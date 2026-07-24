@@ -1,34 +1,108 @@
-/* CarPlay v0.0.1 */
+/* CarPlay v0.0.2 */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+:root {
+  --outer-gap: clamp(18px, 2vw, 28px);
+  --section-gap: clamp(18px, 2.2vh, 28px);
+  --glass-bg: rgba(255, 255, 255, 0.14);
+  --glass-border: rgba(255, 255, 255, 0.24);
+  --glass-shadow: 0 12px 34px rgba(0, 38, 82, 0.20);
+  --radius: 24px;
 }
 
-html,
+* { box-sizing: border-box; }
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+
 body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+  background: #06275f;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
 }
 
-body {
-  background: #000;
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Display",
-    "Segoe UI",
-    sans-serif;
-}
+button { font: inherit; }
 
 #app {
   width: 100vw;
   height: 100vh;
   min-height: 100svh;
-  background-image: url("wallpaper.png");
+  padding: var(--outer-gap);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: var(--section-gap);
+  background-image: linear-gradient(rgba(0, 24, 70, 0.05), rgba(0, 24, 70, 0.05)), url("wallpaper.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.status-bar {
+  min-height: 56px;
+  padding: 10px 20px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  background: var(--glass-bg);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(22px) saturate(145%);
+  -webkit-backdrop-filter: blur(22px) saturate(145%);
+}
+
+.status-info {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  white-space: nowrap;
+  text-shadow: 0 2px 10px rgba(0, 42, 88, 0.35);
+}
+
+.temperature {
+  font-size: clamp(18px, 1.75vw, 25px);
+  font-weight: 500;
+  opacity: 0.90;
+}
+
+.clock {
+  min-width: 5.2ch;
+  text-align: right;
+  font-size: clamp(22px, 2.15vw, 31px);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.icon-grid {
+  min-height: 0;
+  width: min(100%, 1180px);
+  justify-self: center;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.1vw, 28px);
+  align-items: center;
+}
+
+.app-slot {
+  width: min(100%, 150px);
+  aspect-ratio: 1;
+  justify-self: center;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: clamp(24px, 2.7vw, 34px);
+  background: rgba(255, 255, 255, 0.13);
+  box-shadow: 0 12px 28px rgba(0, 41, 90, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  cursor: default;
+  appearance: none;
+}
+
+.app-slot:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.90);
+  outline-offset: 4px;
+}
+
+@media (max-height: 620px) {
+  :root { --outer-gap: 16px; --section-gap: 14px; }
+  .status-bar { min-height: 48px; padding-block: 7px; }
+  .icon-grid { gap: 14px 24px; }
+  .app-slot { width: min(100%, 118px); border-radius: 26px; }
 }

@@ -2,14 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>CarPlay</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main id="app" aria-label="CarPlay home screen"></main>
+  <main id="app">
+    <header class="status-bar" aria-label="Status bar">
+      <div aria-hidden="true"></div>
+      <div class="status-info">
+        <span class="temperature" aria-label="Temperature">72°</span>
+        <time class="clock" id="clock">--:--</time>
+      </div>
+    </header>
+
+    <section class="icon-grid" aria-label="4 by 3 app grid">
+      <button class="app-slot" aria-label="App slot 1"></button>
+      <button class="app-slot" aria-label="App slot 2"></button>
+      <button class="app-slot" aria-label="App slot 3"></button>
+      <button class="app-slot" aria-label="App slot 4"></button>
+      <button class="app-slot" aria-label="App slot 5"></button>
+      <button class="app-slot" aria-label="App slot 6"></button>
+      <button class="app-slot" aria-label="App slot 7"></button>
+      <button class="app-slot" aria-label="App slot 8"></button>
+      <button class="app-slot" aria-label="App slot 9"></button>
+      <button class="app-slot" aria-label="App slot 10"></button>
+      <button class="app-slot" aria-label="App slot 11"></button>
+      <button class="app-slot" aria-label="App slot 12"></button>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
