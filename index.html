@@ -1,37 +1,60 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>CarPlay</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="theme-color" content="#075a9d">
+  <title>Home</title>
+  <link rel="stylesheet" href="home.css?v=003">
 </head>
 <body>
-  <main id="app">
-    <header class="status-bar" aria-label="Status bar">
-      <div aria-hidden="true"></div>
-      <div class="status-info">
-        <span class="temperature" aria-label="Temperature">72°</span>
-        <time class="clock" id="clock">--:--</time>
-      </div>
-    </header>
+  <main class="home-screen">
+    <div class="status" aria-label="Current temperature and time">
+      <span class="temperature">72°</span>
+      <time id="home-time">--:--</time>
+    </div>
 
-    <section class="icon-grid" aria-label="4 by 3 app grid">
-      <button class="app-slot" aria-label="App slot 1"></button>
-      <button class="app-slot" aria-label="App slot 2"></button>
-      <button class="app-slot" aria-label="App slot 3"></button>
-      <button class="app-slot" aria-label="App slot 4"></button>
-      <button class="app-slot" aria-label="App slot 5"></button>
-      <button class="app-slot" aria-label="App slot 6"></button>
-      <button class="app-slot" aria-label="App slot 7"></button>
-      <button class="app-slot" aria-label="App slot 8"></button>
-      <button class="app-slot" aria-label="App slot 9"></button>
-      <button class="app-slot" aria-label="App slot 10"></button>
-      <button class="app-slot" aria-label="App slot 11"></button>
-      <button class="app-slot" aria-label="App slot 12"></button>
+    <section class="home-grid" aria-label="Apps">
+      <button class="home-app" type="button" aria-label="Radio">
+        <span class="home-icon icon-radio"><span>♪</span></span><span>Radio</span>
+      </button>
+      <button class="home-app" type="button" aria-label="Disney">
+        <span class="home-icon icon-disney"><span>✦</span></span><span>Disney</span>
+      </button>
+      <button class="home-app" type="button" aria-label="Bible">
+        <span class="home-icon icon-bible"><span>✝</span></span><span>Bible</span>
+      </button>
+      <button class="home-app" type="button" aria-label="Podcasts">
+        <span class="home-icon icon-podcasts"><span>◉</span></span><span>Podcasts</span>
+      </button>
+
+      <button class="home-app" type="button" aria-label="Maps">
+        <span class="home-icon icon-maps"><span>➤</span></span><span>Maps</span>
+      </button>
+      <button class="home-app" type="button" aria-label="Weather">
+        <span class="home-icon icon-weather"><span>☀</span></span><span>Weather</span>
+      </button>
+      <button class="home-app" type="button" aria-label="Restaurants">
+        <span class="home-icon icon-food"><span>⌁</span></span><span>Restaurants</span>
+      </button>
+      <button class="home-app" type="button" aria-label="Real Estate">
+        <span class="home-icon icon-realestate"><span>⌂</span></span><span>Real Estate</span>
+      </button>
+
+      <button class="home-app" type="button" aria-label="Streaming">
+        <span class="home-icon icon-streaming"><span>▶</span></span><span>Streaming</span>
+      </button>
+      <button class="home-app" type="button" aria-label="Tesla">
+        <span class="home-icon icon-tesla"><span>T</span></span><span>Tesla</span>
+      </button>
+      <button class="home-app" type="button" aria-label="Favorites">
+        <span class="home-icon icon-favorites"><span>★</span></span><span>Favorites</span>
+      </button>
+      <button class="home-app" type="button" aria-label="Settings">
+        <span class="home-icon icon-settings"><span>⚙</span></span><span>Settings</span>
+      </button>
     </section>
   </main>
-
-  <script src="app.js"></script>
+  <script src="home.js?v=003"></script>
 </body>
 </html>
