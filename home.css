@@ -19,7 +19,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
   overflow:hidden;
   background:
     linear-gradient(180deg,rgba(0,25,68,.10),rgba(0,0,0,.05)),
-    url("home-wallpaper.png?v=003") center/cover no-repeat;
+    url("home-wallpaper.png?v=004") center/cover no-repeat;
 }
 .status{
   position:absolute;
@@ -27,11 +27,23 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
   top:clamp(20px,3.2vh,38px);
   right:clamp(28px,4vw,64px);
   display:flex;
-  align-items:baseline;
+  align-items:center;
   gap:.62em;
   color:rgba(255,255,255,.96);
   text-shadow:0 2px 12px rgba(0,24,58,.48);
   letter-spacing:-.025em;
+}
+.weather-status{
+  display:inline-flex;
+  align-items:center;
+  gap:.34em;
+}
+.weather-icon{
+  width:clamp(21px,2.25vw,32px);
+  height:clamp(21px,2.25vw,32px);
+  flex:0 0 auto;
+  object-fit:contain;
+  filter:drop-shadow(0 2px 5px rgba(0,24,58,.30));
 }
 .temperature{font-size:clamp(18px,2vw,29px);font-weight:400}
 #home-time{font-size:clamp(21px,2.35vw,34px);font-weight:600}

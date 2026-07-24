@@ -5,12 +5,15 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
   <meta name="theme-color" content="#075a9d">
   <title>Home</title>
-  <link rel="stylesheet" href="home.css?v=003">
+  <link rel="stylesheet" href="home.css?v=004">
 </head>
 <body>
   <main class="home-screen">
-    <div class="status" aria-label="Current temperature and time">
-      <span class="temperature">72°</span>
+    <div class="status" aria-label="Current weather and time" title="Weather data by Open-Meteo">
+      <span class="weather-status" aria-live="polite">
+        <img id="weather-icon" class="weather-icon" src="weather-sun.svg?v=004" alt="Clear">
+        <span id="temperature" class="temperature">--°</span>
+      </span>
       <time id="home-time">--:--</time>
     </div>
 
@@ -55,6 +58,6 @@
       </button>
     </section>
   </main>
-  <script src="home.js?v=003"></script>
+  <script src="home.js?v=004"></script>
 </body>
 </html>
