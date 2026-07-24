@@ -1,4 +1,4 @@
-CARPLAY HOME v005 — 12 HOUR FORECAST
+CARPLAY HOME v006 — WEATHER CENTER
 
 UPLOAD THESE FILES TO THE ROOT OF YOUR GITHUB PAGES REPOSITORY:
 - index.html
@@ -11,14 +11,15 @@ KEEP YOUR EXISTING:
 - all other repository files and assets
 
 WHAT CHANGED:
-- The current weather icon and temperature are now one large touch target.
-- Tapping either opens the 12 Hour Forecast dropdown.
-- The panel shows the next 12 full forecast hours.
-- Each hour includes time, condition icon, temperature, and precipitation chance.
-- Close with the X, tap the weather again, tap outside the panel, or press Escape.
+- Removed the X close button.
+- The weather dropdown is now a larger Weather panel.
+- Added a Next 12 Hours section.
+- Added a Next 10 Days section with daily condition icon, high, and low.
+- Tap the weather icon/temperature again to close.
+- Tap outside the panel to close.
+- Escape still closes it during desktop testing.
 - Weather remains hard-coded to Frankfort, Kentucky.
-- Current weather and forecast refresh every 15 minutes.
-- No other Home screen layout changes were intended.
+- Weather refreshes every 15 minutes.
 
 CACHE TEST:
-After deployment, add ?v=005 to the end of the page URL if Tesla or Safari shows an older build.
+After deployment, add ?v=006 to the end of the page URL if Tesla or Safari shows an older build.

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
   <meta name="theme-color" content="#075a9d">
   <title>Home</title>
-  <link rel="stylesheet" href="home.css?v=005">
+  <link rel="stylesheet" href="home.css?v=006">
 </head>
 <body>
   <main class="home-screen">
@@ -29,14 +29,24 @@
     <section class="forecast-panel" id="forecast-panel" aria-hidden="true"
       aria-labelledby="forecast-title">
       <header class="forecast-header">
-        <h2 id="forecast-title">12 Hour Forecast</h2>
-        <button class="forecast-close" id="forecast-close" type="button"
-          aria-label="Close forecast">×</button>
+        <h2 id="forecast-title">Weather</h2>
       </header>
 
-      <div class="forecast-strip" id="forecast-strip" aria-live="polite">
-        <div class="forecast-loading">Loading forecast…</div>
-      </div>
+      <section class="forecast-section" aria-labelledby="hourly-title">
+        <h3 id="hourly-title">Next 12 Hours</h3>
+        <div class="forecast-strip" id="forecast-strip" aria-live="polite">
+          <div class="forecast-loading">Loading forecast…</div>
+        </div>
+      </section>
+
+      <div class="forecast-divider" aria-hidden="true"></div>
+
+      <section class="forecast-section forecast-section-daily" aria-labelledby="daily-title">
+        <h3 id="daily-title">Next 10 Days</h3>
+        <div class="daily-strip" id="daily-strip" aria-live="polite">
+          <div class="forecast-loading">Loading forecast…</div>
+        </div>
+      </section>
 
       <footer class="forecast-footer">
         <span>Frankfort, Kentucky</span>
@@ -85,6 +95,6 @@
       </button>
     </section>
   </main>
-  <script src="home.js?v=005"></script>
+  <script src="home.js?v=006"></script>
 </body>
 </html>

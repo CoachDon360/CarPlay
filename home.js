@@ -13,11 +13,11 @@
   const screen = document.querySelector(".home-screen");
   const trigger = document.getElementById("weather-trigger");
   const panel = document.getElementById("forecast-panel");
-  const closeButton = document.getElementById("forecast-close");
   const backdrop = document.getElementById("forecast-backdrop");
   const temperature = document.getElementById("temperature");
   const weatherIcon = document.getElementById("weather-icon");
   const forecastStrip = document.getElementById("forecast-strip");
+  const dailyStrip = document.getElementById("daily-strip");
   const updatedText = document.getElementById("forecast-updated");
   const clock = document.getElementById("home-time");
 
@@ -72,9 +72,10 @@
       longitude: String(WEATHER_LOCATION.longitude),
       current: "temperature_2m,weather_code,is_day",
       hourly: "temperature_2m,weather_code,precipitation_probability,is_day",
+      daily: "weather_code,temperature_2m_max,temperature_2m_min",
       temperature_unit: "fahrenheit",
       timezone: WEATHER_LOCATION.timezone,
-      forecast_days: "2"
+      forecast_days: "10"
     });
     return `https://api.open-meteo.com/v1/forecast?${params.toString()}`;
   }
@@ -110,6 +111,38 @@
     forecastStrip.scrollLeft = 0;
   }
 
+  function formatDay(isoDate, index) {
+    if (index === 0) return "Today";
+    return new Date(`${isoDate}T12:00:00`).toLocaleDateString([], {
+      weekday: "short"
+    });
+  }
+
+  function renderDailyForecast(daily) {
+    const count = Math.min(10, daily.time.length);
+    const cards = [];
+
+    for (let i = 0; i < count; i += 1) {
+      const code = daily.weather_code[i];
+      const label = conditionName(code);
+      const high = Math.round(daily.temperature_2m_max[i]);
+      const low = Math.round(daily.temperature_2m_min[i]);
+      const day = formatDay(daily.time[i], i);
+
+      cards.push(`
+        <article class="daily-card" aria-label="${day}, ${label}, high ${high} degrees, low ${low} degrees">
+          <div class="daily-day">${day}</div>
+          <img src="${iconFor(code, true)}" alt="${label}">
+          <div class="daily-high">${high}°</div>
+          <div class="daily-low">${low}°</div>
+        </article>
+      `);
+    }
+
+    dailyStrip.innerHTML = cards.join("");
+    dailyStrip.scrollLeft = 0;
+  }
+
   async function loadWeather(force = false) {
     if (weatherRequest && !force) return weatherRequest;
 
@@ -124,6 +157,7 @@
         weatherIcon.src = iconFor(current.weather_code, Boolean(current.is_day));
         weatherIcon.alt = conditionName(current.weather_code);
         renderForecast(data.hourly);
+        renderDailyForecast(data.daily);
         updatedText.textContent = `Updated ${new Date().toLocaleTimeString([], {
           hour: "numeric",
           minute: "2-digit"
@@ -138,6 +172,8 @@
           weatherIcon.alt = "Weather unavailable";
           forecastStrip.innerHTML =
             '<div class="forecast-error">Forecast unavailable. Tap the weather again to retry.</div>';
+          dailyStrip.innerHTML =
+            '<div class="forecast-error">10 day forecast unavailable.</div>';
           updatedText.textContent = "";
         }
       })
@@ -171,7 +207,6 @@
   }
 
   trigger.addEventListener("click", toggleForecast);
-  closeButton.addEventListener("click", () => closeForecast({ returnFocus: true }));
   backdrop.addEventListener("click", () => closeForecast());
 
   document.addEventListener("keydown", event => {
