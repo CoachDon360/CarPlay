@@ -1,15 +1,16 @@
-BIBLE CENTERED + FUNCTIONAL HEADER — TINY PATCH v8
+BIBLE CLEAN HEADER COMPONENT — v9
 
 Upload only:
   bible.html
 
-This patch changes only the header navigation control:
-- Anchors the arrow lane to the full height of the header.
-- Vertically centers the white arrow.
-- Extends the subtle divider from the top to the bottom of the header.
-- Keeps the entire arrow lane clickable.
-- Adds reliable back behavior:
-    1. Go back when browser history exists.
-    2. Otherwise open index.html.
+This is not another positioning patch.
 
-The Bible title, verse card, menu, reader area, and footer are preserved.
+The previous header markup is completely replaced by one self-contained component containing:
+- a full-height clickable back lane
+- a white SVG arrow centered by flexbox
+- a subtle divider with equal top and bottom margins
+- the white Bible icon and title
+- the warm-yellow READ • LISTEN • PRAY subtitle
+- reliable browser-back behavior with index.html fallback
+
+The rest of the Bible page is unchanged.

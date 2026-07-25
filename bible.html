@@ -677,36 +677,249 @@
       }
     }
 
+
+    /* v9 — one clean, self-contained header component */
+    .bible-header-v9 {
+      box-sizing: border-box;
+      display: flex;
+      align-items: stretch;
+      width: 100%;
+      height: 156px;
+      min-height: 156px;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      border: 0;
+      border-radius: 0 0 34px 34px;
+      background: #255a91;
+      color: #fff;
+    }
+
+    .bible-header-v9__back {
+      position: relative;
+      box-sizing: border-box;
+      flex: 0 0 162px;
+      width: 162px;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      appearance: none;
+      -webkit-appearance: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .bible-header-v9__back::after {
+      content: "";
+      position: absolute;
+      top: 22px;
+      right: 0;
+      bottom: 22px;
+      width: 1px;
+      background: rgba(255,255,255,.20);
+    }
+
+    .bible-header-v9__back:hover,
+    .bible-header-v9__back:focus-visible {
+      background: rgba(255,255,255,.08);
+      outline: none;
+    }
+
+    .bible-header-v9__back:active {
+      background: rgba(255,255,255,.13);
+    }
+
+    .bible-header-v9__arrow {
+      display: block;
+      width: 48px;
+      height: 48px;
+      margin: 0;
+      overflow: visible;
+    }
+
+    .bible-header-v9__arrow path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .bible-header-v9__brand {
+      box-sizing: border-box;
+      flex: 1 1 auto;
+      min-width: 0;
+      height: 100%;
+      padding: 23px 28px 18px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .bible-header-v9__title-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      min-width: 0;
+    }
+
+    .bible-header-v9__book {
+      display: block;
+      flex: 0 0 70px;
+      width: 70px;
+      height: 70px;
+      overflow: visible;
+    }
+
+    .bible-header-v9__book path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .bible-header-v9__book path:last-child {
+      stroke-width: 2.4;
+      opacity: .9;
+    }
+
+    .bible-header-v9__title {
+      margin: 0;
+      padding: 0;
+      color: #fff;
+      font-size: clamp(48px, 5.2vw, 74px);
+      font-weight: 700;
+      line-height: .95;
+      letter-spacing: 0;
+      text-align: left;
+    }
+
+    .bible-header-v9__subtitle {
+      margin: 14px 0 0;
+      padding: 0;
+      color: #ffd95a;
+      font-size: clamp(22px, 2.25vw, 34px);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 900px) {
+      .bible-header-v9 {
+        height: 126px;
+        min-height: 126px;
+        border-radius: 0 0 26px 26px;
+      }
+
+      .bible-header-v9__back {
+        flex-basis: 118px;
+        width: 118px;
+      }
+
+      .bible-header-v9__back::after {
+        top: 18px;
+        bottom: 18px;
+      }
+
+      .bible-header-v9__arrow {
+        width: 42px;
+        height: 42px;
+      }
+
+      .bible-header-v9__brand {
+        padding: 18px 20px 14px 34px;
+      }
+
+      .bible-header-v9__title-row {
+        gap: 18px;
+      }
+
+      .bible-header-v9__book {
+        flex-basis: 58px;
+        width: 58px;
+        height: 58px;
+      }
+
+      .bible-header-v9__subtitle {
+        margin-top: 10px;
+      }
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .bible-header-v9 {
+        height: 104px;
+        min-height: 104px;
+        border-radius: 0 0 20px 20px;
+      }
+
+      .bible-header-v9__back {
+        flex-basis: 86px;
+        width: 86px;
+      }
+
+      .bible-header-v9__back::after {
+        top: 14px;
+        bottom: 14px;
+      }
+
+      .bible-header-v9__arrow {
+        width: 34px;
+        height: 34px;
+      }
+
+      .bible-header-v9__brand {
+        padding: 13px 16px 11px 24px;
+      }
+
+      .bible-header-v9__title-row {
+        gap: 13px;
+      }
+
+      .bible-header-v9__book {
+        flex-basis: 45px;
+        width: 45px;
+        height: 45px;
+      }
+
+      .bible-header-v9__subtitle {
+        margin-top: 7px;
+        letter-spacing: .07em;
+      }
+    }
+
   </style>
 </head>
 <body>
-  <header class="top-bar" aria-label="Bible header">
-    <button class="back-button" id="backButton" type="button" aria-label="Go back">
-      <span class="back-arrow" aria-hidden="true">‹</span>
-      <span>Back</span>
+  <header class="bible-header-v9" aria-label="Bible header">
+    <button class="bible-header-v9__back" id="bibleBackV9" type="button" aria-label="Go back">
+      <svg class="bible-header-v9__arrow" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M20 7 11 16l9 9" />
+      </svg>
     </button>
 
-    <div class="bible-brand">
-      <div class="bible-brand-row">
-        <div class="header-bible-icon" aria-hidden="true">
-          <svg viewBox="0 0 64 64" role="img">
-            <path d="M32 16c-6.2-5.2-14.7-7.3-23-5.5v36.2c8.2-1.8 16.8.3 23 5.5V16Z"
-                  fill="none" stroke="currentColor" stroke-width="3.5"
-                  stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M32 16c6.2-5.2 14.7-7.3 23-5.5v36.2c-8.2-1.8-16.8.3-23 5.5V16Z"
-                  fill="none" stroke="currentColor" stroke-width="3.5"
-                  stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M32 16v36.2"
-                  fill="none" stroke="currentColor" stroke-width="3.5"
-                  stroke-linecap="round"/>
-            <path d="M14 20.5c4.7-.5 9.4.5 13.3 2.9M14 29c4.7-.5 9.4.5 13.3 2.9M50 20.5c-4.7-.5-9.4.5-13.3 2.9M50 29c-4.7-.5-9.4.5-13.3 2.9"
-                  fill="none" stroke="currentColor" stroke-width="2.4"
-                  stroke-linecap="round" opacity=".9"/>
-          </svg>
-        </div>
-        <h1 class="bible-page-title">Bible</h1>
+    <div class="bible-header-v9__brand">
+      <div class="bible-header-v9__title-row">
+        <svg class="bible-header-v9__book" viewBox="0 0 64 64" aria-hidden="true">
+          <path d="M32 16c-6.2-5.2-14.7-7.3-23-5.5v36.2c8.2-1.8 16.8.3 23 5.5V16Z"/>
+          <path d="M32 16c6.2-5.2 14.7-7.3 23-5.5v36.2c-8.2-1.8-16.8.3-23 5.5V16Z"/>
+          <path d="M32 16v36.2"/>
+          <path d="M14 20.5c4.7-.5 9.4.5 13.3 2.9M14 29c4.7-.5 9.4.5 13.3 2.9M50 20.5c-4.7-.5-9.4.5-13.3 2.9M50 29c-4.7-.5-9.4.5-13.3 2.9"/>
+        </svg>
+        <h1 class="bible-header-v9__title">Bible</h1>
       </div>
-      <div class="bible-page-subtitle">Read • Listen • Pray</div>
+      <div class="bible-header-v9__subtitle">Read • Listen • Pray</div>
     </div>
   </header>
 
@@ -798,6 +1011,22 @@
           window.history.back();
         } else {
           window.location.href = "index.html";
+        }
+      });
+    })();
+  </script>
+
+
+  <script>
+    (() => {
+      const button = document.getElementById("bibleBackV9");
+      if (!button) return;
+
+      button.addEventListener("click", () => {
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          window.location.assign("index.html");
         }
       });
     })();
