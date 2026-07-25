@@ -988,7 +988,7 @@
       padding: 0 16px;
       border: 1px solid rgba(255,255,255,.2);
       border-radius: 15px;
-      background: #101216;
+      background: var(--bible-accent-blue);
       color: #fff;
       font: inherit;
       font-size: clamp(18px, 1.6vw, 23px);
@@ -1328,21 +1328,20 @@ Psalm 46:10
         <div class="bible-reader-frame__audio" aria-label="Audio player preview">
           <div class="reader-audio__controls" aria-label="Playback controls">
             <button class="reader-audio__skip" type="button" aria-label="Rewind 15 seconds" disabled>
-              <span class="reader-audio__skip-mark">↶<span class="reader-audio__skip-number">15</span></span>
+              <div style="display:flex;flex-direction:column;align-items:center;line-height:1;"><span>⏪</span><small style="font-size:9px;color:white;">15</small></div>
             </button>
             <button class="reader-audio__play" type="button" aria-label="Play preview" disabled>▶</button>
             <button class="reader-audio__skip" type="button" aria-label="Forward 15 seconds" disabled>
-              <span class="reader-audio__skip-mark">↷<span class="reader-audio__skip-number">15</span></span>
+              <div style="display:flex;flex-direction:column;align-items:center;line-height:1;"><span>⏩</span><small style="font-size:9px;color:white;">15</small></div>
             </button>
           </div>
 
-          <div class="reader-audio__progress">
-            <span class="reader-audio__time">00:00</span>
-            <div class="reader-audio__track" aria-hidden="true"></div>
-            <span class="reader-audio__duration">00:00</span>
           </div>
-
-          <span class="reader-audio__status">Audio next</span>
+        <div class="reader-audio__progress" style="grid-column:1 / -1;margin-top:10px;">
+            <span class="reader-audio__time">0:00</span>
+            <div class="reader-audio__track" aria-hidden="true"></div>
+            <span class="reader-audio__duration">18:42</span>
+          </div>
         </div>
       </section>
     </section>
