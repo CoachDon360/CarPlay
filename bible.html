@@ -1035,33 +1035,32 @@
     .reader-audio__skip {
       display: grid;
       place-items: center;
-      width: 50px;
-      height: 50px;
+      width: 58px;
+      height: 58px;
       padding: 0;
-      border: 1px solid rgba(255,255,255,.19);
+      border: 0;
       border-radius: 50%;
-      background: #101216;
+      background: transparent;
       color: #fff;
-      font: inherit;
-      font-size: 20px;
-      font-weight: 800;
       line-height: 1;
       cursor: default;
+      opacity: 1;
+      -webkit-text-fill-color: currentColor;
     }
 
-    .reader-audio__skip-mark {
-      position: relative;
-      display: inline-block;
-      transform: translateY(-1px);
+    .reader-audio__skip svg {
+      display: block;
+      width: 34px;
+      height: 34px;
+      fill: currentColor;
+      filter: drop-shadow(0 1px 1px rgba(0,0,0,.28));
     }
 
-    .reader-audio__skip-number {
-      position: absolute;
-      inset: 50% auto auto 50%;
-      transform: translate(-50%, -46%);
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: -.03em;
+    .reader-audio__skip:disabled,
+    .reader-audio__play:disabled {
+      opacity: 1;
+      color: #fff;
+      -webkit-text-fill-color: currentColor;
     }
 
     .reader-audio__progress {
@@ -1577,12 +1576,16 @@ Psalm 46:10
 
         <div class="bible-reader-frame__audio" aria-label="Audio player preview">
           <div class="reader-audio__controls" aria-label="Playback controls">
-            <button class="reader-audio__skip" type="button" aria-label="Rewind 15 seconds" disabled>
-              <span class="reader-audio__skip-mark">↶<span class="reader-audio__skip-number">15</span></span>
+            <button class="reader-audio__skip" type="button" aria-label="Rewind" disabled>
+              <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+                <path d="M15.2 7.1v17.8L3 16 15.2 7.1Zm13.8 0v17.8L16.8 16 29 7.1Z"/>
+              </svg>
             </button>
             <button class="reader-audio__play" type="button" aria-label="Play preview" disabled>▶</button>
-            <button class="reader-audio__skip" type="button" aria-label="Forward 15 seconds" disabled>
-              <span class="reader-audio__skip-mark">↷<span class="reader-audio__skip-number">15</span></span>
+            <button class="reader-audio__skip" type="button" aria-label="Fast forward" disabled>
+              <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+                <path d="M16.8 7.1v17.8L29 16 16.8 7.1Zm-13.8 0v17.8L15.2 16 3 7.1Z"/>
+              </svg>
             </button>
           </div>
 
