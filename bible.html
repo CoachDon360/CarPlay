@@ -1926,7 +1926,79 @@
         font-size: 14px;
       }
     }
-</style>
+
+
+    /* v11.8 — Reading size controls */
+    .reading-size-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin: -2px 0 20px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 14px;
+      background: rgba(255,255,255,.045);
+    }
+
+    .reading-size-toolbar__label {
+      color: rgba(255,255,255,.7);
+      font-size: 14px;
+      font-weight: 750;
+      letter-spacing: .03em;
+    }
+
+    .reading-size-toolbar__controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .reading-size-toolbar__button {
+      display: grid;
+      place-items: center;
+      min-width: 52px;
+      height: 46px;
+      padding: 0 12px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 12px;
+      background: rgba(255,255,255,.07);
+      color: #fff;
+      font: inherit;
+      font-size: 20px;
+      font-weight: 800;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .reading-size-toolbar__button[data-font-action="reset"] {
+      color: var(--bible-warm-yellow);
+      font-size: 18px;
+    }
+
+    .reading-size-toolbar__button:active {
+      transform: scale(.96);
+      background: rgba(77,163,255,.22);
+    }
+
+    .reading-size-toolbar__button:disabled {
+      opacity: .35;
+      cursor: default;
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .reading-size-toolbar {
+        margin-bottom: 16px;
+        padding: 8px 10px;
+      }
+
+      .reading-size-toolbar__button {
+        min-width: 48px;
+        height: 44px;
+      }
+    }
+
+  </style>
 </head>
 <body>
   <header class="bible-header-v9" aria-label="Bible header">
@@ -2130,6 +2202,15 @@ Psalm 46:10
           <article class="scripture-reader">
             <p class="scripture-reader__eyebrow">World English Bible</p>
             <h2 class="scripture-reader__title" id="scriptureTitle">Psalms 46</h2>
+
+            <div class="reading-size-toolbar" aria-label="Reading text size">
+              <span class="reading-size-toolbar__label">Text size</span>
+              <div class="reading-size-toolbar__controls">
+                <button class="reading-size-toolbar__button" id="decreaseTextSize" data-font-action="decrease" type="button" aria-label="Decrease Bible text size">A−</button>
+                <button class="reading-size-toolbar__button" id="resetTextSize" data-font-action="reset" type="button" aria-label="Reset Bible text size">A</button>
+                <button class="reading-size-toolbar__button" id="increaseTextSize" data-font-action="increase" type="button" aria-label="Increase Bible text size">A+</button>
+              </div>
+            </div>
             <p class="scripture-reader__text" id="scriptureText">
               <span><sup>1</sup> God is our refuge and strength, a very present help in trouble.</span>
               <span><sup>2</sup> Therefore we won’t be afraid, though the earth changes, though the mountains are shaken into the heart of the seas;</span>
@@ -2458,6 +2539,65 @@ Psalm 46:10
         updateNavigationButtons();
         saveReadingPosition();
       }
+    })();
+  </script>
+
+
+  <script>
+    (() => {
+      const scriptureText = document.getElementById("scriptureText");
+      const decreaseButton = document.getElementById("decreaseTextSize");
+      const resetButton = document.getElementById("resetTextSize");
+      const increaseButton = document.getElementById("increaseTextSize");
+      if (!scriptureText || !decreaseButton || !resetButton || !increaseButton) return;
+
+      const storageKey = "carplayBibleTextSize";
+      const sizes = [18, 21, 23, 26, 29];
+      const defaultIndex = 2;
+      let sizeIndex = defaultIndex;
+
+      try {
+        const savedIndex = Number(window.localStorage.getItem(storageKey));
+        if (Number.isInteger(savedIndex) && savedIndex >= 0 && savedIndex < sizes.length) {
+          sizeIndex = savedIndex;
+        }
+      } catch (error) {
+        // Reading controls still work if browser storage is unavailable.
+      }
+
+      function applySize() {
+        scriptureText.style.fontSize = `${sizes[sizeIndex]}px`;
+        decreaseButton.disabled = sizeIndex === 0;
+        increaseButton.disabled = sizeIndex === sizes.length - 1;
+        resetButton.setAttribute("aria-pressed", sizeIndex === defaultIndex ? "true" : "false");
+
+        try {
+          window.localStorage.setItem(storageKey, String(sizeIndex));
+        } catch (error) {
+          // Ignore storage errors; keep the selected size for this visit.
+        }
+      }
+
+      decreaseButton.addEventListener("click", () => {
+        if (sizeIndex > 0) {
+          sizeIndex -= 1;
+          applySize();
+        }
+      });
+
+      increaseButton.addEventListener("click", () => {
+        if (sizeIndex < sizes.length - 1) {
+          sizeIndex += 1;
+          applySize();
+        }
+      });
+
+      resetButton.addEventListener("click", () => {
+        sizeIndex = defaultIndex;
+        applySize();
+      });
+
+      applySize();
     })();
   </script>
 
