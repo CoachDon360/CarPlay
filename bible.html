@@ -1514,6 +1514,40 @@
       white-space: nowrap;
     }
 
+    /* v11.9 — selected-chapter audio */
+    .reader-audio__skip,
+    .reader-audio__play {
+      cursor: pointer;
+      transition: transform .12s ease, opacity .12s ease, background .12s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .reader-audio__skip:active,
+    .reader-audio__play:active {
+      transform: scale(.94);
+    }
+
+    .reader-audio__skip:disabled,
+    .reader-audio__play:disabled {
+      opacity: .38;
+      cursor: default;
+    }
+
+    .reader-audio__track {
+      cursor: pointer;
+      touch-action: none;
+    }
+
+    .reader-audio__track::before {
+      width: var(--audio-progress, 0%);
+      transition: width .15s linear;
+    }
+
+    .reader-audio__status.is-ready {
+      border-color: rgba(85,168,255,.48);
+      color: #fff;
+    }
+
     .bible-reader-frame__reader {
       min-height: 0;
       overflow: hidden;
@@ -1926,79 +1960,7 @@
         font-size: 14px;
       }
     }
-
-
-    /* v11.8 — Reading size controls */
-    .reading-size-toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      margin: -2px 0 20px;
-      padding: 10px 12px;
-      border: 1px solid rgba(255,255,255,.13);
-      border-radius: 14px;
-      background: rgba(255,255,255,.045);
-    }
-
-    .reading-size-toolbar__label {
-      color: rgba(255,255,255,.7);
-      font-size: 14px;
-      font-weight: 750;
-      letter-spacing: .03em;
-    }
-
-    .reading-size-toolbar__controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .reading-size-toolbar__button {
-      display: grid;
-      place-items: center;
-      min-width: 52px;
-      height: 46px;
-      padding: 0 12px;
-      border: 1px solid rgba(255,255,255,.16);
-      border-radius: 12px;
-      background: rgba(255,255,255,.07);
-      color: #fff;
-      font: inherit;
-      font-size: 20px;
-      font-weight: 800;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .reading-size-toolbar__button[data-font-action="reset"] {
-      color: var(--bible-warm-yellow);
-      font-size: 18px;
-    }
-
-    .reading-size-toolbar__button:active {
-      transform: scale(.96);
-      background: rgba(77,163,255,.22);
-    }
-
-    .reading-size-toolbar__button:disabled {
-      opacity: .35;
-      cursor: default;
-    }
-
-    @media (max-width: 760px), (max-height: 560px) {
-      .reading-size-toolbar {
-        margin-bottom: 16px;
-        padding: 8px 10px;
-      }
-
-      .reading-size-toolbar__button {
-        min-width: 48px;
-        height: 44px;
-      }
-    }
-
-  </style>
+</style>
 </head>
 <body>
   <header class="bible-header-v9" aria-label="Bible header">
@@ -2176,13 +2138,13 @@ Psalm 46:10
 
         <div class="bible-reader-frame__audio" aria-label="Audio player preview">
           <div class="reader-audio__controls" aria-label="Playback controls">
-            <button class="reader-audio__skip" type="button" aria-label="Rewind" disabled>
+            <button class="reader-audio__skip" id="audioRewindButton" type="button" aria-label="Rewind 15 seconds" disabled>
               <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
                 <path d="M15.2 7.1v17.8L3 16 15.2 7.1Zm13.8 0v17.8L16.8 16 29 7.1Z"/>
               </svg>
             </button>
-            <button class="reader-audio__play" type="button" aria-label="Play preview" disabled>▶</button>
-            <button class="reader-audio__skip" type="button" aria-label="Fast forward" disabled>
+            <button class="reader-audio__play" id="audioPlayButton" type="button" aria-label="Play chapter" disabled>▶</button>
+            <button class="reader-audio__skip" id="audioForwardButton" type="button" aria-label="Fast forward 15 seconds" disabled>
               <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
                 <path d="M16.8 7.1v17.8L29 16 16.8 7.1Zm-13.8 0v17.8L15.2 16 3 7.1Z"/>
               </svg>
@@ -2190,27 +2152,19 @@ Psalm 46:10
           </div>
 
           <div class="reader-audio__progress">
-            <span class="reader-audio__time">00:00</span>
-            <div class="reader-audio__track" aria-hidden="true"></div>
-            <span class="reader-audio__duration">00:00</span>
+            <span class="reader-audio__time" id="audioCurrentTime">00:00</span>
+            <div class="reader-audio__track" id="audioProgressTrack" role="slider" aria-label="Chapter audio position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0"></div>
+            <span class="reader-audio__duration" id="audioDuration">00:00</span>
           </div>
 
-          <span class="reader-audio__status">Audio next</span>
+          <span class="reader-audio__status" id="audioStatus">Loading audio…</span>
+          <audio id="chapterAudio" preload="metadata"></audio>
         </div>
 
         <div class="bible-reader-frame__reader" id="scriptureReader">
           <article class="scripture-reader">
             <p class="scripture-reader__eyebrow">World English Bible</p>
             <h2 class="scripture-reader__title" id="scriptureTitle">Psalms 46</h2>
-
-            <div class="reading-size-toolbar" aria-label="Reading text size">
-              <span class="reading-size-toolbar__label">Text size</span>
-              <div class="reading-size-toolbar__controls">
-                <button class="reading-size-toolbar__button" id="decreaseTextSize" data-font-action="decrease" type="button" aria-label="Decrease Bible text size">A−</button>
-                <button class="reading-size-toolbar__button" id="resetTextSize" data-font-action="reset" type="button" aria-label="Reset Bible text size">A</button>
-                <button class="reading-size-toolbar__button" id="increaseTextSize" data-font-action="increase" type="button" aria-label="Increase Bible text size">A+</button>
-              </div>
-            </div>
             <p class="scripture-reader__text" id="scriptureText">
               <span><sup>1</sup> God is our refuge and strength, a very present help in trouble.</span>
               <span><sup>2</sup> Therefore we won’t be afraid, though the earth changes, though the mountains are shaken into the heart of the seas;</span>
@@ -2305,6 +2259,14 @@ Psalm 46:10
       const previousChapterButtons = Array.from(document.querySelectorAll('[data-chapter-direction="previous"]'));
       const nextChapterButtons = Array.from(document.querySelectorAll('[data-chapter-direction="next"]'));
       const topChapterNavigation = document.getElementById("topChapterNavigation");
+      const chapterAudio = document.getElementById("chapterAudio");
+      const audioPlayButton = document.getElementById("audioPlayButton");
+      const audioRewindButton = document.getElementById("audioRewindButton");
+      const audioForwardButton = document.getElementById("audioForwardButton");
+      const audioProgressTrack = document.getElementById("audioProgressTrack");
+      const audioCurrentTime = document.getElementById("audioCurrentTime");
+      const audioDuration = document.getElementById("audioDuration");
+      const audioStatus = document.getElementById("audioStatus");
 
       if (!bookButton || !chapterButton || !bookMenu || !chapterMenu || !title || !text || !note || previousChapterButtons.length === 0 || nextChapterButtons.length === 0) return;
 
@@ -2370,6 +2332,100 @@ Psalm 46:10
         }
       }
 
+      const audioBookNames = {
+        "1 Samuel": "First Samuel", "2 Samuel": "Second Samuel",
+        "1 Kings": "First Kings", "2 Kings": "Second Kings",
+        "1 Chronicles": "First Chronicles", "2 Chronicles": "Second Chronicles",
+        "1 Corinthians": "First Corinthians", "2 Corinthians": "Second Corinthians",
+        "1 Thessalonians": "First Thessalonians", "2 Thessalonians": "Second Thessalonians",
+        "1 Timothy": "First Timothy", "2 Timothy": "Second Timothy",
+        "1 Peter": "First Peter", "2 Peter": "Second Peter",
+        "1 John": "First John", "2 John": "Second John", "3 John": "Third John"
+      };
+      let audioCandidates = [];
+      let audioCandidateIndex = 0;
+
+      function numberWords(value) {
+        const ones = ["Zero","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
+        const tens = ["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
+        if (value < 20) return ones[value];
+        if (value < 100) return tens[Math.floor(value / 10)] + (value % 10 ? ` ${ones[value % 10]}` : "");
+        return `One Hundred${value % 100 ? ` ${numberWords(value % 100)}` : ""}`;
+      }
+
+      function formatAudioTime(seconds) {
+        if (!Number.isFinite(seconds) || seconds < 0) return "00:00";
+        const total = Math.floor(seconds);
+        const minutes = Math.floor(total / 60);
+        const remainder = total % 60;
+        return `${String(minutes).padStart(2, "0")}:${String(remainder).padStart(2, "0")}`;
+      }
+
+      function setAudioControlsEnabled(enabled) {
+        [audioPlayButton, audioRewindButton, audioForwardButton].forEach((button) => {
+          if (button) button.disabled = !enabled;
+        });
+      }
+
+      function setAudioStatus(message, ready = false) {
+        if (!audioStatus) return;
+        audioStatus.textContent = message;
+        audioStatus.classList.toggle("is-ready", ready);
+      }
+
+      function buildAudioCandidates() {
+        const bookIndex = books.findIndex((book) => book.name === selectedBook);
+        const bookNumber = bookIndex + 1;
+        const bookNumberPadded = String(bookNumber).padStart(2, "0");
+        const audioBookName = audioBookNames[selectedBook] || selectedBook;
+        const folderName = `${bookNumberPadded}_${audioBookName.replaceAll(" ", "_")}`;
+        const precedingChapters = books.slice(0, bookIndex).reduce((sum, book) => sum + book.chapters, 0);
+        const globalChapter = precedingChapters + selectedChapter;
+        const globalPadded = String(globalChapter).padStart(4, "0");
+        const rollingPadded = String(globalChapter % 100).padStart(2, "0");
+        const words = numberWords(selectedChapter);
+        const underscoredWords = words.replaceAll(" ", "_");
+        const underscoredBook = audioBookName.replaceAll(" ", "_");
+        const base = `https://ebible.org/eng-web/audio/${encodeURIComponent(folderName)}/`;
+        const filenames = [
+          `${globalPadded} ${audioBookName}-Chapter ${words}.mp3`,
+          `${globalPadded} ${audioBookName}-${words}.mp3`,
+          `${bookNumberPadded}_${rollingPadded}_${underscoredBook}_Chapter_${underscoredWords}.mp3`,
+          `${bookNumberPadded}_${String(selectedChapter).padStart(2, "0")}_${underscoredBook}_Chapter_${underscoredWords}.mp3`
+        ];
+        return [...new Set(filenames)].map((filename) => base + encodeURIComponent(filename));
+      }
+
+      function tryAudioCandidate(index) {
+        if (!chapterAudio) return;
+        if (index >= audioCandidates.length) {
+          chapterAudio.removeAttribute("src");
+          setAudioControlsEnabled(false);
+          setAudioStatus("Audio unavailable");
+          return;
+        }
+        audioCandidateIndex = index;
+        chapterAudio.src = audioCandidates[index];
+        chapterAudio.load();
+      }
+
+      function loadChapterAudio() {
+        if (!chapterAudio) return;
+        chapterAudio.pause();
+        chapterAudio.currentTime = 0;
+        if (audioPlayButton) audioPlayButton.textContent = "▶";
+        if (audioCurrentTime) audioCurrentTime.textContent = "00:00";
+        if (audioDuration) audioDuration.textContent = "00:00";
+        if (audioProgressTrack) {
+          audioProgressTrack.style.setProperty("--audio-progress", "0%");
+          audioProgressTrack.setAttribute("aria-valuenow", "0");
+        }
+        setAudioControlsEnabled(false);
+        setAudioStatus("Loading audio…");
+        audioCandidates = buildAudioCandidates();
+        tryAudioCandidate(0);
+      }
+
       function selectReference(bookName, chapterNumber) {
         const book = books.find((entry) => entry.name === bookName);
         if (!book) return;
@@ -2384,6 +2440,7 @@ Psalm 46:10
         updateNavigationButtons();
         saveReadingPosition();
         closeAll();
+        loadChapterAudio();
         loadChapter();
       }
 
@@ -2524,6 +2581,73 @@ Psalm 46:10
       previousChapterButtons.forEach((button) => button.addEventListener("click", goToPreviousChapter));
       nextChapterButtons.forEach((button) => button.addEventListener("click", goToNextChapter));
 
+      if (chapterAudio) {
+        chapterAudio.addEventListener("loadedmetadata", () => {
+          if (audioDuration) audioDuration.textContent = formatAudioTime(chapterAudio.duration);
+        });
+        chapterAudio.addEventListener("canplay", () => {
+          setAudioControlsEnabled(true);
+          setAudioStatus(`${selectedBook} ${selectedChapter}`, true);
+        });
+        chapterAudio.addEventListener("timeupdate", () => {
+          const percent = chapterAudio.duration ? (chapterAudio.currentTime / chapterAudio.duration) * 100 : 0;
+          if (audioCurrentTime) audioCurrentTime.textContent = formatAudioTime(chapterAudio.currentTime);
+          if (audioProgressTrack) {
+            audioProgressTrack.style.setProperty("--audio-progress", `${percent}%`);
+            audioProgressTrack.setAttribute("aria-valuenow", String(Math.round(percent)));
+          }
+        });
+        chapterAudio.addEventListener("play", () => {
+          if (audioPlayButton) audioPlayButton.textContent = "❚❚";
+          setAudioStatus("Playing", true);
+        });
+        chapterAudio.addEventListener("pause", () => {
+          if (audioPlayButton) audioPlayButton.textContent = "▶";
+          if (!chapterAudio.ended && chapterAudio.readyState >= 2) setAudioStatus("Paused", true);
+        });
+        chapterAudio.addEventListener("ended", () => {
+          if (audioPlayButton) audioPlayButton.textContent = "▶";
+          setAudioStatus("Chapter finished", true);
+        });
+        chapterAudio.addEventListener("error", () => {
+          tryAudioCandidate(audioCandidateIndex + 1);
+        });
+      }
+
+      audioPlayButton?.addEventListener("click", async () => {
+        if (!chapterAudio || audioPlayButton.disabled) return;
+        try {
+          if (chapterAudio.paused) await chapterAudio.play();
+          else chapterAudio.pause();
+        } catch (error) {
+          setAudioStatus("Tap play again");
+        }
+      });
+
+      audioRewindButton?.addEventListener("click", () => {
+        if (!chapterAudio || audioRewindButton.disabled) return;
+        chapterAudio.currentTime = Math.max(0, chapterAudio.currentTime - 15);
+      });
+
+      audioForwardButton?.addEventListener("click", () => {
+        if (!chapterAudio || audioForwardButton.disabled) return;
+        const end = Number.isFinite(chapterAudio.duration) ? chapterAudio.duration : chapterAudio.currentTime + 15;
+        chapterAudio.currentTime = Math.min(end, chapterAudio.currentTime + 15);
+      });
+
+      function seekAudioFromPointer(event) {
+        if (!chapterAudio || !audioProgressTrack || !Number.isFinite(chapterAudio.duration)) return;
+        const rect = audioProgressTrack.getBoundingClientRect();
+        const ratio = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
+        chapterAudio.currentTime = ratio * chapterAudio.duration;
+      }
+      audioProgressTrack?.addEventListener("click", seekAudioFromPointer);
+      audioProgressTrack?.addEventListener("keydown", (event) => {
+        if (!chapterAudio || !Number.isFinite(chapterAudio.duration)) return;
+        if (event.key === "ArrowLeft") chapterAudio.currentTime = Math.max(0, chapterAudio.currentTime - 15);
+        if (event.key === "ArrowRight") chapterAudio.currentTime = Math.min(chapterAudio.duration, chapterAudio.currentTime + 15);
+      });
+
       document.addEventListener("click", closeAll);
       document.addEventListener("keydown", (event) => {
         if (event.key === "Escape") closeAll();
@@ -2538,66 +2662,8 @@ Psalm 46:10
         updateSelectedChapterUI();
         updateNavigationButtons();
         saveReadingPosition();
+        loadChapterAudio();
       }
-    })();
-  </script>
-
-
-  <script>
-    (() => {
-      const scriptureText = document.getElementById("scriptureText");
-      const decreaseButton = document.getElementById("decreaseTextSize");
-      const resetButton = document.getElementById("resetTextSize");
-      const increaseButton = document.getElementById("increaseTextSize");
-      if (!scriptureText || !decreaseButton || !resetButton || !increaseButton) return;
-
-      const storageKey = "carplayBibleTextSize";
-      const sizes = [18, 21, 23, 26, 29];
-      const defaultIndex = 2;
-      let sizeIndex = defaultIndex;
-
-      try {
-        const savedIndex = Number(window.localStorage.getItem(storageKey));
-        if (Number.isInteger(savedIndex) && savedIndex >= 0 && savedIndex < sizes.length) {
-          sizeIndex = savedIndex;
-        }
-      } catch (error) {
-        // Reading controls still work if browser storage is unavailable.
-      }
-
-      function applySize() {
-        scriptureText.style.fontSize = `${sizes[sizeIndex]}px`;
-        decreaseButton.disabled = sizeIndex === 0;
-        increaseButton.disabled = sizeIndex === sizes.length - 1;
-        resetButton.setAttribute("aria-pressed", sizeIndex === defaultIndex ? "true" : "false");
-
-        try {
-          window.localStorage.setItem(storageKey, String(sizeIndex));
-        } catch (error) {
-          // Ignore storage errors; keep the selected size for this visit.
-        }
-      }
-
-      decreaseButton.addEventListener("click", () => {
-        if (sizeIndex > 0) {
-          sizeIndex -= 1;
-          applySize();
-        }
-      });
-
-      increaseButton.addEventListener("click", () => {
-        if (sizeIndex < sizes.length - 1) {
-          sizeIndex += 1;
-          applySize();
-        }
-      });
-
-      resetButton.addEventListener("click", () => {
-        sizeIndex = defaultIndex;
-        applySize();
-      });
-
-      applySize();
     })();
   </script>
 
