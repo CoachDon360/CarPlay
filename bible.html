@@ -2476,6 +2476,22 @@ Psalm 46:10
         "1 Peter": "First Peter", "2 Peter": "Second Peter",
         "1 John": "First John", "2 John": "Second John", "3 John": "Third John"
       };
+
+      // v13.0 — David Williams / AudioTreasure WEB recording.
+      const davidWilliamsBookSlugs = {
+        "1 Samuel": "1Samuel", "2 Samuel": "2Samuel",
+        "1 Kings": "1Kings", "2 Kings": "2Kings",
+        "1 Chronicles": "1Chronicles", "2 Chronicles": "2Chronicles",
+        "Psalms": "Psalm", "Proverbs": "Prov",
+        "Song of Solomon": "Song_of_Solomon",
+        "Matthew": "Matt", "Galatians": "Gal",
+        "1 Corinthians": "1Cor", "2 Corinthians": "2Cor",
+        "1 Thessalonians": "1Thessa", "2 Thessalonians": "2Thessa",
+        "1 Timothy": "1Timothy", "2 Timothy": "2Timothy",
+        "1 Peter": "1Peter", "2 Peter": "2Peter",
+        "1 John": "1John", "2 John": "2John", "3 John": "3John"
+      };
+      const davidWilliamsSingleChapterBooks = new Set(["Obadiah", "Philemon", "2 John", "3 John", "Jude"]);
       let audioCandidates = [];
       let audioCandidateIndex = 0;
 
@@ -2509,8 +2525,18 @@ Psalm 46:10
 
       function buildAudioCandidates() {
         const bookIndex = books.findIndex((book) => book.name === selectedBook);
-        const bookNumber = bookIndex + 1;
-        const bookNumberPadded = String(bookNumber).padStart(2, "0");
+        const bookNumberPadded = String(bookIndex + 1).padStart(2, "0");
+        const chapterPadded = selectedBook === "Psalms"
+          ? String(selectedChapter).padStart(3, "0")
+          : String(selectedChapter).padStart(2, "0");
+        const davidSlug = davidWilliamsBookSlugs[selectedBook] || selectedBook.replaceAll(" ", "_");
+        const davidFilename = davidWilliamsSingleChapterBooks.has(selectedBook)
+          ? `${bookNumberPadded}_${davidSlug}.mp3`
+          : `${bookNumberPadded}_${davidSlug}_${chapterPadded}.mp3`;
+        const davidWilliamsUrl = `https://www.audiotreasure.com/content/WEBD_AT/${encodeURIComponent(davidFilename)}`;
+
+        // Retain the former WEB host as a fallback only, so a temporary AudioTreasure outage
+        // does not leave the player unusable.
         const audioBookName = audioBookNames[selectedBook] || selectedBook;
         const folderName = `${bookNumberPadded}_${audioBookName.replaceAll(" ", "_")}`;
         const precedingChapters = books.slice(0, bookIndex).reduce((sum, book) => sum + book.chapters, 0);
@@ -2520,14 +2546,14 @@ Psalm 46:10
         const words = numberWords(selectedChapter);
         const underscoredWords = words.replaceAll(" ", "_");
         const underscoredBook = audioBookName.replaceAll(" ", "_");
-        const base = `https://ebible.org/eng-web/audio/${encodeURIComponent(folderName)}/`;
-        const filenames = [
+        const fallbackBase = `https://ebible.org/eng-web/audio/${encodeURIComponent(folderName)}/`;
+        const fallbackNames = [
           `${globalPadded} ${audioBookName}-Chapter ${words}.mp3`,
           `${globalPadded} ${audioBookName}-${words}.mp3`,
           `${bookNumberPadded}_${rollingPadded}_${underscoredBook}_Chapter_${underscoredWords}.mp3`,
           `${bookNumberPadded}_${String(selectedChapter).padStart(2, "0")}_${underscoredBook}_Chapter_${underscoredWords}.mp3`
         ];
-        return [...new Set(filenames)].map((filename) => base + encodeURIComponent(filename));
+        return [davidWilliamsUrl, ...fallbackNames.map((filename) => fallbackBase + encodeURIComponent(filename))];
       }
 
       function tryAudioCandidate(index) {
