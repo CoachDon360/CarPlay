@@ -1,12 +1,10 @@
-Bible Simple Verse Card v10.4
+Bible No Read Chapter v10.5
 
 Upload only bible.html.
 
 What changed:
-- Removed the Verse of the Day context scroll feature.
-- Restored the simple Verse of the Day reference and verse text.
-- Kept the Read Chapter button and working chapter reader intact.
-- Kept the v10.2 footer readability improvements.
-
-Next step:
-- Build the full Bible reader in the right panel.
+- Removed the Read Chapter button from the Verse of the Day card.
+- Removed the Verse of the Day Read Chapter click logic.
+- Removed unused Read Chapter button styling.
+- Preserved the simple Verse of the Day card and footer improvements.
+- Left the right panel ready for the dedicated Bible reader.
