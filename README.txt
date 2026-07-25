@@ -1,13 +1,15 @@
-BIBLE INTEGRATED HEADER — TINY PATCH v7
+BIBLE CENTERED + FUNCTIONAL HEADER — TINY PATCH v8
 
 Upload only:
   bible.html
 
-Changes:
-- Removes the separate charcoal arrow card appearance.
-- Builds the white back arrow directly into the navy header.
-- Makes the entire left navigation lane clickable.
-- Adds a thin, subtle divider between the arrow and title.
-- Vertically centers the arrow using a full-height flex container.
-- Left-aligns the Bible icon, title, and subtitle after the divider.
-- Preserves the verse card, navigation, reader, footer, and existing back-button behavior.
+This patch changes only the header navigation control:
+- Anchors the arrow lane to the full height of the header.
+- Vertically centers the white arrow.
+- Extends the subtle divider from the top to the bottom of the header.
+- Keeps the entire arrow lane clickable.
+- Adds reliable back behavior:
+    1. Go back when browser history exists.
+    2. Otherwise open index.html.
+
+The Bible title, verse card, menu, reader area, and footer are preserved.

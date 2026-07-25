@@ -602,6 +602,81 @@
       }
     }
 
+
+    /* Tiny patch v8: lock arrow/divider to the full header height */
+    .top-bar {
+      position: relative;
+      padding-left: 78px;
+      grid-template-columns: minmax(370px, 39%) minmax(0, 1fr);
+    }
+
+    .top-bar .back-button {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 78px;
+      height: auto;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      margin: 0;
+      border: 0;
+      border-right: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 0;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      z-index: 2;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .top-bar .back-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+      color: #fff;
+      font-size: 48px;
+      font-weight: 300;
+      line-height: 1;
+      transform: translateY(1px);
+    }
+
+    .bible-brand {
+      grid-column: 1;
+    }
+
+    @media (max-width: 900px) {
+      .top-bar {
+        padding-left: 72px;
+        grid-template-columns: minmax(330px, 42%) minmax(0, 1fr);
+      }
+
+      .top-bar .back-button {
+        width: 72px;
+      }
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .top-bar {
+        padding-left: 64px;
+        grid-template-columns: minmax(300px, 43%) minmax(0, 1fr);
+      }
+
+      .top-bar .back-button {
+        width: 64px;
+      }
+
+      .top-bar .back-arrow {
+        font-size: 42px;
+        transform: translateY(1px);
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -712,6 +787,22 @@
       <span>Empty the Jar</span>
     </div>
   </footer>
+
+  <script>
+    (() => {
+      const backButton = document.getElementById("backButton");
+      if (!backButton) return;
+
+      backButton.addEventListener("click", () => {
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          window.location.href = "index.html";
+        }
+      });
+    })();
+  </script>
+
 </body>
 </html>
 
