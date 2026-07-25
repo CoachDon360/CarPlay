@@ -1,13 +1,13 @@
-BIBLE ARROW CARD — TINY PATCH v6
+BIBLE INTEGRATED HEADER — TINY PATCH v7
 
 Upload only:
   bible.html
 
-This patch:
-- Gives the back arrow its own small charcoal card.
-- Centers the arrow inside a generous touch target.
-- Moves the Bible title/icon group farther left over the left content column.
-- Slightly tightens the spacing below the Verse of the Day card.
-- Preserves the warm yellow accents, navigation, and verse logic.
-
-Nothing else is intentionally changed.
+Changes:
+- Removes the separate charcoal arrow card appearance.
+- Builds the white back arrow directly into the navy header.
+- Makes the entire left navigation lane clickable.
+- Adds a thin, subtle divider between the arrow and title.
+- Vertically centers the arrow using a full-height flex container.
+- Left-aligns the Bible icon, title, and subtitle after the divider.
+- Preserves the verse card, navigation, reader, footer, and existing back-button behavior.
