@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bible</title>
+  <link rel="stylesheet" href="bible.css?v=001">
+</head>
+<body>
+  <header class="top-bar" aria-label="Bible header">
+    <button class="back-button" id="backButton" type="button" aria-label="Go back">
+      <span class="back-arrow" aria-hidden="true">‹</span>
+      <span>Back</span>
+    </button>
+
+    <div class="verse-content">
+      <div class="verse-heading-row">
+        <span class="verse-label">Verse of the Day</span>
+        <span class="verse-reference">Psalm 46:10</span>
+      </div>
+
+      <div class="verse-text">
+        “Be still, and know that I am God.”
+      </div>
+    </div>
+  </header>
+
+  <main class="app-shell" aria-label="Bible navigation">
+    <nav class="side-menu" aria-label="Bible sections">
+      <button class="menu-item active" type="button" data-section="law">
+        <span class="menu-title">The Law</span>
+        <span class="menu-subtitle">Genesis–Deuteronomy</span>
+      </button>
+
+      <button class="menu-item" type="button" data-section="history">
+        <span class="menu-title">History</span>
+        <span class="menu-subtitle">Joshua–Esther</span>
+      </button>
+
+      <button class="menu-item" type="button" data-section="wisdom">
+        <span class="menu-title">Poetry &amp; Wisdom</span>
+        <span class="menu-subtitle">Job–Song of Songs</span>
+      </button>
+
+      <button class="menu-item" type="button" data-section="prophets">
+        <span class="menu-title">Prophets</span>
+        <span class="menu-subtitle">Isaiah–Malachi</span>
+      </button>
+
+      <button class="menu-item" type="button" data-section="new-testament">
+        <span class="menu-title">New Testament</span>
+        <span class="menu-subtitle">Matthew–Revelation</span>
+      </button>
+
+      <button class="menu-item" type="button" data-section="insight">
+        <span class="menu-title">Insight for Living</span>
+        <span class="menu-subtitle">Sermons</span>
+      </button>
+    </nav>
+
+    <div class="panel-divider" aria-hidden="true"></div>
+    <section class="content-panel" aria-live="polite">
+    </section>
+  </main>
+  <script src="bible.js?v=001"></script>
+
+  <footer class="footer-banner">
+    <div class="mission">
+      Unleash the full force of the church to love people one at a time.
+    </div>
+
+    <div class="themes">
+      <span>Be the Branch</span>
+      <span class="footer-divider">|</span>
+      <span>Catch the Wind</span>
+      <span class="footer-divider">|</span>
+      <span>Wreck the Roof</span>
+      <span class="footer-divider">|</span>
+      <span>Grip the Plow</span>
+      <span class="footer-divider">|</span>
+      <span>Empty the Jar</span>
+    </div>
+  </footer>
+</body>
+</html>
+

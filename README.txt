@@ -1,25 +1,23 @@
-CARPLAY HOME v006 — WEATHER CENTER
+CARPLAY + BIBLE — FLAT GITHUB DEPLOYMENT
 
-UPLOAD THESE FILES TO THE ROOT OF YOUR GITHUB PAGES REPOSITORY:
-- index.html
-- home.css
-- home.js
-- all eight weather SVG files
+Upload every loose file in this ZIP directly to the ROOT of the CarPlay repository:
 
-KEEP YOUR EXISTING:
-- home-wallpaper.png
-- all other repository files and assets
+index.html
+home.css
+home.js
+bible.html
+bible.css
+bible.js
+bible-icon.png
 
-WHAT CHANGED:
-- Removed the X close button.
-- The weather dropdown is now a larger Weather panel.
-- Added a Next 12 Hours section.
-- Added a Next 10 Days section with daily condition icon, high, and low.
-- Tap the weather icon/temperature again to close.
-- Tap outside the panel to close.
-- Escape still closes it during desktop testing.
-- Weather remains hard-coded to Frankfort, Kentucky.
-- Weather refreshes every 15 minutes.
+Do not create a Bible folder.
 
-CACHE TEST:
-After deployment, add ?v=006 to the end of the page URL if Tesla or Safari shows an older build.
+RESULT
+- https://coachdon360.github.io/CarPlay/ opens the CarPlay home.
+- The first icon is Bible.
+- The Bible icon opens bible.html.
+- The Bible page Back button returns to index.html.
+
+IMPORTANT
+Keep the existing home-wallpaper.png and weather SVG files already in the repository.
+This package does not delete or replace those supporting assets.
