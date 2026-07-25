@@ -1,19 +1,18 @@
-VERSE OF THE DAY — TINY TEST v1
+BIBLE VERSE CARD — TINY PATCH v2
 
-Upload only these two files to the repository root:
+Upload only:
+  bible.html
 
-1. bible.html
-2. verse-of-the-day-test.js
+This patch:
+- Moves Verse of the Day out of the top bar.
+- Places it in its own charcoal card at the top of the left menu.
+- Makes the card exactly the same width as the left menu.
+- Adds the small white sun with rays.
+- Preserves the working seven-verse JavaScript test.
+- Does not replace bible.css, bible.js, or verse-of-the-day-test.js.
 
-Do not replace index.html, home.css, home.js, or bible.css.
-
-Normal test:
-Open bible.html. The verse is selected from a seven-verse test set using the local day of the week.
-
-Force each test verse:
-bible.html?verse=1
-bible.html?verse=2
-...
-bible.html?verse=7
-
-After the header behaves correctly, the seven test verses can be replaced by all 365 verses.
+Testing:
+Open bible.html normally, or use:
+  bible.html?verse=1
+through:
+  bible.html?verse=7

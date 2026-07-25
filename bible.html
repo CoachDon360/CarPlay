@@ -5,6 +5,114 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bible</title>
   <link rel="stylesheet" href="bible.css?v=001">
+
+  <style>
+    /* Tiny patch v2: Verse of the Day card only */
+    .top-bar .verse-content {
+      display: none;
+    }
+
+    .side-menu {
+      overflow-y: auto;
+    }
+
+    .verse-card {
+      flex: 0 0 auto;
+      width: 100%;
+      margin: 0 0 12px;
+      padding: clamp(16px, 2vw, 24px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 20px;
+      background: #17191d;
+      color: #fff;
+      text-align: left;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    .verse-card-heading {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      color: #4da3ff;
+      font-size: clamp(14px, 1.45vw, 20px);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .daily-sun {
+      position: relative;
+      width: 25px;
+      height: 25px;
+      flex: 0 0 25px;
+    }
+
+    .daily-sun::before {
+      content: "";
+      position: absolute;
+      inset: 7px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+    }
+
+    .daily-sun span,
+    .daily-sun::after {
+      position: absolute;
+      inset: 0;
+      content: "";
+      background:
+        linear-gradient(#fff, #fff) center top / 2px 5px no-repeat,
+        linear-gradient(#fff, #fff) center bottom / 2px 5px no-repeat,
+        linear-gradient(90deg, #fff, #fff) left center / 5px 2px no-repeat,
+        linear-gradient(90deg, #fff, #fff) right center / 5px 2px no-repeat;
+    }
+
+    .daily-sun span {
+      transform: rotate(45deg);
+    }
+
+    .verse-card-reference {
+      margin-bottom: 10px;
+      color: #fff;
+      font-size: clamp(21px, 2.15vw, 31px);
+      font-weight: 650;
+      line-height: 1.15;
+    }
+
+    .verse-card-text {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: clamp(16px, 1.55vw, 22px);
+      line-height: 1.42;
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .verse-card {
+        margin-bottom: 8px;
+        padding: 13px 15px;
+        border-radius: 16px;
+      }
+
+      .verse-card-heading {
+        margin-bottom: 9px;
+        gap: 9px;
+      }
+
+      .daily-sun {
+        width: 21px;
+        height: 21px;
+        flex-basis: 21px;
+      }
+
+      .daily-sun::before {
+        inset: 6px;
+      }
+
+      .verse-card-reference {
+        margin-bottom: 6px;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="top-bar" aria-label="Bible header">
@@ -13,20 +121,23 @@
       <span>Back</span>
     </button>
 
-    <div class="verse-content">
-      <div class="verse-heading-row">
-        <span class="verse-label">Verse of the Day</span>
-        <span class="verse-reference" id="verseReference">Psalm 46:10</span>
-      </div>
-
-      <div class="verse-text" id="verseText">
-        “Be still, and know that I am God.”
-      </div>
-    </div>
   </header>
 
   <main class="app-shell" aria-label="Bible navigation">
     <nav class="side-menu" aria-label="Bible sections">
+      <section class="verse-card" aria-label="Verse of the Day">
+        <div class="verse-card-heading">
+          <span class="daily-sun" aria-hidden="true"><span></span></span>
+          <span>Verse of the Day</span>
+        </div>
+
+        <div class="verse-card-reference" id="verseReference">Psalm 46:10</div>
+
+        <div class="verse-card-text" id="verseText">
+          “Be still, and know that I am God.”
+        </div>
+      </section>
+
       <button class="menu-item active" type="button" data-section="law">
         <span class="menu-title">The Law</span>
         <span class="menu-subtitle">Genesis–Deuteronomy</span>
