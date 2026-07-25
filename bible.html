@@ -112,6 +112,110 @@
         margin-bottom: 6px;
       }
     }
+
+    /* Tiny patch v3: navy Bible header + slightly wider left column */
+    .top-bar {
+      position: relative;
+      display: grid;
+      grid-template-columns: 72px 1fr 72px;
+      align-items: center;
+      width: 100%;
+      min-height: 72px;
+      padding: 0 18px;
+      border: 0;
+      border-radius: 0 0 18px 18px;
+      background: #123f73;
+      color: #fff;
+      box-sizing: border-box;
+    }
+
+    .top-bar .back-button {
+      position: static;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 52px;
+      height: 52px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #fff;
+    }
+
+    .top-bar .back-button > span:last-child {
+      display: none;
+    }
+
+    .top-bar .back-arrow {
+      color: #fff;
+      font-size: 48px;
+      font-weight: 300;
+      line-height: 1;
+      transform: translateY(-2px);
+    }
+
+    .bible-page-title {
+      margin: 0;
+      color: #fff;
+      font-size: clamp(28px, 3vw, 42px);
+      font-weight: 650;
+      line-height: 1;
+      text-align: center;
+      letter-spacing: 0.01em;
+    }
+
+    .header-bible-icon {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      color: #fff;
+    }
+
+    .header-bible-icon svg {
+      display: block;
+      width: 43px;
+      height: 43px;
+      overflow: visible;
+    }
+
+    /* Give the verse/navigation column a little more breathing room. */
+    .app-shell {
+      grid-template-columns: minmax(370px, 39%) 2px minmax(0, 1fr);
+    }
+
+    @media (max-width: 900px) {
+      .app-shell {
+        grid-template-columns: minmax(330px, 42%) 2px minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .top-bar {
+        min-height: 60px;
+        grid-template-columns: 58px 1fr 58px;
+        padding: 0 12px;
+        border-radius: 0 0 14px 14px;
+      }
+
+      .top-bar .back-button {
+        width: 44px;
+        height: 44px;
+      }
+
+      .top-bar .back-arrow {
+        font-size: 40px;
+      }
+
+      .header-bible-icon svg {
+        width: 36px;
+        height: 36px;
+      }
+
+      .app-shell {
+        grid-template-columns: minmax(300px, 43%) 2px minmax(0, 1fr);
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -121,6 +225,24 @@
       <span>Back</span>
     </button>
 
+    <h1 class="bible-page-title">Bible</h1>
+
+    <div class="header-bible-icon" aria-hidden="true">
+      <svg viewBox="0 0 64 64" role="img">
+        <path d="M32 16c-6.2-5.2-14.7-7.3-23-5.5v36.2c8.2-1.8 16.8.3 23 5.5V16Z"
+              fill="none" stroke="currentColor" stroke-width="3.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M32 16c6.2-5.2 14.7-7.3 23-5.5v36.2c-8.2-1.8-16.8.3-23 5.5V16Z"
+              fill="none" stroke="currentColor" stroke-width="3.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M32 16v36.2"
+              fill="none" stroke="currentColor" stroke-width="3.5"
+              stroke-linecap="round"/>
+        <path d="M14 20.5c4.7-.5 9.4.5 13.3 2.9M14 29c4.7-.5 9.4.5 13.3 2.9M50 20.5c-4.7-.5-9.4.5-13.3 2.9M50 29c-4.7-.5-9.4.5-13.3 2.9"
+              fill="none" stroke="currentColor" stroke-width="2.4"
+              stroke-linecap="round" opacity=".9"/>
+      </svg>
+    </div>
   </header>
 
   <main class="app-shell" aria-label="Bible navigation">
