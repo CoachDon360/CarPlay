@@ -958,25 +958,27 @@
 
     .bible-reader-frame__selectors {
       display: grid;
-      grid-template-columns: minmax(180px, 1fr) minmax(150px, .7fr);
-      gap: 16px;
-      padding: clamp(18px, 2.2vw, 28px);
+      grid-template-columns: minmax(220px, 1.15fr) minmax(190px, .85fr);
+      gap: 14px;
+      padding: clamp(14px, 1.6vw, 20px) clamp(18px, 2.2vw, 28px);
       border-bottom: 1px solid rgba(255,255,255,.12);
     }
 
     .reader-field {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+      display: block;
       min-width: 0;
     }
 
     .reader-field__label {
-      color: var(--bible-warm-yellow);
-      font-size: clamp(12px, 1vw, 15px);
-      font-weight: 800;
-      letter-spacing: .09em;
-      text-transform: uppercase;
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
     }
 
     .reader-field__control {
@@ -1015,12 +1017,59 @@
 
     .bible-reader-frame__audio {
       display: grid;
-      grid-template-columns: auto auto minmax(120px, 1fr) auto;
+      grid-template-columns: auto minmax(140px, 1fr) auto;
       align-items: center;
-      gap: 14px;
-      padding: clamp(16px, 1.8vw, 24px) clamp(18px, 2.2vw, 28px);
+      gap: 18px;
+      padding: clamp(14px, 1.6vw, 20px) clamp(18px, 2.2vw, 28px);
       border-bottom: 1px solid rgba(255,255,255,.12);
       background: rgba(0,0,0,.12);
+    }
+
+    .reader-audio__controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 13px;
+    }
+
+    .reader-audio__skip {
+      display: grid;
+      place-items: center;
+      width: 50px;
+      height: 50px;
+      padding: 0;
+      border: 1px solid rgba(255,255,255,.19);
+      border-radius: 50%;
+      background: #101216;
+      color: #fff;
+      font: inherit;
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1;
+      cursor: default;
+    }
+
+    .reader-audio__skip-mark {
+      position: relative;
+      display: inline-block;
+      transform: translateY(-1px);
+    }
+
+    .reader-audio__skip-number {
+      position: absolute;
+      inset: 50% auto auto 50%;
+      transform: translate(-50%, -46%);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: -.03em;
+    }
+
+    .reader-audio__progress {
+      display: grid;
+      grid-template-columns: auto minmax(90px, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
     }
 
     .reader-audio__play {
@@ -1031,13 +1080,14 @@
       padding: 0;
       border: 0;
       border-radius: 50%;
-      background: var(--bible-warm-yellow);
-      color: #111317;
+      background: var(--bible-accent-blue);
+      color: #fff;
       font-size: 24px;
       cursor: default;
     }
 
-    .reader-audio__time {
+    .reader-audio__time,
+    .reader-audio__duration {
       color: rgba(255,255,255,.76);
       font-size: clamp(14px, 1.15vw, 17px);
       font-variant-numeric: tabular-nums;
@@ -1136,9 +1186,19 @@
       }
 
       .bible-reader-frame__audio {
-        grid-template-columns: auto auto minmax(90px, 1fr) auto;
-        gap: 10px;
+        grid-template-columns: auto minmax(100px, 1fr) auto;
+        gap: 12px;
         padding: 12px 14px;
+      }
+
+      .reader-audio__controls {
+        gap: 9px;
+      }
+
+      .reader-audio__skip {
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
       }
 
       .reader-audio__play {
@@ -1259,25 +1319,30 @@ Psalm 46:10
             <span class="reader-field__label">Chapter</span>
             <span class="reader-field__select-wrap">
               <select class="reader-field__control" aria-label="Chapter" disabled>
-                <option selected>46</option>
+                <option selected>Chapter 46</option>
               </select>
             </span>
           </label>
         </div>
 
         <div class="bible-reader-frame__audio" aria-label="Audio player preview">
-          <button class="reader-audio__play" type="button" aria-label="Play preview" disabled>▶</button>
-          <span class="reader-audio__time">00:00</span>
-          <div class="reader-audio__track" aria-hidden="true"></div>
-          <span class="reader-audio__status">Audio next</span>
-        </div>
-
-        <div class="bible-reader-frame__reader">
-          <div class="reader-placeholder">
-            <div class="reader-placeholder__eyebrow">Bible Reader</div>
-            <h2 class="reader-placeholder__title">Psalm 46</h2>
-            <p class="reader-placeholder__message">Bible reader coming next…</p>
+          <div class="reader-audio__controls" aria-label="Playback controls">
+            <button class="reader-audio__skip" type="button" aria-label="Rewind 15 seconds" disabled>
+              <span class="reader-audio__skip-mark">↶<span class="reader-audio__skip-number">15</span></span>
+            </button>
+            <button class="reader-audio__play" type="button" aria-label="Play preview" disabled>▶</button>
+            <button class="reader-audio__skip" type="button" aria-label="Forward 15 seconds" disabled>
+              <span class="reader-audio__skip-mark">↷<span class="reader-audio__skip-number">15</span></span>
+            </button>
           </div>
+
+          <div class="reader-audio__progress">
+            <span class="reader-audio__time">00:00</span>
+            <div class="reader-audio__track" aria-hidden="true"></div>
+            <span class="reader-audio__duration">00:00</span>
+          </div>
+
+          <span class="reader-audio__status">Audio next</span>
         </div>
       </section>
     </section>

@@ -1,14 +1,14 @@
-Bible Reader Frame v11.0a
+Bible Reader Controls v11.0b
 
 Upload only bible.html.
 
 What changed:
-- Built the permanent Bible reader frame in the right panel.
-- Added static Book and Chapter selectors showing Psalms 46.
-- Added a nonfunctional audio-player placeholder.
-- Added an empty chapter-reading area labeled Psalm 46.
-- Removed the obsolete Verse of the Day Read Chapter script.
-- No selector, audio, or chapter-reading functionality has been added yet.
+- Condensed the Book and Chapter controls into a slimmer single selector row.
+- Changed the play button from gold to the established interface blue.
+- Added curved 15-second rewind and forward controls.
+- Added elapsed and total-time positions around the progress track.
+- Kept every control intentionally nonfunctional for this layout-testing build.
+- Preserved the empty Psalm 46 reader placeholder.
 
 Next tiny build:
-- Add the text of Psalm 46 and test reading, spacing, and scrolling.
+- Add the Psalm 46 text and test typography, spacing, and scrolling.
