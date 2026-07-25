@@ -2232,6 +2232,7 @@ Psalm 46:10
       let selectedBookChapters = 150;
       let requestNumber = 0;
       const chapterCache = new Map();
+      const readingPositionKey = "carplayBibleReadingPosition";
 
 
       const books = Array.from(bookMenu.querySelectorAll("[data-book]")).map((item) => ({
@@ -2262,6 +2263,32 @@ Psalm 46:10
         nextChapterButtons.forEach((button) => { button.disabled = atEnd; });
       }
 
+      function saveReadingPosition() {
+        try {
+          window.localStorage.setItem(readingPositionKey, JSON.stringify({
+            book: selectedBook,
+            chapter: selectedChapter
+          }));
+        } catch (error) {
+          // Some browsers can block storage. Reading still works normally.
+        }
+      }
+
+      function getSavedReadingPosition() {
+        try {
+          const saved = JSON.parse(window.localStorage.getItem(readingPositionKey));
+          if (!saved || typeof saved.book !== "string") return null;
+
+          const book = books.find((entry) => entry.name === saved.book);
+          const chapter = Number(saved.chapter);
+          if (!book || !Number.isInteger(chapter) || chapter < 1 || chapter > book.chapters) return null;
+
+          return { book: book.name, chapter };
+        } catch (error) {
+          return null;
+        }
+      }
+
       function selectReference(bookName, chapterNumber) {
         const book = books.find((entry) => entry.name === bookName);
         if (!book) return;
@@ -2274,6 +2301,7 @@ Psalm 46:10
         buildChapterMenu(selectedBookChapters);
         updateSelectedChapterUI();
         updateNavigationButtons();
+        saveReadingPosition();
         closeAll();
         loadChapter();
       }
@@ -2420,10 +2448,16 @@ Psalm 46:10
         if (event.key === "Escape") closeAll();
       });
 
-      buildChapterMenu(selectedBookChapters);
-      updateSelectedBookUI();
-      updateSelectedChapterUI();
-      updateNavigationButtons();
+      const savedReadingPosition = getSavedReadingPosition();
+      if (savedReadingPosition) {
+        selectReference(savedReadingPosition.book, savedReadingPosition.chapter);
+      } else {
+        buildChapterMenu(selectedBookChapters);
+        updateSelectedBookUI();
+        updateSelectedChapterUI();
+        updateNavigationButtons();
+        saveReadingPosition();
+      }
     })();
   </script>
 
