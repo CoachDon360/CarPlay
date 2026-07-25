@@ -1,7 +1,17 @@
-CARPLAY + BIBLE FINAL MATCHED BUILD
+TRUE PATCH BUILD
 
-Upload all loose files directly into the ROOT of the CarPlay GitHub repository:
+Source files:
+- index(49).html
+- home(2).css
+- home(2).js
 
+Verification:
+- home.css copied byte-for-byte: True
+- home.js copied byte-for-byte: True
+- Only index.html was patched.
+- INDEX-DIFF.txt shows every changed line.
+
+Upload these loose files to the repository root:
 index.html
 home.css
 home.js
@@ -10,16 +20,4 @@ bible.css
 bible.js
 bible-icon.png
 
-This build uses the exact matching files you supplied:
-- index(49).html
-- home(2).css
-- home(2).js
-
-Only the Bible tile was changed:
-- moved to the first position
-- replaced with the new blue-and-white icon
-- linked to bible.html
-
-Keep all existing repository assets, especially:
-- home-wallpaper.png
-- weather SVG files
+Keep all existing wallpaper and weather icon assets in place.
