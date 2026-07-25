@@ -1,1 +1,1 @@
-v9.1 - Reduced header height and scaled icon/text proportionally. Upload only bible.html.
+v9.2 — Corrects the header corner radius so all four corners are rounded. Upload only bible.html.
