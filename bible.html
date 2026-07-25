@@ -216,6 +216,133 @@
       }
     }
 
+
+    /* Tiny patch v4: header balance, subtitle, unified blues, spacing, card footer */
+    :root {
+      --bible-primary-blue: #1d4f86;
+      --bible-accent-blue: #4da3ff;
+      --bible-selected-blue: rgba(29, 79, 134, 0.58);
+    }
+
+    .top-bar {
+      background: var(--bible-primary-blue);
+      min-height: 82px;
+      grid-template-columns: 72px 1fr 72px;
+    }
+
+    .top-bar .back-button,
+    .header-bible-icon {
+      height: 100%;
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+    }
+
+    .top-bar .back-button {
+      justify-content: flex-start;
+    }
+
+    .top-bar .back-arrow {
+      display: block;
+      transform: none;
+      line-height: 1;
+      margin-top: 0;
+    }
+
+    .header-bible-icon {
+      justify-content: flex-end;
+    }
+
+    .bible-title-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      text-align: center;
+    }
+
+    .bible-page-title {
+      line-height: 1.05;
+    }
+
+    .bible-page-subtitle {
+      margin-top: 5px;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: clamp(12px, 1.15vw, 16px);
+      font-weight: 550;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .verse-card {
+      margin-bottom: 24px;
+    }
+
+    .verse-card-heading {
+      color: var(--bible-accent-blue);
+    }
+
+    .verse-card-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .read-chapter-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 42px;
+      padding: 8px 16px;
+      border: 1px solid var(--bible-accent-blue);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--bible-accent-blue);
+      font: inherit;
+      font-size: clamp(14px, 1.25vw, 18px);
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    .read-chapter-button:hover,
+    .read-chapter-button:focus-visible {
+      background: rgba(77, 163, 255, 0.10);
+    }
+
+    .side-menu .menu-item.active,
+    .side-menu [aria-current="true"] {
+      background: var(--bible-selected-blue);
+      border-left-color: var(--bible-accent-blue);
+    }
+
+    .app-shell .divider,
+    .vertical-divider {
+      background: var(--bible-accent-blue);
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .top-bar {
+        min-height: 70px;
+      }
+
+      .bible-page-subtitle {
+        margin-top: 3px;
+      }
+
+      .verse-card {
+        margin-bottom: 16px;
+      }
+
+      .verse-card-footer {
+        margin-top: 12px;
+        padding-top: 11px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -225,7 +352,10 @@
       <span>Back</span>
     </button>
 
-    <h1 class="bible-page-title">Bible</h1>
+    <div class="bible-title-group">
+      <h1 class="bible-page-title">Bible</h1>
+      <div class="bible-page-subtitle">Read • Listen • Pray</div>
+    </div>
 
     <div class="header-bible-icon" aria-hidden="true">
       <svg viewBox="0 0 64 64" role="img">
@@ -257,6 +387,13 @@
 
         <div class="verse-card-text" id="verseText">
           “Be still, and know that I am God.”
+        </div>
+
+        <div class="verse-card-footer">
+          <button class="read-chapter-button" type="button" aria-label="Read the full chapter">
+            <span>Read Chapter</span>
+            <span aria-hidden="true">→</span>
+          </button>
         </div>
       </section>
 

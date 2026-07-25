@@ -1,15 +1,15 @@
-BIBLE BLUE HEADER — TINY PATCH v3
+BIBLE HEADER POLISH — TINY PATCH v4
 
 Upload only:
   bible.html
 
 This patch:
-- Adds the full-width navy blue header.
-- Adds a white back arrow on the left.
-- Centers the white “Bible” title.
-- Adds a simple white open-Bible icon on the right.
-- Makes the left Verse of the Day/navigation column a smidge wider.
-- Preserves the Verse of the Day card and seven-verse test logic.
-- Does not replace bible.css, bible.js, or verse-of-the-day-test.js.
+- Vertically centers the white back arrow in the blue header.
+- Keeps the white Bible icon centered on the same visual line.
+- Adds “Read • Listen • Pray” beneath the Bible title.
+- Unifies the page to one primary blue plus one accent blue.
+- Adds more space below the Verse of the Day card.
+- Adds a divider and a non-working “Read Chapter →” placeholder button.
+- Preserves the existing Bible navigation and seven-verse test logic.
 
-Nothing else is intentionally changed.
+The Read Chapter button is visual only in this version.
