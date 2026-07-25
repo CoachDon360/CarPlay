@@ -1,6 +1,6 @@
-CARPLAY + BIBLE — FLAT GITHUB DEPLOYMENT
+SURGICAL CARPLAY + BIBLE UPDATE
 
-Upload every loose file in this ZIP directly to the ROOT of the CarPlay repository:
+Upload these loose files directly to the ROOT of the GitHub repository:
 
 index.html
 home.css
@@ -10,14 +10,18 @@ bible.css
 bible.js
 bible-icon.png
 
-Do not create a Bible folder.
+WHAT CHANGED IN index.html
+- Started from the exact index(49).html you uploaded.
+- Moved Bible to the first grid position.
+- Replaced only the old cross icon with bible-icon.png.
+- Linked the Bible tile directly to bible.html.
 
-RESULT
-- https://coachdon360.github.io/CarPlay/ opens the CarPlay home.
-- The first icon is Bible.
-- The Bible icon opens bible.html.
-- The Bible page Back button returns to index.html.
+WHAT DID NOT CHANGE
+- Weather panel HTML
+- Forecast panel HTML
+- Time display HTML
+- home.css
+- home.js
+- All other app tiles and their order
 
-IMPORTANT
-Keep the existing home-wallpaper.png and weather SVG files already in the repository.
-This package does not delete or replace those supporting assets.
+Keep existing supporting files such as home-wallpaper.png and weather SVG files.

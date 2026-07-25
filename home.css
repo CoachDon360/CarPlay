@@ -10,7 +10,7 @@ body{
   -webkit-font-smoothing:antialiased;
   background:#075a9d;
 }
-button,a{font:inherit;-webkit-tap-highlight-color:transparent}
+button{font:inherit;-webkit-tap-highlight-color:transparent}
 .home-screen{
   position:relative;
   width:100vw;
@@ -61,7 +61,6 @@ button,a{font:inherit;-webkit-tap-highlight-color:transparent}
   gap:clamp(7px,1.1vh,12px);
   cursor:pointer;
   text-shadow:0 2px 9px rgba(0,30,70,.58);
-  text-decoration:none;
 }
 .home-app>span:last-child{
   max-width:100%;
@@ -93,18 +92,7 @@ button,a{font:inherit;-webkit-tap-highlight-color:transparent}
 
 .icon-radio{background:linear-gradient(145deg,#ff6a24,#e9342c)}
 .icon-disney{background:linear-gradient(145deg,#7457ff,#2738aa)}
-.icon-bible{
-  padding:0;
-  overflow:hidden;
-  background:transparent;
-  border-color:rgba(255,255,255,.34);
-}
-.icon-bible img{
-  display:block;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
+.icon-bible{background:linear-gradient(145deg,#bea06e,#664526)}
 .icon-podcasts{background:linear-gradient(145deg,#9d57ff,#6020c7)}
 .icon-maps{background:linear-gradient(145deg,#42cc7c,#0b8d65)}
 .icon-weather{background:linear-gradient(145deg,#52c7ff,#1570d7)}
