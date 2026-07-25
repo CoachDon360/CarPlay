@@ -1,17 +1,10 @@
-BIBLE READ CHAPTER PROTOTYPE — v10
+Bible Read Chapter Panel v10.1
 
-Upload only:
-  bible.html
+Upload only bible.html.
 
-This focused prototype does three things:
-1. Makes the existing Read Chapter button functional.
-2. Opens Psalm 46 in a dedicated reader overlay.
-3. Highlights verse 1, matching the current Verse of the Day.
-
-Also included:
-- Close button
-- Escape-key close
-- Click-outside close
-- Scroll lock while the reader is open
-
-This prototype intentionally uses Psalm 46 only. It does not yet add the full Bible, search, audio, or chapter navigation.
+What this build does:
+- Wires the existing Read Chapter button.
+- Opens Psalm 46 in the existing right content panel.
+- Highlights verse 10 to match the Verse of the Day.
+- Adds a Close button that clears the reader panel.
+- Leaves external bible.css, bible.js, and verse-of-the-day-test.js references untouched.

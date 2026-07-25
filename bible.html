@@ -899,146 +899,139 @@
       }
     }
 
-
-    /* v10 — Read Chapter prototype */
-    .chapter-reader-v10 {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 28px;
-      background: rgba(0, 0, 0, .72);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-    }
-
-    .chapter-reader-v10.is-open {
-      display: flex;
-    }
-
-    .chapter-reader-v10__panel {
-      width: min(980px, 94vw);
-      max-height: 88vh;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,.16);
-      border-radius: 28px;
-      background: #15181c;
+  
+    /* v10.1 — Read Chapter in the right content panel */
+    .content-panel {
+      position: relative;
+      min-width: 0;
+      overflow-y: auto;
+      padding: clamp(24px, 3vw, 42px);
+      background: #111317;
       color: #fff;
-      box-shadow: 0 24px 80px rgba(0,0,0,.45);
-      display: flex;
-      flex-direction: column;
     }
 
-    .chapter-reader-v10__header {
-      flex: 0 0 auto;
+    .chapter-reader {
+      width: 100%;
+      max-width: 980px;
+      margin: 0 auto;
+      animation: chapterReaderIn .22s ease-out;
+    }
+
+    @keyframes chapterReaderIn {
+      from {
+        opacity: 0;
+        transform: translateX(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .chapter-reader__header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 24px;
-      padding: 28px 32px 22px;
-      border-bottom: 1px solid rgba(255,255,255,.12);
-      background: #214d7d;
+      gap: 22px;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,.14);
     }
 
-    .chapter-reader-v10__eyebrow {
+    .chapter-reader__eyebrow {
       margin-bottom: 6px;
-      color: #ffd95a;
-      font-size: 18px;
+      color: var(--bible-warm-yellow);
+      font-size: clamp(13px, 1.2vw, 17px);
       font-weight: 800;
       letter-spacing: .1em;
       text-transform: uppercase;
     }
 
-    .chapter-reader-v10__header h2 {
+    .chapter-reader__title {
       margin: 0;
-      font-size: clamp(34px, 4vw, 54px);
+      color: #fff;
+      font-size: clamp(38px, 4vw, 58px);
       line-height: 1;
     }
 
-    .chapter-reader-v10__close {
-      flex: 0 0 56px;
-      width: 56px;
-      height: 56px;
-      border: 1px solid rgba(255,255,255,.28);
-      border-radius: 50%;
+    .chapter-reader__reference {
+      margin-top: 8px;
+      color: rgba(255,255,255,.68);
+      font-size: clamp(15px, 1.3vw, 19px);
+    }
+
+    .chapter-reader__close {
+      flex: 0 0 auto;
+      min-width: 48px;
+      height: 48px;
+      padding: 0 16px;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 999px;
       background: transparent;
       color: #fff;
-      font-size: 40px;
-      line-height: 1;
+      font: inherit;
+      font-size: 16px;
+      font-weight: 700;
       cursor: pointer;
     }
 
-    .chapter-reader-v10__close:hover,
-    .chapter-reader-v10__close:focus-visible {
-      background: rgba(255,255,255,.1);
+    .chapter-reader__close:hover,
+    .chapter-reader__close:focus-visible {
+      background: rgba(255,255,255,.08);
       outline: none;
     }
 
-    .chapter-reader-v10__body {
-      overflow-y: auto;
-      padding: 26px 32px 34px;
-      scroll-behavior: smooth;
-    }
-
-    .chapter-reader-v10__verse {
-      margin: 0 0 16px;
-      padding: 14px 16px;
+    .chapter-reader__verse {
+      margin: 0 0 10px;
+      padding: 13px 16px;
       border-radius: 14px;
-      color: #f3f4f6;
-      font-size: clamp(20px, 2vw, 28px);
-      line-height: 1.55;
+      color: rgba(255,255,255,.92);
+      font-size: clamp(18px, 1.7vw, 25px);
+      line-height: 1.58;
     }
 
-    .chapter-reader-v10__number {
+    .chapter-reader__verse-number {
       display: inline-block;
       min-width: 34px;
-      color: #58a7ff;
+      color: var(--bible-accent-blue);
       font-weight: 800;
     }
 
-    .chapter-reader-v10__verse.is-highlighted {
+    .chapter-reader__verse.is-highlighted {
       background: rgba(255,217,90,.14);
-      box-shadow: inset 4px 0 0 #ffd95a;
+      box-shadow: inset 4px 0 0 var(--bible-warm-yellow);
     }
 
-    .chapter-reader-v10__verse.is-highlighted .chapter-reader-v10__number {
-      color: #ffd95a;
+    .chapter-reader__verse.is-highlighted .chapter-reader__verse-number {
+      color: var(--bible-warm-yellow);
     }
 
-    body.chapter-reader-open {
-      overflow: hidden;
+    .chapter-reader__empty {
+      display: grid;
+      place-items: center;
+      min-height: 100%;
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      font-size: clamp(18px, 1.6vw, 24px);
     }
 
     @media (max-width: 760px), (max-height: 560px) {
-      .chapter-reader-v10 {
-        padding: 12px;
+      .content-panel {
+        padding: 20px;
       }
 
-      .chapter-reader-v10__panel {
-        width: 100%;
-        max-height: 94vh;
-        border-radius: 20px;
+      .chapter-reader__header {
+        margin-bottom: 18px;
+        padding-bottom: 16px;
       }
 
-      .chapter-reader-v10__header {
-        padding: 18px 20px 16px;
+      .chapter-reader__close {
+        min-width: 44px;
+        height: 44px;
+        padding: 0 13px;
       }
 
-      .chapter-reader-v10__close {
-        flex-basis: 48px;
-        width: 48px;
-        height: 48px;
-        font-size: 34px;
-      }
-
-      .chapter-reader-v10__body {
-        padding: 18px 20px 24px;
-      }
-
-      .chapter-reader-v10__verse {
-        margin-bottom: 10px;
+      .chapter-reader__verse {
         padding: 10px 12px;
       }
     }
@@ -1082,7 +1075,7 @@
         </div>
 
         <div class="verse-card-footer">
-          <button class="read-chapter-button" type="button" aria-label="Read the full chapter" id="readChapterButton">
+          <button class="read-chapter-button" id="readChapterButton" type="button" aria-label="Read the full chapter">
             <span>Read Chapter</span>
             <span aria-hidden="true">→</span>
           </button>
@@ -1121,7 +1114,7 @@
     </nav>
 
     <div class="panel-divider" aria-hidden="true"></div>
-    <section class="content-panel" aria-live="polite">
+    <section class="content-panel" id="contentPanel" aria-live="polite">
     </section>
   </main>
   <script src="bible.js?v=001"></script>
@@ -1177,94 +1170,81 @@
   </script>
 
 
-  <section class="chapter-reader-v10" id="chapterReader" aria-hidden="true" aria-label="Bible chapter reader">
-    <div class="chapter-reader-v10__panel" role="dialog" aria-modal="true" aria-labelledby="chapterReaderTitle">
-      <div class="chapter-reader-v10__header">
-        <div>
-          <div class="chapter-reader-v10__eyebrow">Read Chapter</div>
-          <h2 id="chapterReaderTitle">Psalm 46</h2>
-        </div>
-        <button class="chapter-reader-v10__close" id="closeChapterReader" type="button" aria-label="Close chapter reader">×</button>
-      </div>
-
-      <div class="chapter-reader-v10__body" id="chapterReaderBody">
-        <p class="chapter-reader-v10__verse is-highlighted" data-verse="1"><span class="chapter-reader-v10__number">1</span> God is our refuge and strength, a very present help in trouble.</p>
-        <p class="chapter-reader-v10__verse" data-verse="2"><span class="chapter-reader-v10__number">2</span> Therefore will not we fear, though the earth be removed, and though the mountains be carried into the midst of the sea;</p>
-        <p class="chapter-reader-v10__verse" data-verse="3"><span class="chapter-reader-v10__number">3</span> Though the waters thereof roar and be troubled, though the mountains shake with the swelling thereof. Selah.</p>
-        <p class="chapter-reader-v10__verse" data-verse="4"><span class="chapter-reader-v10__number">4</span> There is a river, the streams whereof shall make glad the city of God, the holy place of the tabernacles of the most High.</p>
-        <p class="chapter-reader-v10__verse" data-verse="5"><span class="chapter-reader-v10__number">5</span> God is in the midst of her; she shall not be moved: God shall help her, and that right early.</p>
-        <p class="chapter-reader-v10__verse" data-verse="6"><span class="chapter-reader-v10__number">6</span> The heathen raged, the kingdoms were moved: he uttered his voice, the earth melted.</p>
-        <p class="chapter-reader-v10__verse" data-verse="7"><span class="chapter-reader-v10__number">7</span> The Lord of hosts is with us; the God of Jacob is our refuge. Selah.</p>
-        <p class="chapter-reader-v10__verse" data-verse="8"><span class="chapter-reader-v10__number">8</span> Come, behold the works of the Lord, what desolations he hath made in the earth.</p>
-        <p class="chapter-reader-v10__verse" data-verse="9"><span class="chapter-reader-v10__number">9</span> He maketh wars to cease unto the end of the earth; he breaketh the bow, and cutteth the spear in sunder; he burneth the chariot in the fire.</p>
-        <p class="chapter-reader-v10__verse" data-verse="10"><span class="chapter-reader-v10__number">10</span> Be still, and know that I am God: I will be exalted among the heathen, I will be exalted in the earth.</p>
-        <p class="chapter-reader-v10__verse" data-verse="11"><span class="chapter-reader-v10__number">11</span> The Lord of hosts is with us; the God of Jacob is our refuge. Selah.</p>
-      </div>
-    </div>
-  </section>
-
-
   <script>
     (() => {
-      const dailyVerse = {
+      const verseOfDay = {
         book: "Psalm",
         chapter: 46,
-        verse: 1,
-        reference: "Psalm 46:1"
+        verse: 10,
+        reference: "Psalm 46:10"
       };
 
-      const openButton = document.getElementById("readChapterButton");
-      const reader = document.getElementById("chapterReader");
-      const closeButton = document.getElementById("closeChapterReader");
-      const readerTitle = document.getElementById("chapterReaderTitle");
-      const readerBody = document.getElementById("chapterReaderBody");
+      const psalm46 = [
+        "God is our refuge and strength, a very present help in trouble.",
+        "Therefore will not we fear, though the earth be removed, and though the mountains be carried into the midst of the sea;",
+        "Though the waters thereof roar and be troubled, though the mountains shake with the swelling thereof. Selah.",
+        "There is a river, the streams whereof shall make glad the city of God, the holy place of the tabernacles of the most High.",
+        "God is in the midst of her; she shall not be moved: God shall help her, and that right early.",
+        "The heathen raged, the kingdoms were moved: he uttered his voice, the earth melted.",
+        "The Lord of hosts is with us; the God of Jacob is our refuge. Selah.",
+        "Come, behold the works of the Lord, what desolations he hath made in the earth.",
+        "He maketh wars to cease unto the end of the earth; he breaketh the bow, and cutteth the spear in sunder; he burneth the chariot in the fire.",
+        "Be still, and know that I am God: I will be exalted among the heathen, I will be exalted in the earth.",
+        "The Lord of hosts is with us; the God of Jacob is our refuge. Selah."
+      ];
 
-      if (!openButton || !reader || !closeButton || !readerBody) return;
+      const button = document.getElementById("readChapterButton");
+      const panel = document.getElementById("contentPanel");
 
-      const openReader = (event) => {
-        if (event) event.preventDefault();
+      if (!button || !panel) return;
 
-        readerTitle.textContent = `${dailyVerse.book} ${dailyVerse.chapter}`;
+      const renderChapter = () => {
+        panel.innerHTML = `
+          <article class="chapter-reader" aria-labelledby="chapterReaderTitle">
+            <header class="chapter-reader__header">
+              <div>
+                <div class="chapter-reader__eyebrow">Read Chapter</div>
+                <h2 class="chapter-reader__title" id="chapterReaderTitle">${verseOfDay.book} ${verseOfDay.chapter}</h2>
+                <div class="chapter-reader__reference">Verse of the Day: ${verseOfDay.reference}</div>
+              </div>
+              <button class="chapter-reader__close" id="closeChapterReader" type="button">Close</button>
+            </header>
 
-        readerBody.querySelectorAll(".chapter-reader-v10__verse").forEach((verse) => {
-          verse.classList.toggle(
-            "is-highlighted",
-            Number(verse.dataset.verse) === dailyVerse.verse
-          );
-        });
+            <div class="chapter-reader__body">
+              ${psalm46.map((text, index) => {
+                const verseNumber = index + 1;
+                const highlighted = verseNumber === verseOfDay.verse ? " is-highlighted" : "";
+                return `
+                  <p class="chapter-reader__verse${highlighted}" data-verse="${verseNumber}">
+                    <span class="chapter-reader__verse-number">${verseNumber}</span>${text}
+                  </p>
+                `;
+              }).join("")}
+            </div>
+          </article>
+        `;
 
-        reader.classList.add("is-open");
-        reader.setAttribute("aria-hidden", "false");
-        document.body.classList.add("chapter-reader-open");
-
+        const highlightedVerse = panel.querySelector(".is-highlighted");
         requestAnimationFrame(() => {
-          const highlighted = readerBody.querySelector(".is-highlighted");
-          if (highlighted) {
-            highlighted.scrollIntoView({ block: "center", behavior: "smooth" });
+          if (highlightedVerse) {
+            highlightedVerse.scrollIntoView({ block: "center", behavior: "smooth" });
           }
-          closeButton.focus();
         });
-      };
 
-      const closeReader = () => {
-        reader.classList.remove("is-open");
-        reader.setAttribute("aria-hidden", "true");
-        document.body.classList.remove("chapter-reader-open");
-        openButton.focus();
-      };
-
-      openButton.addEventListener("click", openReader);
-      closeButton.addEventListener("click", closeReader);
-
-      reader.addEventListener("click", (event) => {
-        if (event.target === reader) closeReader();
-      });
-
-      document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && reader.classList.contains("is-open")) {
-          closeReader();
+        const close = document.getElementById("closeChapterReader");
+        if (close) {
+          close.addEventListener("click", () => {
+            panel.innerHTML = `
+              <div class="chapter-reader__empty">
+                Select a Bible section or use Verse of the Day to begin reading.
+              </div>
+            `;
+            button.focus();
+          });
         }
-      });
+      };
+
+      button.addEventListener("click", renderChapter);
     })();
   </script>
 
