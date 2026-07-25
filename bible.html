@@ -1084,6 +1084,90 @@
       }
     }
 
+  
+    /* v10.3 — Verse of the Day context scroll */
+    .verse-context-window {
+      position: relative;
+      width: 100%;
+      max-height: clamp(190px, 29vh, 310px);
+      margin-top: 16px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 18px;
+      background: rgba(0,0,0,.16);
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,217,90,.62) rgba(255,255,255,.08);
+    }
+
+    .verse-context-window::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    .verse-context-window::-webkit-scrollbar-track {
+      background: rgba(255,255,255,.06);
+      border-radius: 999px;
+    }
+
+    .verse-context-window::-webkit-scrollbar-thumb {
+      background: rgba(255,217,90,.58);
+      border-radius: 999px;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+
+    .verse-context-list {
+      padding: 14px;
+    }
+
+    .verse-context-line {
+      margin: 0 0 10px;
+      padding: 12px 13px;
+      border-radius: 14px;
+      color: rgba(255,255,255,.84);
+      font-size: clamp(16px, 1.45vw, 21px);
+      line-height: 1.52;
+    }
+
+    .verse-context-line:last-child {
+      margin-bottom: 0;
+    }
+
+    .verse-context-number {
+      display: inline-block;
+      min-width: 30px;
+      color: var(--bible-accent-blue);
+      font-weight: 800;
+    }
+
+    .verse-context-line.is-today {
+      background: rgba(255,217,90,.14);
+      box-shadow: inset 4px 0 0 var(--bible-warm-yellow);
+      color: #fff;
+    }
+
+    .verse-context-line.is-today .verse-context-number {
+      color: var(--bible-warm-yellow);
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .verse-context-window {
+        max-height: 170px;
+        margin-top: 12px;
+      }
+
+      .verse-context-list {
+        padding: 10px;
+      }
+
+      .verse-context-line {
+        padding: 10px 11px;
+        font-size: clamp(15px, 1.7vw, 18px);
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1116,11 +1200,36 @@
           <span>Verse of the Day</span>
         </div>
 
-        <div class="verse-card-reference" id="verseReference">Psalm 46:10</div>
+        
+<div class="verse-card-reference" id="verseReference">
+Psalm 46:10
+</div>
 
-        <div class="verse-card-text" id="verseText">
-          “Be still, and know that I am God.”
-        </div>
+<div class="verse-context-window" id="verseContextWindow" aria-label="Verse of the Day context">
+  <div class="verse-context-list" id="verseContextList">
+    <p class="verse-context-line" data-verse="7">
+      <span class="verse-context-number">7</span>
+      The Lord of hosts is with us; the God of Jacob is our refuge. Selah.
+    </p>
+    <p class="verse-context-line" data-verse="8">
+      <span class="verse-context-number">8</span>
+      Come, behold the works of the Lord, what desolations he hath made in the earth.
+    </p>
+    <p class="verse-context-line" data-verse="9">
+      <span class="verse-context-number">9</span>
+      He maketh wars to cease unto the end of the earth; he breaketh the bow, and cutteth the spear in sunder; he burneth the chariot in the fire.
+    </p>
+    <p class="verse-context-line is-today" id="verseText" data-verse="10">
+      <span class="verse-context-number">10</span>
+      Be still, and know that I am God: I will be exalted among the heathen, I will be exalted in the earth.
+    </p>
+    <p class="verse-context-line" data-verse="11">
+      <span class="verse-context-number">11</span>
+      The Lord of hosts is with us; the God of Jacob is our refuge. Selah.
+    </p>
+  </div>
+</div>
+
 
         <div class="verse-card-footer">
           <button class="read-chapter-button" id="readChapterButton" type="button" aria-label="Read the full chapter">
@@ -1293,6 +1402,31 @@
       };
 
       button.addEventListener("click", renderChapter);
+    })();
+  </script>
+
+
+  <script>
+    (() => {
+      const contextWindow = document.getElementById("verseContextWindow");
+      const todayVerse = document.querySelector(".verse-context-line.is-today");
+
+      if (!contextWindow || !todayVerse) return;
+
+      const centerTodayVerse = () => {
+        const targetTop =
+          todayVerse.offsetTop -
+          (contextWindow.clientHeight / 2) +
+          (todayVerse.offsetHeight / 2);
+
+        contextWindow.scrollTop = Math.max(0, targetTop);
+      };
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(centerTodayVerse);
+      });
+
+      window.addEventListener("resize", centerTodayVerse, { passive: true });
     })();
   </script>
 
