@@ -1894,7 +1894,39 @@
       }
     }
 
-  </style>
+  
+
+    /* v11.6: primary chapter navigation stays near the chapter controls. */
+    .chapter-navigation--top {
+      margin: 14px 0 18px;
+      padding: 0 2px;
+    }
+
+    .chapter-navigation--top .chapter-navigation__button {
+      min-height: 54px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .chapter-navigation--bottom {
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .chapter-navigation--bottom .chapter-navigation__button {
+      min-height: 46px;
+      font-size: 14px;
+      opacity: 0.88;
+    }
+
+    @media (max-width: 700px) {
+      .chapter-navigation--top .chapter-navigation__button {
+        min-height: 50px;
+        font-size: 14px;
+      }
+    }
+</style>
 </head>
 <body>
   <header class="bible-header-v9" aria-label="Bible header">
@@ -2065,6 +2097,11 @@ Psalm 46:10
           </div>
         </div>
 
+        <div class="chapter-navigation chapter-navigation--top" id="topChapterNavigation" aria-label="Chapter navigation">
+          <button class="chapter-navigation__button" data-chapter-direction="previous" type="button">◀ Previous Chapter</button>
+          <button class="chapter-navigation__button" data-chapter-direction="next" type="button">Next Chapter ▶</button>
+        </div>
+
         <div class="bible-reader-frame__audio" aria-label="Audio player preview">
           <div class="reader-audio__controls" aria-label="Playback controls">
             <button class="reader-audio__skip" type="button" aria-label="Rewind" disabled>
@@ -2110,9 +2147,9 @@ Psalm 46:10
               Choose any book and chapter. Scripture loads automatically when you make a selection.
             </p>
 
-            <div class="chapter-navigation" aria-label="Chapter navigation">
-              <button class="chapter-navigation__button" id="previousChapterButton" type="button">◀ Previous Chapter</button>
-              <button class="chapter-navigation__button" id="nextChapterButton" type="button">Next Chapter ▶</button>
+            <div class="chapter-navigation chapter-navigation--bottom" aria-label="Chapter navigation">
+              <button class="chapter-navigation__button" data-chapter-direction="previous" type="button">◀ Previous Chapter</button>
+              <button class="chapter-navigation__button" data-chapter-direction="next" type="button">Next Chapter ▶</button>
             </div>
           </article>
         </div>
@@ -2184,10 +2221,11 @@ Psalm 46:10
       const title = document.getElementById("scriptureTitle");
       const text = document.getElementById("scriptureText");
       const note = document.getElementById("readerNote");
-      const previousChapterButton = document.getElementById("previousChapterButton");
-      const nextChapterButton = document.getElementById("nextChapterButton");
+      const previousChapterButtons = Array.from(document.querySelectorAll('[data-chapter-direction="previous"]'));
+      const nextChapterButtons = Array.from(document.querySelectorAll('[data-chapter-direction="next"]'));
+      const topChapterNavigation = document.getElementById("topChapterNavigation");
 
-      if (!bookButton || !chapterButton || !bookMenu || !chapterMenu || !title || !text || !note || !previousChapterButton || !nextChapterButton) return;
+      if (!bookButton || !chapterButton || !bookMenu || !chapterMenu || !title || !text || !note || previousChapterButtons.length === 0 || nextChapterButtons.length === 0) return;
 
       let selectedBook = "Psalms";
       let selectedChapter = 46;
@@ -2218,8 +2256,10 @@ Psalm 46:10
 
       function updateNavigationButtons() {
         const bookIndex = books.findIndex((book) => book.name === selectedBook);
-        previousChapterButton.disabled = bookIndex === 0 && selectedChapter === 1;
-        nextChapterButton.disabled = bookIndex === books.length - 1 && selectedChapter === selectedBookChapters;
+        const atBeginning = bookIndex === 0 && selectedChapter === 1;
+        const atEnd = bookIndex === books.length - 1 && selectedChapter === selectedBookChapters;
+        previousChapterButtons.forEach((button) => { button.disabled = atBeginning; });
+        nextChapterButtons.forEach((button) => { button.disabled = atEnd; });
       }
 
       function selectReference(bookName, chapterNumber) {
@@ -2313,6 +2353,7 @@ Psalm 46:10
           renderVerses(verses);
           note.textContent = "World English Bible • Select another book or chapter anytime.";
           document.getElementById("scriptureReader")?.scrollTo({ top: 0, behavior: "smooth" });
+          topChapterNavigation?.scrollIntoView({ behavior: "smooth", block: "nearest" });
         } catch (error) {
           if (currentRequest !== requestNumber) return;
           text.innerHTML = "";
@@ -2352,7 +2393,7 @@ Psalm 46:10
       });
 
 
-      previousChapterButton.addEventListener("click", () => {
+      function goToPreviousChapter() {
         const bookIndex = books.findIndex((book) => book.name === selectedBook);
         if (selectedChapter > 1) {
           selectReference(selectedBook, selectedChapter - 1);
@@ -2360,16 +2401,19 @@ Psalm 46:10
           const previousBook = books[bookIndex - 1];
           selectReference(previousBook.name, previousBook.chapters);
         }
-      });
+      }
 
-      nextChapterButton.addEventListener("click", () => {
+      function goToNextChapter() {
         const bookIndex = books.findIndex((book) => book.name === selectedBook);
         if (selectedChapter < selectedBookChapters) {
           selectReference(selectedBook, selectedChapter + 1);
         } else if (bookIndex < books.length - 1) {
           selectReference(books[bookIndex + 1].name, 1);
         }
-      });
+      }
+
+      previousChapterButtons.forEach((button) => button.addEventListener("click", goToPreviousChapter));
+      nextChapterButtons.forEach((button) => button.addEventListener("click", goToNextChapter));
 
       document.addEventListener("click", closeAll);
       document.addEventListener("keydown", (event) => {
