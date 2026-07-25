@@ -1,100 +1,477 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-  <meta name="theme-color" content="#075a9d">
-  <title>Home</title>
-  <link rel="stylesheet" href="home.css?v=006">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Christian Audio</title>
+  <style>
+    :root {
+      --page-bg: #000000;
+      --panel-bg: #101114;
+      --panel-border: #26282d;
+      --text: #ffffff;
+      --muted: #a8adb7;
+      --accent: #0a84ff;
+      --pressed: #1a1c21;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--page-bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+        "Segoe UI", sans-serif;
+    }
+
+    body {
+      padding: 14px 16px 24px;
+    }
+
+    .top-bar {
+      position: relative;
+      width: 100%;
+      min-height: 90px;
+      height: auto;
+      padding: 12px 18px 14px;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+    }
+
+    .back-button {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      border: 0;
+      border-radius: 12px;
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      font-size: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .back-button:hover,
+    .back-button:focus-visible {
+      background: var(--pressed);
+      outline: none;
+    }
+
+    .back-arrow {
+      color: var(--accent);
+      font-size: 30px;
+      line-height: 1;
+      transform: translateY(-1px);
+    }
+
+    .verse-content {
+      width: min(820px, calc(100% - 210px));
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .verse-heading-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 3ch;
+      white-space: nowrap;
+    }
+
+    .verse-label {
+      color: #4DA3FF;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .verse-reference {
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .verse-text {
+      margin-top: 8px;
+      color: var(--text);
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1.35;
+      text-align: center;
+
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+
+      overflow: hidden;
+    }
+
+    .page-space {
+      min-height: 520px;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 10px;
+      }
+
+      .top-bar {
+        min-height: 84px;
+        padding: 10px 12px 12px;
+        border-radius: 14px;
+      }
+
+      .back-button {
+        left: 8px;
+        padding: 0 8px;
+        font-size: 18px;
+      }
+
+      .verse-content {
+        width: calc(100% - 150px);
+      }
+
+      .verse-heading-row {
+        gap: 2ch;
+      }
+
+      .verse-label {
+        font-size: 15px;
+      }
+
+      .verse-reference {
+        font-size: 14px;
+      }
+
+      .verse-text {
+        margin-top: 7px;
+        font-size: 17px;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .back-button span:last-child {
+        display: none;
+      }
+
+      .verse-content {
+        width: calc(100% - 82px);
+        margin-left: 70px;
+      }
+
+      .verse-heading-row {
+        gap: 1.5ch;
+      }
+
+      .verse-label,
+      .verse-reference {
+        font-size: 13px;
+      }
+
+      .verse-text {
+        font-size: 15px;
+      }
+    }
+  
+
+    .app-shell {
+      display:grid;
+      grid-template-columns:240px 3px minmax(0,1fr);
+      gap:0;
+      margin-top:18px;
+      min-height:430px;
+      background:var(--panel-bg);
+      border:1px solid var(--panel-border);
+      border-radius:16px;
+      overflow:hidden;
+    }
+
+    .side-menu,
+    .content-panel {
+      background: transparent;
+      border: none;
+      border-radius: 0;
+    }
+
+    .content-panel {
+      color: var(--text);
+    }
+
+    .panel-divider {
+      width: 3px;
+      margin: 14px 0;
+      background: #4DA3FF;
+      opacity: 0.8;
+      border-radius: 999px;
+      align-self: stretch;
+    }
+
+    .side-menu {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .menu-item {
+      width: 100%;
+      min-height: 62px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 3px;
+      padding: 10px 14px;
+      border: 0;
+      border-radius: 12px;
+      background: transparent;
+      color: var(--text);
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
+      transition: background 140ms ease, transform 140ms ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .menu-item:hover,
+    .menu-item:focus-visible {
+      background: var(--pressed);
+      outline: none;
+    }
+
+    .menu-item:active {
+      transform: scale(0.99);
+    }
+
+    .menu-item.active {
+      background: #17283d;
+      box-shadow: inset 3px 0 0 #4DA3FF;
+    }
+
+    .menu-title {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.15;
+    }
+
+    .menu-item.active .menu-title {
+      color: #4DA3FF;
+    }
+
+    .menu-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .content-panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 34px;
+      min-width: 0;
+    }
+
+    .content-placeholder {
+      text-align: center;
+    }
+
+    .content-eyebrow {
+      color: #4DA3FF;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .content-placeholder h1 {
+      margin: 8px 0 6px;
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 1.05;
+    }
+
+    .content-placeholder p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    @media (max-width: 820px) {
+      .app-shell {
+        grid-template-columns: 210px minmax(0, 1fr);
+        gap: 12px;
+      }
+
+      .menu-title {
+        font-size: 16px;
+      }
+
+      .menu-subtitle {
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .side-menu {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .content-panel {
+        min-height: 240px;
+      }
+    }
+
+    .footer-banner{
+      margin-top:32px;
+      text-align:center;
+      padding:18px 10px 8px;
+    }
+
+    .mission{
+      color:#4DA3FF;
+      font-size:18px;
+      font-weight:500;
+      line-height:1.45;
+      margin-bottom:14px;
+    }
+
+    .themes{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:0;
+      color:#ffffff;
+      font-size:16px;
+      font-weight:600;
+    }
+
+    .themes span{
+      white-space:nowrap;
+    }
+
+    .footer-divider{
+      color:#4DA3FF;
+      opacity:.85;
+      padding:0 14px;
+      font-weight:400;
+    }
+
+    @media (max-width:700px){
+      .mission{font-size:16px;}
+      .themes{
+        row-gap:10px;
+        font-size:14px;
+      }
+    }
+
+</style>
 </head>
 <body>
-  <main class="home-screen">
-    <div class="status" aria-label="Current weather and time">
-      <button
-        class="weather-trigger"
-        id="weather-trigger"
-        type="button"
-        aria-label="Open 12 hour forecast"
-        aria-expanded="false"
-        aria-controls="forecast-panel">
-        <img id="weather-icon" class="weather-icon" src="weather-sun.svg" alt="">
-        <span id="temperature" class="temperature">--°</span>
-      </button>
-      <time id="home-time">--:--</time>
+  <header class="top-bar" aria-label="Christian audio header">
+    <button class="back-button" id="backButton" type="button" aria-label="Go back">
+      <span class="back-arrow" aria-hidden="true">‹</span>
+      <span>Back</span>
+    </button>
+
+    <div class="verse-content">
+      <div class="verse-heading-row">
+        <span class="verse-label">Verse of the Day</span>
+        <span class="verse-reference">Psalm 46:10</span>
+      </div>
+
+      <div class="verse-text">
+        “Be still, and know that I am God.”
+      </div>
     </div>
+  </header>
 
-    <button class="forecast-backdrop" id="forecast-backdrop" type="button"
-      aria-label="Close 12 hour forecast" tabindex="-1"></button>
-
-    <section class="forecast-panel" id="forecast-panel" aria-hidden="true"
-      aria-labelledby="forecast-title">
-      <header class="forecast-header">
-        <h2 id="forecast-title">Weather</h2>
-      </header>
-
-      <section class="forecast-section" aria-labelledby="hourly-title">
-        <h3 id="hourly-title">Next 12 Hours</h3>
-        <div class="forecast-strip" id="forecast-strip" aria-live="polite">
-          <div class="forecast-loading">Loading forecast…</div>
-        </div>
-      </section>
-
-      <div class="forecast-divider" aria-hidden="true"></div>
-
-      <section class="forecast-section forecast-section-daily" aria-labelledby="daily-title">
-        <h3 id="daily-title">Next 10 Days</h3>
-        <div class="daily-strip" id="daily-strip" aria-live="polite">
-          <div class="forecast-loading">Loading forecast…</div>
-        </div>
-      </section>
-
-      <footer class="forecast-footer">
-        <span>Frankfort, Kentucky</span>
-        <span id="forecast-updated"></span>
-      </footer>
-    </section>
-
-    <section class="home-grid" aria-label="Apps">
-      <button class="home-app" type="button" aria-label="Radio">
-        <span class="home-icon icon-radio"><span>♪</span></span><span>Radio</span>
-      </button>
-      <button class="home-app" type="button" aria-label="Disney">
-        <span class="home-icon icon-disney"><span>✦</span></span><span>Disney</span>
-      </button>
-      <button class="home-app" type="button" aria-label="Bible">
-        <span class="home-icon icon-bible"><span>✝</span></span><span>Bible</span>
-      </button>
-      <button class="home-app" type="button" aria-label="Podcasts">
-        <span class="home-icon icon-podcasts"><span>◉</span></span><span>Podcasts</span>
+  <main class="app-shell" aria-label="Christian audio navigation">
+    <nav class="side-menu" aria-label="Bible sections">
+      <button class="menu-item active" type="button" data-section="law">
+        <span class="menu-title">The Law</span>
+        <span class="menu-subtitle">Genesis–Deuteronomy</span>
       </button>
 
-      <button class="home-app" type="button" aria-label="Maps">
-        <span class="home-icon icon-maps"><span>➤</span></span><span>Maps</span>
-      </button>
-      <button class="home-app" type="button" aria-label="Weather">
-        <span class="home-icon icon-weather"><span>☀</span></span><span>Weather</span>
-      </button>
-      <button class="home-app" type="button" aria-label="Restaurants">
-        <span class="home-icon icon-food"><span>⌁</span></span><span>Restaurants</span>
-      </button>
-      <button class="home-app" type="button" aria-label="Real Estate">
-        <span class="home-icon icon-realestate"><span>⌂</span></span><span>Real Estate</span>
+      <button class="menu-item" type="button" data-section="history">
+        <span class="menu-title">History</span>
+        <span class="menu-subtitle">Joshua–Esther</span>
       </button>
 
-      <button class="home-app" type="button" aria-label="Streaming">
-        <span class="home-icon icon-streaming"><span>▶</span></span><span>Streaming</span>
+      <button class="menu-item" type="button" data-section="wisdom">
+        <span class="menu-title">Poetry &amp; Wisdom</span>
+        <span class="menu-subtitle">Job–Song of Songs</span>
       </button>
-      <button class="home-app" type="button" aria-label="Tesla">
-        <span class="home-icon icon-tesla"><span>T</span></span><span>Tesla</span>
+
+      <button class="menu-item" type="button" data-section="prophets">
+        <span class="menu-title">Prophets</span>
+        <span class="menu-subtitle">Isaiah–Malachi</span>
       </button>
-      <button class="home-app" type="button" aria-label="Favorites">
-        <span class="home-icon icon-favorites"><span>★</span></span><span>Favorites</span>
+
+      <button class="menu-item" type="button" data-section="new-testament">
+        <span class="menu-title">New Testament</span>
+        <span class="menu-subtitle">Matthew–Revelation</span>
       </button>
-      <button class="home-app" type="button" aria-label="Settings">
-        <span class="home-icon icon-settings"><span>⚙</span></span><span>Settings</span>
+
+      <button class="menu-item" type="button" data-section="insight">
+        <span class="menu-title">Insight for Living</span>
+        <span class="menu-subtitle">Sermons</span>
       </button>
+    </nav>
+
+    <div class="panel-divider" aria-hidden="true"></div>
+    <section class="content-panel" aria-live="polite">
     </section>
   </main>
-  <script src="home.js?v=006"></script>
+
+  <script>
+    document.getElementById("backButton").addEventListener("click", () => {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = "index.html";
+      }
+    });
+  </script>
+
+  <footer class="footer-banner">
+    <div class="mission">
+      Unleash the full force of the church to love people one at a time.
+    </div>
+
+    <div class="themes">
+      <span>Be the Branch</span>
+      <span class="footer-divider">|</span>
+      <span>Catch the Wind</span>
+      <span class="footer-divider">|</span>
+      <span>Wreck the Roof</span>
+      <span class="footer-divider">|</span>
+      <span>Grip the Plow</span>
+      <span class="footer-divider">|</span>
+      <span>Empty the Jar</span>
+    </div>
+  </footer>
 </body>
 </html>
+
