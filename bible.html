@@ -1036,6 +1036,54 @@
       }
     }
 
+  
+    /* v10.2 — Tesla footer readability polish */
+    .footer-banner {
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+
+    .footer-banner .mission {
+      font-size: clamp(20px, 2vw, 28px);
+      font-weight: 700;
+      line-height: 1.25;
+      text-align: center;
+    }
+
+    .footer-banner .themes {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 8px 14px;
+      font-size: clamp(16px, 1.5vw, 22px);
+      font-weight: 650;
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .footer-banner .footer-divider {
+      opacity: .55;
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .footer-banner {
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+
+      .footer-banner .mission {
+        font-size: clamp(18px, 2.2vw, 24px);
+      }
+
+      .footer-banner .themes {
+        margin-top: 6px;
+        gap: 6px 10px;
+        font-size: clamp(15px, 1.8vw, 19px);
+      }
+    }
+
   </style>
 </head>
 <body>
