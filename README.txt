@@ -1,23 +1,19 @@
-TRUE PATCH BUILD
+VERSE OF THE DAY — TINY TEST v1
 
-Source files:
-- index(49).html
-- home(2).css
-- home(2).js
+Upload only these two files to the repository root:
 
-Verification:
-- home.css copied byte-for-byte: True
-- home.js copied byte-for-byte: True
-- Only index.html was patched.
-- INDEX-DIFF.txt shows every changed line.
+1. bible.html
+2. verse-of-the-day-test.js
 
-Upload these loose files to the repository root:
-index.html
-home.css
-home.js
-bible.html
-bible.css
-bible.js
-bible-icon.png
+Do not replace index.html, home.css, home.js, or bible.css.
 
-Keep all existing wallpaper and weather icon assets in place.
+Normal test:
+Open bible.html. The verse is selected from a seven-verse test set using the local day of the week.
+
+Force each test verse:
+bible.html?verse=1
+bible.html?verse=2
+...
+bible.html?verse=7
+
+After the header behaves correctly, the seven test verses can be replaced by all 365 verses.
