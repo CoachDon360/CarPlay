@@ -1,0 +1,1841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bible</title>
+  <link rel="stylesheet" href="bible.css?v=001">
+
+  <style>
+    /* Tiny patch v2: Verse of the Day card only */
+    .top-bar .verse-content {
+      display: none;
+    }
+
+    .side-menu {
+      overflow-y: auto;
+    }
+
+    .verse-card {
+      flex: 0 0 auto;
+      width: 100%;
+      margin: 0 0 12px;
+      padding: clamp(16px, 2vw, 24px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 20px;
+      background: #17191d;
+      color: #fff;
+      text-align: left;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    .verse-card-heading {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      color: #4da3ff;
+      font-size: clamp(14px, 1.45vw, 20px);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .daily-sun {
+      position: relative;
+      width: 25px;
+      height: 25px;
+      flex: 0 0 25px;
+    }
+
+    .daily-sun::before {
+      content: "";
+      position: absolute;
+      inset: 7px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+    }
+
+    .daily-sun span,
+    .daily-sun::after {
+      position: absolute;
+      inset: 0;
+      content: "";
+      background:
+        linear-gradient(#fff, #fff) center top / 2px 5px no-repeat,
+        linear-gradient(#fff, #fff) center bottom / 2px 5px no-repeat,
+        linear-gradient(90deg, #fff, #fff) left center / 5px 2px no-repeat,
+        linear-gradient(90deg, #fff, #fff) right center / 5px 2px no-repeat;
+    }
+
+    .daily-sun span {
+      transform: rotate(45deg);
+    }
+
+    .verse-card-reference {
+      margin-bottom: 10px;
+      color: #fff;
+      font-size: clamp(21px, 2.15vw, 31px);
+      font-weight: 650;
+      line-height: 1.15;
+    }
+
+    .verse-card-text {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: clamp(16px, 1.55vw, 22px);
+      line-height: 1.42;
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .verse-card {
+        margin-bottom: 8px;
+        padding: 13px 15px;
+        border-radius: 16px;
+      }
+
+      .verse-card-heading {
+        margin-bottom: 9px;
+        gap: 9px;
+      }
+
+      .daily-sun {
+        width: 21px;
+        height: 21px;
+        flex-basis: 21px;
+      }
+
+      .daily-sun::before {
+        inset: 6px;
+      }
+
+      .verse-card-reference {
+        margin-bottom: 6px;
+      }
+    }
+
+    /* Tiny patch v3: navy Bible header + slightly wider left column */
+    .top-bar {
+      position: relative;
+      display: grid;
+      grid-template-columns: 72px 1fr 72px;
+      align-items: center;
+      width: 100%;
+      min-height: 72px;
+      padding: 0 18px;
+      border: 0;
+      border-radius: 0 0 18px 18px;
+      background: #123f73;
+      color: #fff;
+      box-sizing: border-box;
+    }
+
+    .top-bar .back-button {
+      position: static;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 52px;
+      height: 52px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #fff;
+    }
+
+    .top-bar .back-button > span:last-child {
+      display: none;
+    }
+
+    .top-bar .back-arrow {
+      color: #fff;
+      font-size: 48px;
+      font-weight: 300;
+      line-height: 1;
+      transform: translateY(-2px);
+    }
+
+    .bible-page-title {
+      margin: 0;
+      color: #fff;
+      font-size: clamp(28px, 3vw, 42px);
+      font-weight: 650;
+      line-height: 1;
+      text-align: center;
+      letter-spacing: 0.01em;
+    }
+
+    .header-bible-icon {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      color: #fff;
+    }
+
+    .header-bible-icon svg {
+      display: block;
+      width: 43px;
+      height: 43px;
+      overflow: visible;
+    }
+
+    /* Give the verse/navigation column a little more breathing room. */
+    .app-shell {
+      grid-template-columns: minmax(370px, 39%) 2px minmax(0, 1fr);
+    }
+
+    @media (max-width: 900px) {
+      .app-shell {
+        grid-template-columns: minmax(330px, 42%) 2px minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .top-bar {
+        min-height: 60px;
+        grid-template-columns: 58px 1fr 58px;
+        padding: 0 12px;
+        border-radius: 0 0 14px 14px;
+      }
+
+      .top-bar .back-button {
+        width: 44px;
+        height: 44px;
+      }
+
+      .top-bar .back-arrow {
+        font-size: 40px;
+      }
+
+      .header-bible-icon svg {
+        width: 36px;
+        height: 36px;
+      }
+
+      .app-shell {
+        grid-template-columns: minmax(300px, 43%) 2px minmax(0, 1fr);
+      }
+    }
+
+
+    /* Tiny patch v4: header balance, subtitle, unified blues, spacing, card footer */
+    :root {
+      --bible-primary-blue: #1d4f86;
+      --bible-accent-blue: #4da3ff;
+      --bible-selected-blue: rgba(29, 79, 134, 0.58);
+    }
+
+    .top-bar {
+      background: var(--bible-primary-blue);
+      min-height: 82px;
+      grid-template-columns: 72px 1fr 72px;
+    }
+
+    .top-bar .back-button,
+    .header-bible-icon {
+      height: 100%;
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+    }
+
+    .top-bar .back-button {
+      justify-content: flex-start;
+    }
+
+    .top-bar .back-arrow {
+      display: block;
+      transform: none;
+      line-height: 1;
+      margin-top: 0;
+    }
+
+    .header-bible-icon {
+      justify-content: flex-end;
+    }
+
+    .bible-title-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      text-align: center;
+    }
+
+    .bible-page-title {
+      line-height: 1.05;
+    }
+
+    .bible-page-subtitle {
+      margin-top: 5px;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: clamp(12px, 1.15vw, 16px);
+      font-weight: 550;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .verse-card {
+      margin-bottom: 24px;
+    }
+
+    .verse-card-heading {
+      color: var(--bible-accent-blue);
+    }
+
+    .verse-card-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .read-chapter-button:hover,
+    .read-chapter-button:focus-visible {
+      background: rgba(77, 163, 255, 0.10);
+    }
+
+    .side-menu .menu-item.active,
+    .side-menu [aria-current="true"] {
+      background: var(--bible-selected-blue);
+      border-left-color: var(--bible-accent-blue);
+    }
+
+    .app-shell .divider,
+    .vertical-divider {
+      background: var(--bible-accent-blue);
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .top-bar {
+        min-height: 58px;
+      }
+
+      .bible-page-subtitle {
+        margin-top: 3px;
+      }
+
+      .verse-card {
+        margin-bottom: 16px;
+      }
+
+      .verse-card-footer {
+        margin-top: 12px;
+        padding-top: 11px;
+      }
+    }
+
+
+    /* Tiny patch v5: left-column-centered title group + warm yellow accents */
+    :root {
+      --bible-warm-yellow: #ffd95a;
+    }
+
+    .top-bar {
+      position: relative;
+      display: grid;
+      grid-template-columns: 72px minmax(370px, 39%) minmax(0, 1fr);
+      align-items: center;
+    }
+
+    .bible-brand {
+      grid-column: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      text-align: center;
+    }
+
+    .bible-brand-row {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .bible-brand-row .header-bible-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: auto;
+      height: auto;
+    }
+
+    .bible-brand-row .header-bible-icon svg {
+      width: 38px;
+      height: 38px;
+    }
+
+    .bible-page-subtitle {
+      color: var(--bible-warm-yellow);
+    }
+
+    .verse-card-heading {
+      color: var(--bible-warm-yellow);
+    }
+
+    .top-bar > .header-bible-icon {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .top-bar {
+        grid-template-columns: 72px minmax(330px, 42%) minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .top-bar {
+        grid-template-columns: 58px minmax(300px, 43%) minmax(0, 1fr);
+      }
+
+      .bible-brand-row {
+        gap: 9px;
+      }
+
+      .bible-brand-row .header-bible-icon svg {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+
+    /* Tiny patch v6: back-arrow card + left-shifted Bible brand */
+    .top-bar {
+      grid-template-columns: 92px minmax(370px, 39%) minmax(0, 1fr);
+    }
+
+    .top-bar .back-button {
+      justify-self: center;
+      align-self: center;
+      width: 58px;
+      height: 58px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 16px;
+      background: #17191d;
+      color: #fff;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    .top-bar .back-button:hover,
+    .top-bar .back-button:focus-visible {
+      background: #20242a;
+    }
+
+    .top-bar .back-button:active {
+      transform: scale(0.97);
+    }
+
+    .top-bar .back-arrow {
+      font-size: 42px;
+      line-height: 1;
+      transform: translateY(-1px);
+    }
+
+    .bible-brand {
+      transform: translateX(-42px);
+    }
+
+    .verse-card {
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 900px) {
+      .top-bar {
+        grid-template-columns: 82px minmax(330px, 42%) minmax(0, 1fr);
+      }
+
+      .bible-brand {
+        transform: translateX(-28px);
+      }
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .top-bar {
+        grid-template-columns: 72px minmax(300px, 43%) minmax(0, 1fr);
+      }
+
+      .top-bar .back-button {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+      }
+
+      .top-bar .back-arrow {
+        font-size: 36px;
+      }
+
+      .bible-brand {
+        transform: translateX(-18px);
+      }
+
+      .verse-card {
+        margin-bottom: 14px;
+      }
+    }
+
+
+    /* Tiny patch v7: integrated header navigation lane */
+    .top-bar {
+      grid-template-columns: 78px minmax(370px, 39%) minmax(0, 1fr);
+      min-height: 78px;
+      padding: 0 18px 0 0;
+      overflow: hidden;
+    }
+
+    .top-bar .back-button {
+      grid-column: 1;
+      justify-self: stretch;
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 78px;
+      height: 100%;
+      min-height: 78px;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-right: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .top-bar .back-button:hover,
+    .top-bar .back-button:focus-visible {
+      background: rgba(255, 255, 255, 0.09);
+      outline: none;
+    }
+
+    .top-bar .back-button:active {
+      transform: none;
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .top-bar .back-arrow {
+      display: block;
+      color: #fff;
+      font-size: 48px;
+      font-weight: 300;
+      line-height: 1;
+      transform: none;
+      margin: 0;
+      padding: 0 0 3px;
+    }
+
+    .bible-brand {
+      grid-column: 2;
+      align-items: flex-start;
+      justify-content: center;
+      transform: none;
+      padding-left: 24px;
+      text-align: left;
+    }
+
+    .bible-brand-row {
+      justify-content: flex-start;
+    }
+
+    .bible-page-title {
+      text-align: left;
+    }
+
+    @media (max-width: 900px) {
+      .top-bar {
+        grid-template-columns: 72px minmax(330px, 42%) minmax(0, 1fr);
+      }
+
+      .top-bar .back-button {
+        width: 72px;
+        min-height: 78px;
+      }
+
+      .bible-brand {
+        transform: none;
+        padding-left: 20px;
+      }
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .top-bar {
+        grid-template-columns: 64px minmax(300px, 43%) minmax(0, 1fr);
+        min-height: 58px;
+      }
+
+      .top-bar .back-button {
+        width: 64px;
+        min-height: 58px;
+        border-radius: 0;
+      }
+
+      .top-bar .back-arrow {
+        font-size: 42px;
+        transform: none;
+      }
+
+      .bible-brand {
+        transform: none;
+        padding-left: 16px;
+      }
+    }
+
+
+    /* Tiny patch v8: lock arrow/divider to the full header height */
+    .top-bar {
+      position: relative;
+      padding-left: 78px;
+      grid-template-columns: minmax(370px, 39%) minmax(0, 1fr);
+    }
+
+    .top-bar .back-button {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 78px;
+      height: auto;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      margin: 0;
+      border: 0;
+      border-right: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 0;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      z-index: 2;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .top-bar .back-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+      color: #fff;
+      font-size: 48px;
+      font-weight: 300;
+      line-height: 1;
+      transform: translateY(1px);
+    }
+
+    .bible-brand {
+      grid-column: 1;
+    }
+
+    @media (max-width: 900px) {
+      .top-bar {
+        padding-left: 72px;
+        grid-template-columns: minmax(330px, 42%) minmax(0, 1fr);
+      }
+
+      .top-bar .back-button {
+        width: 72px;
+      }
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .top-bar {
+        padding-left: 64px;
+        grid-template-columns: minmax(300px, 43%) minmax(0, 1fr);
+      }
+
+      .top-bar .back-button {
+        width: 64px;
+      }
+
+      .top-bar .back-arrow {
+        font-size: 42px;
+        transform: translateY(1px);
+      }
+    }
+
+
+    /* v9 — one clean, self-contained header component */
+    .bible-header-v9 {
+      box-sizing: border-box;
+      display: flex;
+      align-items: stretch;
+      width: 100%;
+      height: 132px;
+      min-height: 132px;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      border: 0;
+      border-radius: 34px;
+      background: #255a91;
+      color: #fff;
+    }
+
+    .bible-header-v9__back {
+      position: relative;
+      box-sizing: border-box;
+      flex: 0 0 138px;
+      width: 138px;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      appearance: none;
+      -webkit-appearance: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .bible-header-v9__back::after {
+      content: "";
+      position: absolute;
+      top: 18px;
+      right: 0;
+      bottom: 18px;
+      width: 1px;
+      background: rgba(255,255,255,.20);
+    }
+
+    .bible-header-v9__back:hover,
+    .bible-header-v9__back:focus-visible {
+      background: rgba(255,255,255,.08);
+      outline: none;
+    }
+
+    .bible-header-v9__back:active {
+      background: rgba(255,255,255,.13);
+    }
+
+    .bible-header-v9__arrow {
+      display: block;
+      width: 48px;
+      height: 48px;
+      margin: 0;
+      overflow: visible;
+    }
+
+    .bible-header-v9__arrow path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .bible-header-v9__brand {
+      box-sizing: border-box;
+      flex: 1 1 auto;
+      min-width: 0;
+      height: 100%;
+      padding: 18px 26px 14px 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .bible-header-v9__title-row {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      min-width: 0;
+    }
+
+    .bible-header-v9__book {
+      display: block;
+      flex: 0 0 58px;
+      width: 58px;
+      height: 58px;
+      overflow: visible;
+    }
+
+    .bible-header-v9__book path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .bible-header-v9__book path:last-child {
+      stroke-width: 2.4;
+      opacity: .9;
+    }
+
+    .bible-header-v9__title {
+      margin: 0;
+      padding: 0;
+      color: #fff;
+      font-size: clamp(42px, 4.7vw, 64px);
+      font-weight: 700;
+      line-height: .95;
+      letter-spacing: 0;
+      text-align: left;
+    }
+
+    .bible-header-v9__subtitle {
+      margin: 8px 0 0;
+      padding: 0;
+      color: #ffd95a;
+      font-size: clamp(19px, 2vw, 28px);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 900px) {
+      .bible-header-v9 {
+        height: 126px;
+        min-height: 126px;
+        border-radius: 26px;
+      }
+
+      .bible-header-v9__back {
+        flex-basis: 118px;
+        width: 118px;
+      }
+
+      .bible-header-v9__back::after {
+        top: 18px;
+        bottom: 18px;
+      }
+
+      .bible-header-v9__arrow {
+        width: 42px;
+        height: 42px;
+      }
+
+      .bible-header-v9__brand {
+        padding: 18px 20px 14px 34px;
+      }
+
+      .bible-header-v9__title-row {
+        gap: 18px;
+      }
+
+      .bible-header-v9__book {
+        flex-basis: 58px;
+        width: 58px;
+        height: 58px;
+      }
+
+      .bible-header-v9__subtitle {
+        margin-top: 10px;
+      }
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .bible-header-v9 {
+        height: 104px;
+        min-height: 104px;
+        border-radius: 20px;
+      }
+
+      .bible-header-v9__back {
+        flex-basis: 86px;
+        width: 86px;
+      }
+
+      .bible-header-v9__back::after {
+        top: 14px;
+        bottom: 14px;
+      }
+
+      .bible-header-v9__arrow {
+        width: 34px;
+        height: 34px;
+      }
+
+      .bible-header-v9__brand {
+        padding: 13px 16px 11px 24px;
+      }
+
+      .bible-header-v9__title-row {
+        gap: 13px;
+      }
+
+      .bible-header-v9__book {
+        flex-basis: 45px;
+        width: 45px;
+        height: 45px;
+      }
+
+      .bible-header-v9__subtitle {
+        margin-top: 7px;
+        letter-spacing: .07em;
+      }
+    }
+
+
+  
+    /* v10.2 — Tesla footer readability polish */
+    .footer-banner {
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+
+    .footer-banner .mission {
+      font-size: clamp(20px, 2vw, 28px);
+      font-weight: 700;
+      line-height: 1.25;
+      text-align: center;
+    }
+
+    .footer-banner .themes {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 8px 14px;
+      font-size: clamp(16px, 1.5vw, 22px);
+      font-weight: 650;
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .footer-banner .footer-divider {
+      opacity: .55;
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .footer-banner {
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+
+      .footer-banner .mission {
+        font-size: clamp(18px, 2.2vw, 24px);
+      }
+
+      .footer-banner .themes {
+        margin-top: 6px;
+        gap: 6px 10px;
+        font-size: clamp(15px, 1.8vw, 19px);
+      }
+    }
+
+  
+    /* v11.0a — Bible Reader Frame */
+    .content-panel {
+      min-width: 0;
+      overflow: hidden;
+      padding: clamp(18px, 2vw, 28px);
+      background: #111317;
+      color: #fff;
+    }
+
+    .bible-reader-frame {
+      box-sizing: border-box;
+      display: grid;
+      grid-template-rows: auto auto minmax(0, 1fr);
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 24px;
+      background: #17191d;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+    }
+
+    .bible-reader-frame__selectors {
+      display: grid;
+      grid-template-columns: minmax(220px, 1.15fr) minmax(190px, .85fr);
+      gap: 14px;
+      padding: clamp(14px, 1.6vw, 20px) clamp(18px, 2.2vw, 28px);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+
+    .reader-field {
+      display: block;
+      min-width: 0;
+    }
+
+    .reader-field__label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .reader-field__control {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 58px;
+      padding: 0 16px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 15px;
+      background: #101216;
+      color: #fff;
+      font: inherit;
+      font-size: clamp(18px, 1.6vw, 23px);
+      font-weight: 650;
+      appearance: none;
+      -webkit-appearance: none;
+      opacity: 1;
+    }
+
+    .reader-field__select-wrap {
+      position: relative;
+    }
+
+    .reader-field__select-wrap::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: 18px;
+      width: 9px;
+      height: 9px;
+      border-right: 2px solid rgba(255,255,255,.8);
+      border-bottom: 2px solid rgba(255,255,255,.8);
+      transform: translateY(-70%) rotate(45deg);
+      pointer-events: none;
+    }
+
+    .bible-reader-frame__audio {
+      display: grid;
+      grid-template-columns: auto minmax(140px, 1fr) auto;
+      align-items: center;
+      gap: 18px;
+      padding: clamp(14px, 1.6vw, 20px) clamp(18px, 2.2vw, 28px);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.12);
+    }
+
+    .reader-audio__controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 13px;
+    }
+
+    .reader-audio__skip {
+      display: grid;
+      place-items: center;
+      width: 50px;
+      height: 50px;
+      padding: 0;
+      border: 1px solid rgba(255,255,255,.19);
+      border-radius: 50%;
+      background: #101216;
+      color: #fff;
+      font: inherit;
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1;
+      cursor: default;
+    }
+
+    .reader-audio__skip-mark {
+      position: relative;
+      display: inline-block;
+      transform: translateY(-1px);
+    }
+
+    .reader-audio__skip-number {
+      position: absolute;
+      inset: 50% auto auto 50%;
+      transform: translate(-50%, -46%);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: -.03em;
+    }
+
+    .reader-audio__progress {
+      display: grid;
+      grid-template-columns: auto minmax(90px, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .reader-audio__play {
+      display: grid;
+      place-items: center;
+      width: 58px;
+      height: 58px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: var(--bible-accent-blue);
+      color: #fff;
+      font-size: 24px;
+      cursor: default;
+    }
+
+    .reader-audio__time,
+    .reader-audio__duration {
+      color: rgba(255,255,255,.76);
+      font-size: clamp(14px, 1.15vw, 17px);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .reader-audio__track {
+      position: relative;
+      height: 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255,255,255,.14);
+    }
+
+    .reader-audio__track::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 0;
+      background: var(--bible-warm-yellow);
+    }
+
+    .reader-audio__status {
+      min-width: 86px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 12px;
+      color: rgba(255,255,255,.62);
+      font-size: clamp(12px, 1vw, 15px);
+      font-weight: 700;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .bible-reader-frame__reader {
+      min-height: 0;
+      overflow: hidden;
+      padding: clamp(20px, 2.5vw, 34px);
+    }
+
+    .reader-placeholder {
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      padding: clamp(22px, 3vw, 38px);
+      border: 1px dashed rgba(255,255,255,.16);
+      border-radius: 20px;
+      background: rgba(0,0,0,.10);
+    }
+
+    .reader-placeholder__eyebrow {
+      color: var(--bible-accent-blue);
+      font-size: clamp(12px, 1vw, 15px);
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .reader-placeholder__title {
+      margin: 10px 0 12px;
+      color: #fff;
+      font-size: clamp(34px, 3.3vw, 50px);
+      line-height: 1;
+    }
+
+    .reader-placeholder__message {
+      margin: 0;
+      color: rgba(255,255,255,.58);
+      font-size: clamp(18px, 1.55vw, 23px);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .content-panel {
+        padding: 12px;
+      }
+
+      .bible-reader-frame {
+        border-radius: 18px;
+      }
+
+      .bible-reader-frame__selectors {
+        grid-template-columns: 1fr 150px;
+        gap: 10px;
+        padding: 14px;
+      }
+
+      .reader-field__control {
+        min-height: 48px;
+        padding: 0 13px;
+      }
+
+      .bible-reader-frame__audio {
+        grid-template-columns: auto minmax(100px, 1fr) auto;
+        gap: 12px;
+        padding: 12px 14px;
+      }
+
+      .reader-audio__controls {
+        gap: 9px;
+      }
+
+      .reader-audio__skip {
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
+      }
+
+      .reader-audio__play {
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+      }
+
+      .reader-audio__status {
+        min-width: 72px;
+        padding: 8px 9px;
+      }
+
+      .bible-reader-frame__reader {
+        padding: 14px;
+      }
+
+      .reader-placeholder {
+        padding: 22px;
+        border-radius: 16px;
+      }
+    }
+
+
+    /* v11.2a — Tesla-friendly custom menus */
+    .custom-selectors {
+      position: relative;
+      z-index: 20;
+      overflow: visible;
+    }
+
+    .custom-select {
+      position: relative;
+      min-width: 0;
+    }
+
+    .custom-select__button {
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      min-height: 58px;
+      padding: 0 18px;
+      border: 1px solid rgba(255,255,255,.20);
+      border-radius: 15px;
+      background: #101216;
+      color: #fff;
+      font: inherit;
+      font-size: clamp(18px, 1.6vw, 23px);
+      font-weight: 650;
+      text-align: left;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .custom-select__button:focus-visible,
+    .custom-select__button[aria-expanded="true"] {
+      border-color: var(--bible-accent-blue);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(77,163,255,.16);
+    }
+
+    .custom-select__chevron {
+      flex: 0 0 11px;
+      width: 11px;
+      height: 11px;
+      margin-left: 18px;
+      border-right: 2px solid rgba(255,255,255,.85);
+      border-bottom: 2px solid rgba(255,255,255,.85);
+      transform: translateY(-3px) rotate(45deg);
+      transition: transform .16s ease;
+    }
+
+    .custom-select__button[aria-expanded="true"] .custom-select__chevron {
+      transform: translateY(3px) rotate(225deg);
+    }
+
+    .custom-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      max-height: min(52vh, 430px);
+      overflow-y: auto;
+      padding: 8px;
+      border: 1px solid rgba(255,255,255,.20);
+      border-radius: 16px;
+      background: #0f1115;
+      box-shadow: 0 18px 48px rgba(0,0,0,.45);
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .custom-menu[hidden] {
+      display: none;
+    }
+
+    .custom-menu__item {
+      display: block;
+      width: 100%;
+      min-height: 54px;
+      padding: 10px 14px;
+      border: 0;
+      border-radius: 11px;
+      background: transparent;
+      color: #fff;
+      font: inherit;
+      font-size: clamp(17px, 1.4vw, 21px);
+      font-weight: 620;
+      text-align: left;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .custom-menu__item:hover,
+    .custom-menu__item:focus-visible {
+      background: rgba(255,255,255,.08);
+      outline: none;
+    }
+
+    .custom-menu__item.is-selected {
+      background: rgba(77,163,255,.18);
+      color: #fff;
+    }
+
+    .custom-menu--chapter {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 6px;
+    }
+
+    .custom-menu--chapter .custom-menu__item {
+      text-align: center;
+      padding: 8px;
+    }
+
+    .scripture-reader {
+      height: 100%;
+      overflow-y: auto;
+      padding-right: 8px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .scripture-reader__eyebrow {
+      margin: 0 0 8px;
+      color: var(--bible-accent-blue);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .scripture-reader__title {
+      margin: 0 0 18px;
+      color: #fff;
+      font-size: clamp(34px, 3vw, 48px);
+      line-height: 1;
+    }
+
+    .scripture-reader__text {
+      margin: 0;
+      color: rgba(255,255,255,.92);
+      font-size: clamp(18px, 1.55vw, 23px);
+      line-height: 1.65;
+    }
+
+    .scripture-reader__text span {
+      display: inline;
+      margin-right: .35em;
+    }
+
+    .scripture-reader__text sup {
+      margin-right: .22em;
+      color: var(--bible-warm-yellow);
+      font-size: .62em;
+      font-weight: 800;
+    }
+
+    .scripture-reader__note {
+      margin: 24px 0 0;
+      padding: 14px 16px;
+      border: 1px solid rgba(255,217,90,.24);
+      border-radius: 12px;
+      background: rgba(255,217,90,.07);
+      color: rgba(255,255,255,.75);
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .custom-select__button {
+        min-height: 48px;
+        padding: 0 14px;
+      }
+
+      .custom-menu {
+        max-height: 44vh;
+      }
+
+      .custom-menu__item {
+        min-height: 48px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <header class="bible-header-v9" aria-label="Bible header">
+    <button class="bible-header-v9__back" id="bibleBackV9" type="button" aria-label="Go back">
+      <svg class="bible-header-v9__arrow" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M20 7 11 16l9 9" />
+      </svg>
+    </button>
+
+    <div class="bible-header-v9__brand">
+      <div class="bible-header-v9__title-row">
+        <svg class="bible-header-v9__book" viewBox="0 0 64 64" aria-hidden="true">
+          <path d="M32 16c-6.2-5.2-14.7-7.3-23-5.5v36.2c8.2-1.8 16.8.3 23 5.5V16Z"/>
+          <path d="M32 16c6.2-5.2 14.7-7.3 23-5.5v36.2c-8.2-1.8-16.8.3-23 5.5V16Z"/>
+          <path d="M32 16v36.2"/>
+          <path d="M14 20.5c4.7-.5 9.4.5 13.3 2.9M14 29c4.7-.5 9.4.5 13.3 2.9M50 20.5c-4.7-.5-9.4.5-13.3 2.9M50 29c-4.7-.5-9.4.5-13.3 2.9"/>
+        </svg>
+        <h1 class="bible-header-v9__title">Bible</h1>
+      </div>
+      <div class="bible-header-v9__subtitle">Read • Listen • Pray</div>
+    </div>
+  </header>
+
+  <main class="app-shell" aria-label="Bible navigation">
+    <nav class="side-menu" aria-label="Bible sections">
+      <section class="verse-card" aria-label="Verse of the Day">
+        <div class="verse-card-heading">
+          <span class="daily-sun" aria-hidden="true"><span></span></span>
+          <span>Verse of the Day</span>
+        </div>
+
+        
+<div class="verse-card-reference" id="verseReference">
+Psalm 46:10
+</div>
+
+
+<div class="verse-card-text" id="verseText">
+“Be still, and know that I am God.”
+</div>
+
+
+
+        <div class="verse-card-footer">
+        </div>
+      </section>
+
+      <button class="menu-item active" type="button" data-section="law">
+        <span class="menu-title">The Law</span>
+        <span class="menu-subtitle">Genesis–Deuteronomy</span>
+      </button>
+
+      <button class="menu-item" type="button" data-section="history">
+        <span class="menu-title">History</span>
+        <span class="menu-subtitle">Joshua–Esther</span>
+      </button>
+
+      <button class="menu-item" type="button" data-section="wisdom">
+        <span class="menu-title">Poetry &amp; Wisdom</span>
+        <span class="menu-subtitle">Job–Song of Songs</span>
+      </button>
+
+      <button class="menu-item" type="button" data-section="prophets">
+        <span class="menu-title">Prophets</span>
+        <span class="menu-subtitle">Isaiah–Malachi</span>
+      </button>
+
+      <button class="menu-item" type="button" data-section="new-testament">
+        <span class="menu-title">New Testament</span>
+        <span class="menu-subtitle">Matthew–Revelation</span>
+      </button>
+
+      <button class="menu-item" type="button" data-section="insight">
+        <span class="menu-title">Insight for Living</span>
+        <span class="menu-subtitle">Sermons</span>
+      </button>
+    </nav>
+
+    <div class="panel-divider" aria-hidden="true"></div>
+    <section class="content-panel" id="contentPanel" aria-live="polite">
+
+      <section class="bible-reader-frame" aria-label="Bible reader preview">
+
+        <div class="bible-reader-frame__selectors custom-selectors">
+          <div class="custom-select" data-menu="book">
+            <button class="custom-select__button" id="bookMenuButton" type="button"
+                    aria-haspopup="listbox" aria-expanded="false">
+              <span id="selectedBookLabel">Psalms</span>
+              <span class="custom-select__chevron" aria-hidden="true"></span>
+            </button>
+            <div class="custom-menu custom-menu--book" id="bookMenu" role="listbox" hidden>
+              <button type="button" class="custom-menu__item" data-book="Genesis" data-chapters="50">Genesis</button>
+<button type="button" class="custom-menu__item" data-book="Exodus" data-chapters="40">Exodus</button>
+<button type="button" class="custom-menu__item" data-book="Leviticus" data-chapters="27">Leviticus</button>
+<button type="button" class="custom-menu__item" data-book="Numbers" data-chapters="36">Numbers</button>
+<button type="button" class="custom-menu__item" data-book="Deuteronomy" data-chapters="34">Deuteronomy</button>
+<button type="button" class="custom-menu__item" data-book="Joshua" data-chapters="24">Joshua</button>
+<button type="button" class="custom-menu__item" data-book="Judges" data-chapters="21">Judges</button>
+<button type="button" class="custom-menu__item" data-book="Ruth" data-chapters="4">Ruth</button>
+<button type="button" class="custom-menu__item" data-book="1 Samuel" data-chapters="31">1 Samuel</button>
+<button type="button" class="custom-menu__item" data-book="2 Samuel" data-chapters="24">2 Samuel</button>
+<button type="button" class="custom-menu__item" data-book="1 Kings" data-chapters="22">1 Kings</button>
+<button type="button" class="custom-menu__item" data-book="2 Kings" data-chapters="25">2 Kings</button>
+<button type="button" class="custom-menu__item" data-book="1 Chronicles" data-chapters="29">1 Chronicles</button>
+<button type="button" class="custom-menu__item" data-book="2 Chronicles" data-chapters="36">2 Chronicles</button>
+<button type="button" class="custom-menu__item" data-book="Ezra" data-chapters="10">Ezra</button>
+<button type="button" class="custom-menu__item" data-book="Nehemiah" data-chapters="13">Nehemiah</button>
+<button type="button" class="custom-menu__item" data-book="Esther" data-chapters="10">Esther</button>
+<button type="button" class="custom-menu__item" data-book="Job" data-chapters="42">Job</button>
+<button type="button" class="custom-menu__item is-selected" data-book="Psalms" data-chapters="150">Psalms</button>
+<button type="button" class="custom-menu__item" data-book="Proverbs" data-chapters="31">Proverbs</button>
+<button type="button" class="custom-menu__item" data-book="Ecclesiastes" data-chapters="12">Ecclesiastes</button>
+<button type="button" class="custom-menu__item" data-book="Song of Solomon" data-chapters="8">Song of Solomon</button>
+<button type="button" class="custom-menu__item" data-book="Isaiah" data-chapters="66">Isaiah</button>
+<button type="button" class="custom-menu__item" data-book="Jeremiah" data-chapters="52">Jeremiah</button>
+<button type="button" class="custom-menu__item" data-book="Lamentations" data-chapters="5">Lamentations</button>
+<button type="button" class="custom-menu__item" data-book="Ezekiel" data-chapters="48">Ezekiel</button>
+<button type="button" class="custom-menu__item" data-book="Daniel" data-chapters="12">Daniel</button>
+<button type="button" class="custom-menu__item" data-book="Hosea" data-chapters="14">Hosea</button>
+<button type="button" class="custom-menu__item" data-book="Joel" data-chapters="3">Joel</button>
+<button type="button" class="custom-menu__item" data-book="Amos" data-chapters="9">Amos</button>
+<button type="button" class="custom-menu__item" data-book="Obadiah" data-chapters="1">Obadiah</button>
+<button type="button" class="custom-menu__item" data-book="Jonah" data-chapters="4">Jonah</button>
+<button type="button" class="custom-menu__item" data-book="Micah" data-chapters="7">Micah</button>
+<button type="button" class="custom-menu__item" data-book="Nahum" data-chapters="3">Nahum</button>
+<button type="button" class="custom-menu__item" data-book="Habakkuk" data-chapters="3">Habakkuk</button>
+<button type="button" class="custom-menu__item" data-book="Zephaniah" data-chapters="3">Zephaniah</button>
+<button type="button" class="custom-menu__item" data-book="Haggai" data-chapters="2">Haggai</button>
+<button type="button" class="custom-menu__item" data-book="Zechariah" data-chapters="14">Zechariah</button>
+<button type="button" class="custom-menu__item" data-book="Malachi" data-chapters="4">Malachi</button>
+<button type="button" class="custom-menu__item" data-book="Matthew" data-chapters="28">Matthew</button>
+<button type="button" class="custom-menu__item" data-book="Mark" data-chapters="16">Mark</button>
+<button type="button" class="custom-menu__item" data-book="Luke" data-chapters="24">Luke</button>
+<button type="button" class="custom-menu__item" data-book="John" data-chapters="21">John</button>
+<button type="button" class="custom-menu__item" data-book="Acts" data-chapters="28">Acts</button>
+<button type="button" class="custom-menu__item" data-book="Romans" data-chapters="16">Romans</button>
+<button type="button" class="custom-menu__item" data-book="1 Corinthians" data-chapters="16">1 Corinthians</button>
+<button type="button" class="custom-menu__item" data-book="2 Corinthians" data-chapters="13">2 Corinthians</button>
+<button type="button" class="custom-menu__item" data-book="Galatians" data-chapters="6">Galatians</button>
+<button type="button" class="custom-menu__item" data-book="Ephesians" data-chapters="6">Ephesians</button>
+<button type="button" class="custom-menu__item" data-book="Philippians" data-chapters="4">Philippians</button>
+<button type="button" class="custom-menu__item" data-book="Colossians" data-chapters="4">Colossians</button>
+<button type="button" class="custom-menu__item" data-book="1 Thessalonians" data-chapters="5">1 Thessalonians</button>
+<button type="button" class="custom-menu__item" data-book="2 Thessalonians" data-chapters="3">2 Thessalonians</button>
+<button type="button" class="custom-menu__item" data-book="1 Timothy" data-chapters="6">1 Timothy</button>
+<button type="button" class="custom-menu__item" data-book="2 Timothy" data-chapters="4">2 Timothy</button>
+<button type="button" class="custom-menu__item" data-book="Titus" data-chapters="3">Titus</button>
+<button type="button" class="custom-menu__item" data-book="Philemon" data-chapters="1">Philemon</button>
+<button type="button" class="custom-menu__item" data-book="Hebrews" data-chapters="13">Hebrews</button>
+<button type="button" class="custom-menu__item" data-book="James" data-chapters="5">James</button>
+<button type="button" class="custom-menu__item" data-book="1 Peter" data-chapters="5">1 Peter</button>
+<button type="button" class="custom-menu__item" data-book="2 Peter" data-chapters="3">2 Peter</button>
+<button type="button" class="custom-menu__item" data-book="1 John" data-chapters="5">1 John</button>
+<button type="button" class="custom-menu__item" data-book="2 John" data-chapters="1">2 John</button>
+<button type="button" class="custom-menu__item" data-book="3 John" data-chapters="1">3 John</button>
+<button type="button" class="custom-menu__item" data-book="Jude" data-chapters="1">Jude</button>
+<button type="button" class="custom-menu__item" data-book="Revelation" data-chapters="22">Revelation</button>
+            </div>
+          </div>
+
+          <div class="custom-select" data-menu="chapter">
+            <button class="custom-select__button" id="chapterMenuButton" type="button"
+                    aria-haspopup="listbox" aria-expanded="false">
+              <span id="selectedChapterLabel">Chapter 46</span>
+              <span class="custom-select__chevron" aria-hidden="true"></span>
+            </button>
+            <div class="custom-menu custom-menu--chapter" id="chapterMenu" role="listbox" hidden></div>
+          </div>
+        </div>
+
+        <div class="bible-reader-frame__audio" aria-label="Audio player preview">
+          <div class="reader-audio__controls" aria-label="Playback controls">
+            <button class="reader-audio__skip" type="button" aria-label="Rewind 15 seconds" disabled>
+              <span class="reader-audio__skip-mark">↶<span class="reader-audio__skip-number">15</span></span>
+            </button>
+            <button class="reader-audio__play" type="button" aria-label="Play preview" disabled>▶</button>
+            <button class="reader-audio__skip" type="button" aria-label="Forward 15 seconds" disabled>
+              <span class="reader-audio__skip-mark">↷<span class="reader-audio__skip-number">15</span></span>
+            </button>
+          </div>
+
+          <div class="reader-audio__progress">
+            <span class="reader-audio__time">00:00</span>
+            <div class="reader-audio__track" aria-hidden="true"></div>
+            <span class="reader-audio__duration">00:00</span>
+          </div>
+
+          <span class="reader-audio__status">Audio next</span>
+        </div>
+
+        <div class="bible-reader-frame__reader" id="scriptureReader">
+          <article class="scripture-reader">
+            <p class="scripture-reader__eyebrow">World English Bible</p>
+            <h2 class="scripture-reader__title" id="scriptureTitle">Psalms 46</h2>
+            <p class="scripture-reader__text" id="scriptureText">
+              <span><sup>1</sup> God is our refuge and strength, a very present help in trouble.</span>
+              <span><sup>2</sup> Therefore we won’t be afraid, though the earth changes, though the mountains are shaken into the heart of the seas;</span>
+              <span><sup>3</sup> though its waters roar and are troubled, though the mountains tremble with their swelling.</span>
+              <span><sup>4</sup> There is a river, the streams of which make the city of God glad, the holy place of the tents of the Most High.</span>
+              <span><sup>5</sup> God is within her. She shall not be moved. God will help her at dawn.</span>
+              <span><sup>6</sup> The nations raged. The kingdoms were moved. He lifted his voice and the earth melted.</span>
+              <span><sup>7</sup> Yahweh of Armies is with us. The God of Jacob is our refuge.</span>
+              <span><sup>8</sup> Come, see Yahweh’s works, what desolations he has made in the earth.</span>
+              <span><sup>9</sup> He makes wars cease to the end of the earth. He breaks the bow, and shatters the spear. He burns the chariots in the fire.</span>
+              <span><sup>10</sup> “Be still, and know that I am God. I will be exalted among the nations. I will be exalted in the earth.”</span>
+              <span><sup>11</sup> Yahweh of Armies is with us. The God of Jacob is our refuge.</span>
+            </p>
+            <p class="scripture-reader__note" id="readerNote">
+              Choose any book and chapter. Scripture loads automatically when you make a selection.
+            </p>
+          </article>
+        </div>
+
+      </section>
+    </section>
+  </main>
+  <script src="bible.js?v=001"></script>
+  <script src="verse-of-the-day-test.js?v=001"></script>
+
+  <footer class="footer-banner">
+    <div class="mission">
+      Unleash the full force of the church to love people one at a time.
+    </div>
+
+    <div class="themes">
+      <span>Be the Branch</span>
+      <span class="footer-divider">|</span>
+      <span>Catch the Wind</span>
+      <span class="footer-divider">|</span>
+      <span>Wreck the Roof</span>
+      <span class="footer-divider">|</span>
+      <span>Grip the Plow</span>
+      <span class="footer-divider">|</span>
+      <span>Empty the Jar</span>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const backButton = document.getElementById("backButton");
+      if (!backButton) return;
+
+      backButton.addEventListener("click", () => {
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          window.location.href = "index.html";
+        }
+      });
+    })();
+  </script>
+
+
+  <script>
+    (() => {
+      const button = document.getElementById("bibleBackV9");
+      if (!button) return;
+
+      button.addEventListener("click", () => {
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          window.location.assign("index.html");
+        }
+      });
+    })();
+  </script>
+
+
+  <script>
+    (() => {
+      const bookButton = document.getElementById("bookMenuButton");
+      const chapterButton = document.getElementById("chapterMenuButton");
+      const bookMenu = document.getElementById("bookMenu");
+      const chapterMenu = document.getElementById("chapterMenu");
+      const bookLabel = document.getElementById("selectedBookLabel");
+      const chapterLabel = document.getElementById("selectedChapterLabel");
+      const title = document.getElementById("scriptureTitle");
+      const text = document.getElementById("scriptureText");
+      const note = document.getElementById("readerNote");
+
+      if (!bookButton || !chapterButton || !bookMenu || !chapterMenu || !title || !text || !note) return;
+
+      let selectedBook = "Psalms";
+      let selectedChapter = 46;
+      let selectedBookChapters = 150;
+      let requestNumber = 0;
+      const chapterCache = new Map();
+
+      function closeMenu(button, menu) {
+        button.setAttribute("aria-expanded", "false");
+        menu.hidden = true;
+      }
+
+      function closeAll() {
+        closeMenu(bookButton, bookMenu);
+        closeMenu(chapterButton, chapterMenu);
+      }
+
+      function toggleMenu(button, menu, otherButton, otherMenu) {
+        const opening = menu.hidden;
+        closeMenu(otherButton, otherMenu);
+        menu.hidden = !opening;
+        button.setAttribute("aria-expanded", opening ? "true" : "false");
+      }
+
+      function buildChapterMenu(count) {
+        chapterMenu.innerHTML = "";
+        for (let chapter = 1; chapter <= count; chapter += 1) {
+          const item = document.createElement("button");
+          item.type = "button";
+          item.className = "custom-menu__item";
+          item.textContent = String(chapter);
+          item.dataset.chapter = String(chapter);
+          if (chapter === selectedChapter) item.classList.add("is-selected");
+          chapterMenu.appendChild(item);
+        }
+      }
+
+      function renderVerses(verses) {
+        text.innerHTML = "";
+        verses.forEach((verse) => {
+          const line = document.createElement("span");
+          const number = document.createElement("sup");
+          number.textContent = verse.verse;
+          line.appendChild(number);
+          line.appendChild(document.createTextNode(` ${verse.text.trim()}`));
+          text.appendChild(line);
+        });
+      }
+
+      async function loadChapter() {
+        const currentRequest = ++requestNumber;
+        const reference = `${selectedBook} ${selectedChapter}`;
+        const cacheKey = reference.toLowerCase();
+
+        title.textContent = reference;
+        note.textContent = "Loading scripture…";
+        text.setAttribute("aria-busy", "true");
+
+        try {
+          let verses = chapterCache.get(cacheKey);
+
+          if (!verses) {
+            const controller = new AbortController();
+            const timeout = window.setTimeout(() => controller.abort(), 12000);
+            const url = `https://bible-api.com/${encodeURIComponent(reference)}?translation=web`;
+            const response = await fetch(url, { signal: controller.signal });
+            window.clearTimeout(timeout);
+
+            if (!response.ok) throw new Error(`Scripture service returned ${response.status}`);
+            const data = await response.json();
+            if (!Array.isArray(data.verses) || data.verses.length === 0) {
+              throw new Error("No verses were returned");
+            }
+
+            verses = data.verses;
+            chapterCache.set(cacheKey, verses);
+          }
+
+          if (currentRequest !== requestNumber) return;
+          renderVerses(verses);
+          note.textContent = "World English Bible • Select another book or chapter anytime.";
+          document.getElementById("scriptureReader")?.scrollTo({ top: 0, behavior: "smooth" });
+        } catch (error) {
+          if (currentRequest !== requestNumber) return;
+          text.innerHTML = "";
+          const message = document.createElement("span");
+          message.textContent = "This chapter could not be loaded. Check the internet connection and tap the chapter again.";
+          text.appendChild(message);
+          note.textContent = error.name === "AbortError"
+            ? "The scripture service took too long to respond."
+            : "Scripture connection unavailable right now.";
+        } finally {
+          if (currentRequest === requestNumber) text.removeAttribute("aria-busy");
+        }
+      }
+
+      bookButton.addEventListener("click", (event) => {
+        event.stopPropagation();
+        toggleMenu(bookButton, bookMenu, chapterButton, chapterMenu);
+      });
+
+      chapterButton.addEventListener("click", (event) => {
+        event.stopPropagation();
+        toggleMenu(chapterButton, chapterMenu, bookButton, bookMenu);
+      });
+
+      bookMenu.addEventListener("click", (event) => {
+        const item = event.target.closest("[data-book]");
+        if (!item) return;
+
+        selectedBook = item.dataset.book;
+        selectedBookChapters = Number(item.dataset.chapters);
+        selectedChapter = 1;
+
+        bookMenu.querySelectorAll(".custom-menu__item").forEach((button) => {
+          button.classList.toggle("is-selected", button === item);
+        });
+
+        bookLabel.textContent = selectedBook;
+        chapterLabel.textContent = "Chapter 1";
+        buildChapterMenu(selectedBookChapters);
+        closeAll();
+        loadChapter();
+      });
+
+      chapterMenu.addEventListener("click", (event) => {
+        const item = event.target.closest("[data-chapter]");
+        if (!item) return;
+
+        selectedChapter = Number(item.dataset.chapter);
+        chapterLabel.textContent = `Chapter ${selectedChapter}`;
+
+        chapterMenu.querySelectorAll(".custom-menu__item").forEach((button) => {
+          button.classList.toggle("is-selected", button === item);
+        });
+
+        closeAll();
+        loadChapter();
+      });
+
+      document.addEventListener("click", closeAll);
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeAll();
+      });
+
+      buildChapterMenu(selectedBookChapters);
+    })();
+  </script>
+
+</body>
+</html>
+
