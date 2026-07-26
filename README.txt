@@ -1,17 +1,20 @@
-BIBLE SERMON MICRO BUILD 1
+CARPLAY — SORCERER RADIO DEPLOYMENT 1
 
-Upload bible.html to the root of the GitHub Pages repository and replace the existing bible.html.
+UPLOAD THESE TWO FILES TO THE ROOT OF YOUR GITHUB PAGES REPOSITORY:
+- index.html
+- CarPlay-sorcerer-radio.png
 
-Keep the existing root-level files:
-- bible.css
-- bible.js
-- verse-of-the-day-test.js
+FIRST ROW:
+Bible | Radio | Disney | Sorcerer Radio
 
-No manual code editing is required.
+WHAT CHANGED:
+- Added the uploaded Sorcerer Radio icon as the fourth app on the first row.
+- Named the image CarPlay-sorcerer-radio.png.
+- Linked the icon to Sorcerer Radio's official online listening page.
+- The link opens in the same browser tab, so the browser Back button returns to CarPlay.
+- Bible links to bible.html.
+- Radio and Disney remain local app links.
+- No CSS, radio, Bible, restaurant, entertainment, or real-estate files are included or changed.
 
-This build only:
-- removes The Law, History, Poetry & Wisdom, Prophets, and New Testament
-- adds Insight for Living, Southeast Christian, and Tony Evans
-- adds selection highlighting
-- reserves an empty episode-list area
-- reserves an empty mini-player area
+IMPORTANT:
+This index.html was built from the latest CarPlay index available in the uploaded File Library.
