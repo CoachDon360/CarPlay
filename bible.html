@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bible v14.1</title>
+  <title>Bible v14.2</title>
   <link rel="stylesheet" href="bible.css?v=001">
 
   <style>
@@ -2172,32 +2172,49 @@
       }
     }
 
+    /* v14.2 — card-width Bible header inside the left content stack */
+    .side-menu > .bible-header-v9 {
+      width: 100%;
+      margin: 0 0 12px;
+      flex: 0 0 auto;
+      box-sizing: border-box;
+    }
+
+    .app-shell {
+      margin-top: 0;
+    }
+
+    @media (max-width: 760px), (max-height: 560px) {
+      .side-menu > .bible-header-v9 {
+        margin-bottom: 8px;
+      }
+    }
+
 </style>
 </head>
 <body>
-  <header class="bible-header-v9" aria-label="Bible header">
-    <button class="bible-header-v9__back" id="bibleBackV9" type="button" aria-label="Go back">
-      <svg class="bible-header-v9__arrow" viewBox="0 0 32 32" aria-hidden="true">
-        <path d="M20 7 11 16l9 9" />
-      </svg>
-    </button>
-
-    <div class="bible-header-v9__brand">
-      <div class="bible-header-v9__title-row">
-        <svg class="bible-header-v9__book" viewBox="0 0 64 64" aria-hidden="true">
-          <path d="M32 16c-6.2-5.2-14.7-7.3-23-5.5v36.2c8.2-1.8 16.8.3 23 5.5V16Z"/>
-          <path d="M32 16c6.2-5.2 14.7-7.3 23-5.5v36.2c-8.2-1.8-16.8.3-23 5.5V16Z"/>
-          <path d="M32 16v36.2"/>
-          <path d="M14 20.5c4.7-.5 9.4.5 13.3 2.9M14 29c4.7-.5 9.4.5 13.3 2.9M50 20.5c-4.7-.5-9.4.5-13.3 2.9M50 29c-4.7-.5-9.4.5-13.3 2.9"/>
-        </svg>
-        <h1 class="bible-header-v9__title">Bible</h1>
-      </div>
-      <div class="bible-header-v9__subtitle">Read • Listen • Pray</div>
-    </div>
-  </header>
-
   <main class="app-shell" aria-label="Bible navigation">
     <nav class="side-menu" aria-label="Bible sections">
+      <header class="bible-header-v9" aria-label="Bible header">
+        <button class="bible-header-v9__back" id="bibleBackV9" type="button" aria-label="Go back">
+          <svg class="bible-header-v9__arrow" viewBox="0 0 32 32" aria-hidden="true">
+            <path d="M20 7 11 16l9 9" />
+          </svg>
+        </button>
+        <div class="bible-header-v9__brand">
+          <div class="bible-header-v9__title-row">
+            <svg class="bible-header-v9__book" viewBox="0 0 64 64" aria-hidden="true">
+              <path d="M32 16c-6.2-5.2-14.7-7.3-23-5.5v36.2c8.2-1.8 16.8.3 23 5.5V16Z"/>
+              <path d="M32 16c6.2-5.2 14.7-7.3 23-5.5v36.2c-8.2-1.8-16.8.3-23 5.5V16Z"/>
+              <path d="M32 16v36.2"/>
+              <path d="M14 20.5c4.7-.5 9.4.5 13.3 2.9M14 29c4.7-.5 9.4.5 13.3 2.9M50 20.5c-4.7-.5-9.4.5-13.3 2.9M50 29c-4.7-.5-9.4.5-13.3 2.9"/>
+            </svg>
+            <h1 class="bible-header-v9__title">Bible</h1>
+          </div>
+          <div class="bible-header-v9__subtitle">Read • Listen • Pray</div>
+        </div>
+      </header>
+
       <section class="verse-card" aria-label="Verse of the Day">
         <div class="verse-card-heading">
           <span class="daily-sun" aria-hidden="true"><span></span></span>
