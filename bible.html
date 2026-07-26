@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bible v14.8 Teaching Player Arrow Fix</title>
+  <title>Bible v14.9 Matching Player Controls</title>
   <link rel="stylesheet" href="bible.css?v=001">
 
   <style>
@@ -2422,7 +2422,7 @@
     }
 
 
-    /* v14.7 — Compact teaching audio player. */
+    /* v14.9 — Teaching controls match the Bible audio player. */
     .teaching-player {
       margin-top: 15px;
       padding: 14px;
@@ -2457,21 +2457,23 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 17px;
+      gap: 13px;
       margin-top: 13px;
     }
 
     .teaching-player__button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      display: grid;
+      place-items: center;
+      width: 58px;
+      height: 58px;
+      padding: 0;
       border: 0;
-      background: transparent;
-      color: #4da3ff;
+      border-radius: 50%;
       font: inherit;
-      font-weight: 900;
+      line-height: 1;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
+      -webkit-text-fill-color: currentColor;
     }
 
     .teaching-player__button:active {
@@ -2479,47 +2481,35 @@
     }
 
     .teaching-player__button:disabled {
-      opacity: .3;
+      opacity: .34;
       cursor: default;
       transform: none;
     }
 
     .teaching-player__button--skip {
-      min-width: 50px;
-      height: 42px;
-      gap: 1px;
-      font-size: 28px;
-      line-height: 1;
+      background: transparent;
+      color: #fff;
     }
 
-    .teaching-player__double-arrow {
-      color: #4da3ff;
-      font-size: 31px;
-      font-weight: 900;
-      letter-spacing: -5px;
-      line-height: 1;
-    }
-
-    .teaching-player__seconds {
-      align-self: flex-end;
-      margin: 0 0 7px 1px;
-      color: #4da3ff;
-      font-size: 10px;
-      letter-spacing: -.02em;
+    .teaching-player__button--skip svg {
+      display: block;
+      width: 34px;
+      height: 34px;
+      fill: currentColor;
+      filter: drop-shadow(0 1px 1px rgba(0,0,0,.28));
     }
 
     .teaching-player__button--play {
-      width: 50px;
-      height: 50px;
-      font-size: 30px;
-      line-height: 1;
+      background: var(--bible-accent-blue);
+      color: #fff;
+      font-size: 24px;
     }
 
     .teaching-player__time {
       display: flex;
       justify-content: space-between;
       margin-top: 9px;
-      color: rgba(255,255,255,.42);
+      color: rgba(255,255,255,.76);
       font-size: 10px;
       font-variant-numeric: tabular-nums;
       font-weight: 650;
@@ -2619,8 +2609,9 @@ Psalm 46:10
 
             <div class="teaching-player__controls">
               <button class="teaching-player__button teaching-player__button--skip" id="teachingBack15" type="button" aria-label="Go back 15 seconds" disabled>
-                <span class="teaching-player__double-arrow" aria-hidden="true">≪</span>
-                <span class="teaching-player__seconds">15</span>
+                <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+                  <path d="M15.2 7.1v17.8L3 16 15.2 7.1Zm13.8 0v17.8L16.8 16 29 7.1Z"/>
+                </svg>
               </button>
 
               <button class="teaching-player__button teaching-player__button--play" id="teachingPlayPause" type="button" aria-label="Play episode" disabled>
@@ -2628,8 +2619,9 @@ Psalm 46:10
               </button>
 
               <button class="teaching-player__button teaching-player__button--skip" id="teachingForward15" type="button" aria-label="Go forward 15 seconds" disabled>
-                <span class="teaching-player__double-arrow" aria-hidden="true">≫</span>
-                <span class="teaching-player__seconds">15</span>
+                <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+                  <path d="M16.8 7.1v17.8L29 16 16.8 7.1Zm-13.8 0v17.8L15.2 16 3 7.1Z"/>
+                </svg>
               </button>
             </div>
 
