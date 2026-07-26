@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bible v14.7 Teaching Player</title>
+  <title>Bible v14.8 Teaching Player Arrow Fix</title>
   <link rel="stylesheet" href="bible.css?v=001">
 
   <style>
@@ -2492,9 +2492,18 @@
       line-height: 1;
     }
 
+    .teaching-player__double-arrow {
+      color: #4da3ff;
+      font-size: 31px;
+      font-weight: 900;
+      letter-spacing: -5px;
+      line-height: 1;
+    }
+
     .teaching-player__seconds {
       align-self: flex-end;
-      margin: 0 0 7px -5px;
+      margin: 0 0 7px 1px;
+      color: #4da3ff;
       font-size: 10px;
       letter-spacing: -.02em;
     }
@@ -2610,7 +2619,8 @@ Psalm 46:10
 
             <div class="teaching-player__controls">
               <button class="teaching-player__button teaching-player__button--skip" id="teachingBack15" type="button" aria-label="Go back 15 seconds" disabled>
-                <span aria-hidden="true">↶</span><span class="teaching-player__seconds">15</span>
+                <span class="teaching-player__double-arrow" aria-hidden="true">≪</span>
+                <span class="teaching-player__seconds">15</span>
               </button>
 
               <button class="teaching-player__button teaching-player__button--play" id="teachingPlayPause" type="button" aria-label="Play episode" disabled>
@@ -2618,7 +2628,8 @@ Psalm 46:10
               </button>
 
               <button class="teaching-player__button teaching-player__button--skip" id="teachingForward15" type="button" aria-label="Go forward 15 seconds" disabled>
-                <span aria-hidden="true">↷</span><span class="teaching-player__seconds">15</span>
+                <span class="teaching-player__double-arrow" aria-hidden="true">≫</span>
+                <span class="teaching-player__seconds">15</span>
               </button>
             </div>
 
