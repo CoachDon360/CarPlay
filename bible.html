@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bible v15.1 Root-Prefixed Artwork</title>
+  <title>Bible v15.2 Teaching Pause Fix</title>
   <link rel="stylesheet" href="bible.css?v=001">
 
   <style>
@@ -3657,8 +3657,18 @@ Psalm 46:10
       }
 
       function selectSourceButton(sourceKey) {
-        teachingPlayPause.addEventListener("click", async () => {
-        if (!teachingAudio.src) return;
+        sourceButtons.forEach((button) => {
+          const selected = button.dataset.teachingSource === sourceKey;
+          button.classList.toggle("active", selected);
+          button.setAttribute("aria-pressed", String(selected));
+        });
+      }
+
+      // Bind the teaching-player controls once. Previously these listeners were
+      // added again every time a ministry was selected, causing one click to
+      // fire multiple play/pause commands.
+      teachingPlayPause.addEventListener("click", async () => {
+        if (!teachingAudio.currentSrc && !teachingAudio.src) return;
 
         if (teachingAudio.paused || teachingAudio.ended) {
           try {
@@ -3669,8 +3679,6 @@ Psalm 46:10
         } else {
           teachingAudio.pause();
         }
-
-        updatePlayPauseAppearance();
       });
 
       teachingBack15.addEventListener("click", () => {
@@ -3705,13 +3713,6 @@ Psalm 46:10
         teachingPlayPauseIcon.textContent = "▶";
         teachingPlayerSource.textContent = "Audio unavailable";
       });
-
-      sourceButtons.forEach((button) => {
-          const selected = button.dataset.teachingSource === sourceKey;
-          button.classList.toggle("active", selected);
-          button.setAttribute("aria-pressed", String(selected));
-        });
-      }
 
       function setLoading(sourceKey) {
         const source = teachingSources[sourceKey];
