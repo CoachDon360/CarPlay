@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bible v14.2</title>
+  <title>Bible v14.3 Red Letter</title>
   <link rel="stylesheet" href="bible.css?v=001">
 
   <style>
@@ -2190,6 +2190,14 @@
       }
     }
 
+
+    /* v14.3 — Red-letter edition
+       The complete verse is red when that verse contains words spoken by Jesus.
+       Verse numbers remain warm yellow for readability. */
+    .scripture-reader__text span.words-of-jesus {
+      color: #ff6b6b;
+    }
+
 </style>
 </head>
 <body>
@@ -2745,13 +2753,65 @@ Psalm 46:10
         }
       }
 
-      function renderVerses(verses) {
+      const redLetterBookCache = new Map();
+      const redLetterBooks = new Set([
+        "Matthew", "Mark", "Luke", "John", "Acts", "Revelation"
+      ]);
+
+      async function getRedLetterVerses(bookName, chapterNumber) {
+        if (!redLetterBooks.has(bookName)) return new Set();
+
+        try {
+          let bookData = redLetterBookCache.get(bookName);
+
+          if (!bookData) {
+            const encodedBook = encodeURIComponent(bookName);
+            const redLetterUrl =
+              `https://raw.githubusercontent.com/jburson/bible-data/main/data/kjv/books/${encodedBook}/${encodedBook}.json`;
+
+            const response = await fetch(redLetterUrl);
+            if (!response.ok) throw new Error(`Red-letter source returned ${response.status}`);
+
+            bookData = await response.json();
+            if (!Array.isArray(bookData)) throw new Error("Red-letter source was not an array");
+
+            redLetterBookCache.set(bookName, bookData);
+          }
+
+          const redVerses = new Set();
+
+          bookData.forEach((item) => {
+            if (!item || typeof item.r !== "string" || typeof item.t !== "string") return;
+            if (!item.t.includes("*r")) return;
+
+            const parts = item.r.split(":");
+            const itemChapter = Number(parts[2]);
+            const itemVerse = Number(parts[3]);
+
+            if (itemChapter === Number(chapterNumber) && Number.isFinite(itemVerse)) {
+              redVerses.add(itemVerse);
+            }
+          });
+
+          return redVerses;
+        } catch (error) {
+          console.warn("Red-letter highlighting unavailable:", error);
+          return new Set();
+        }
+      }
+
+      function renderVerses(verses, redLetterVerses = new Set()) {
         text.innerHTML = "";
         verses.forEach((verse) => {
           const line = document.createElement("span");
           const verseNumber = Number(verse.verse);
           line.id = `verse-${verseNumber}`;
           line.dataset.verse = String(verseNumber);
+
+          if (redLetterVerses.has(verseNumber)) {
+            line.classList.add("words-of-jesus");
+          }
+
           const number = document.createElement("sup");
           number.textContent = verse.verse;
           line.appendChild(number);
@@ -2790,8 +2850,10 @@ Psalm 46:10
           }
 
           if (currentRequest !== requestNumber) return;
-          renderVerses(verses);
-          note.textContent = "World English Bible • Select another book or chapter anytime.";
+          const redLetterVerses = await getRedLetterVerses(selectedBook, selectedChapter);
+          if (currentRequest !== requestNumber) return;
+          renderVerses(verses, redLetterVerses);
+          note.textContent = "World English Bible • Red letters mark verses containing words spoken by Jesus.";
           const scriptureReader = document.getElementById("scriptureReader");
           scriptureReader?.scrollTo({ top: 0, behavior: "smooth" });
           topChapterNavigation?.scrollIntoView({ behavior: "smooth", block: "nearest" });
