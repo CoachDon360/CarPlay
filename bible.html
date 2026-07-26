@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bible v14.6 Teaching Phase 2</title>
+  <title>Bible v14.7 Teaching Player</title>
   <link rel="stylesheet" href="bible.css?v=001">
 
   <style>
@@ -2421,6 +2421,106 @@
       cursor: pointer;
     }
 
+
+    /* v14.7 — Compact teaching audio player. */
+    .teaching-player {
+      margin-top: 15px;
+      padding: 14px;
+      border: 1px solid rgba(77,163,255,.28);
+      border-radius: 14px;
+      background: rgba(7,15,26,.78);
+    }
+
+    .teaching-player__details {
+      min-width: 0;
+      text-align: center;
+    }
+
+    .teaching-player__title {
+      overflow: hidden;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.28;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .teaching-player__source {
+      margin-top: 4px;
+      color: rgba(255,255,255,.54);
+      font-size: 11px;
+      font-weight: 650;
+    }
+
+    .teaching-player__controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 17px;
+      margin-top: 13px;
+    }
+
+    .teaching-player__button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      background: transparent;
+      color: #4da3ff;
+      font: inherit;
+      font-weight: 900;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .teaching-player__button:active {
+      transform: scale(.94);
+    }
+
+    .teaching-player__button:disabled {
+      opacity: .3;
+      cursor: default;
+      transform: none;
+    }
+
+    .teaching-player__button--skip {
+      min-width: 50px;
+      height: 42px;
+      gap: 1px;
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .teaching-player__seconds {
+      align-self: flex-end;
+      margin: 0 0 7px -5px;
+      font-size: 10px;
+      letter-spacing: -.02em;
+    }
+
+    .teaching-player__button--play {
+      width: 50px;
+      height: 50px;
+      font-size: 30px;
+      line-height: 1;
+    }
+
+    .teaching-player__time {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 9px;
+      color: rgba(255,255,255,.42);
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 650;
+    }
+
+    .episode-row.is-loaded {
+      border-color: rgba(77,163,255,.5);
+      background: rgba(29,79,134,.42);
+    }
+
 </style>
 </head>
 <body>
@@ -2501,6 +2601,34 @@ Psalm 46:10
           <button class="latest-episodes-retry" id="latestEpisodesRetry" type="button" hidden>
             Try Again
           </button>
+
+          <section class="teaching-player" id="teachingPlayer" aria-label="Teaching audio player">
+            <div class="teaching-player__details">
+              <div class="teaching-player__title" id="teachingPlayerTitle">Select an episode</div>
+              <div class="teaching-player__source" id="teachingPlayerSource">Teaching</div>
+            </div>
+
+            <div class="teaching-player__controls">
+              <button class="teaching-player__button teaching-player__button--skip" id="teachingBack15" type="button" aria-label="Go back 15 seconds" disabled>
+                <span aria-hidden="true">↶</span><span class="teaching-player__seconds">15</span>
+              </button>
+
+              <button class="teaching-player__button teaching-player__button--play" id="teachingPlayPause" type="button" aria-label="Play episode" disabled>
+                <span id="teachingPlayPauseIcon" aria-hidden="true">▶</span>
+              </button>
+
+              <button class="teaching-player__button teaching-player__button--skip" id="teachingForward15" type="button" aria-label="Go forward 15 seconds" disabled>
+                <span aria-hidden="true">↷</span><span class="teaching-player__seconds">15</span>
+              </button>
+            </div>
+
+            <div class="teaching-player__time" aria-live="off">
+              <span id="teachingCurrentTime">0:00</span>
+              <span id="teachingDuration">0:00</span>
+            </div>
+
+            <audio id="teachingAudio" preload="metadata"></audio>
+          </section>
         </section>
       </section>
     </nav>
@@ -3435,8 +3563,18 @@ Psalm 46:10
       const status = document.getElementById("latestEpisodesStatus");
       const list = document.getElementById("latestEpisodesList");
       const retryButton = document.getElementById("latestEpisodesRetry");
+      const teachingAudio = document.getElementById("teachingAudio");
+      const teachingPlayerTitle = document.getElementById("teachingPlayerTitle");
+      const teachingPlayerSource = document.getElementById("teachingPlayerSource");
+      const teachingPlayPause = document.getElementById("teachingPlayPause");
+      const teachingPlayPauseIcon = document.getElementById("teachingPlayPauseIcon");
+      const teachingBack15 = document.getElementById("teachingBack15");
+      const teachingForward15 = document.getElementById("teachingForward15");
+      const teachingCurrentTime = document.getElementById("teachingCurrentTime");
+      const teachingDuration = document.getElementById("teachingDuration");
 
       let activeSourceKey = "insight";
+      let loadedEpisodeButton = null;
       let requestNumber = 0;
       const episodeCache = new Map();
 
@@ -3459,7 +3597,56 @@ Psalm 46:10
       }
 
       function selectSourceButton(sourceKey) {
-        sourceButtons.forEach((button) => {
+        teachingPlayPause.addEventListener("click", async () => {
+        if (!teachingAudio.src) return;
+
+        if (teachingAudio.paused || teachingAudio.ended) {
+          try {
+            await teachingAudio.play();
+          } catch (error) {
+            console.warn("Episode playback could not start:", error);
+          }
+        } else {
+          teachingAudio.pause();
+        }
+
+        updatePlayPauseAppearance();
+      });
+
+      teachingBack15.addEventListener("click", () => {
+        teachingAudio.currentTime = Math.max(0, teachingAudio.currentTime - 15);
+      });
+
+      teachingForward15.addEventListener("click", () => {
+        const duration = Number.isFinite(teachingAudio.duration)
+          ? teachingAudio.duration
+          : teachingAudio.currentTime + 15;
+        teachingAudio.currentTime = Math.min(duration, teachingAudio.currentTime + 15);
+      });
+
+      teachingAudio.addEventListener("play", updatePlayPauseAppearance);
+      teachingAudio.addEventListener("pause", updatePlayPauseAppearance);
+      teachingAudio.addEventListener("ended", updatePlayPauseAppearance);
+
+      teachingAudio.addEventListener("loadedmetadata", () => {
+        teachingDuration.textContent = formatPlayerTime(teachingAudio.duration);
+      });
+
+      teachingAudio.addEventListener("durationchange", () => {
+        teachingDuration.textContent = formatPlayerTime(teachingAudio.duration);
+      });
+
+      teachingAudio.addEventListener("timeupdate", () => {
+        teachingCurrentTime.textContent = formatPlayerTime(teachingAudio.currentTime);
+      });
+
+      teachingAudio.addEventListener("error", () => {
+        updatePlayerButtons(false);
+        teachingPlayPauseIcon.textContent = "▶";
+        teachingPlayerSource.textContent = "Audio unavailable";
+      });
+
+      sourceButtons.forEach((button) => {
           const selected = button.dataset.teachingSource === sourceKey;
           button.classList.toggle("active", selected);
           button.setAttribute("aria-pressed", String(selected));
@@ -3480,6 +3667,73 @@ Psalm 46:10
         status.textContent = "The latest episodes could not be reached. Check the connection and try again.";
         list.innerHTML = "";
         retryButton.hidden = false;
+      }
+
+      function formatPlayerTime(seconds) {
+        if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
+        const totalSeconds = Math.floor(seconds);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const remainingSeconds = totalSeconds % 60;
+
+        if (hours > 0) {
+          return `${hours}:${String(minutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
+        }
+
+        return `${minutes}:${String(remainingSeconds).padStart(2, "0")}`;
+      }
+
+      function getEpisodeAudioUrl(episode) {
+        return (
+          episode?.enclosure?.link ||
+          episode?.enclosure?.url ||
+          episode?.audio ||
+          ""
+        );
+      }
+
+      function updatePlayerButtons(enabled) {
+        teachingPlayPause.disabled = !enabled;
+        teachingBack15.disabled = !enabled;
+        teachingForward15.disabled = !enabled;
+      }
+
+      function updatePlayPauseAppearance() {
+        const playing = !teachingAudio.paused && !teachingAudio.ended;
+        teachingPlayPauseIcon.textContent = playing ? "❚❚" : "▶";
+        teachingPlayPause.setAttribute("aria-label", playing ? "Pause episode" : "Play episode");
+      }
+
+      async function loadEpisodeIntoPlayer(episode, source, row) {
+        const audioUrl = getEpisodeAudioUrl(episode);
+
+        if (!audioUrl) {
+          const destination = episode.link || episode.guid;
+          if (destination) window.open(destination, "_blank", "noopener");
+          return;
+        }
+
+        if (loadedEpisodeButton) loadedEpisodeButton.classList.remove("is-loaded");
+        loadedEpisodeButton = row;
+        loadedEpisodeButton.classList.add("is-loaded");
+
+        teachingPlayerTitle.textContent = cleanText(episode.title) || "Untitled episode";
+        teachingPlayerSource.textContent = source.label;
+        teachingCurrentTime.textContent = "0:00";
+        teachingDuration.textContent = "0:00";
+
+        teachingAudio.pause();
+        teachingAudio.src = audioUrl;
+        teachingAudio.load();
+        updatePlayerButtons(true);
+
+        try {
+          await teachingAudio.play();
+        } catch (error) {
+          console.warn("Autoplay was blocked; episode is ready to play.", error);
+        }
+
+        updatePlayPauseAppearance();
       }
 
       function renderEpisodes(sourceKey, episodes) {
@@ -3512,8 +3766,7 @@ Psalm 46:10
           row.append(title, meta);
 
           row.addEventListener("click", () => {
-            const destination = episode.link || episode.guid;
-            if (destination) window.open(destination, "_blank", "noopener");
+            loadEpisodeIntoPlayer(episode, source, row);
           });
 
           list.appendChild(row);
