@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bible v14.5 Teaching Phase 1</title>
+  <title>Bible v14.6 Teaching Phase 2</title>
   <link rel="stylesheet" href="bible.css?v=001">
 
   <style>
@@ -2338,6 +2338,89 @@
       line-height: 1.45;
     }
 
+
+    /* v14.6 — Phase 2 live episode list. */
+    .latest-episodes-placeholder__header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .latest-episodes-placeholder__source {
+      overflow: hidden;
+      color: rgba(255,255,255,.48);
+      font-size: 11px;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .latest-episodes-status {
+      padding: 13px 0 4px;
+      color: rgba(255,255,255,.6);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .latest-episodes-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 11px;
+    }
+
+    .episode-row {
+      width: 100%;
+      min-height: 58px;
+      padding: 10px 11px;
+      border: 1px solid rgba(255,255,255,.11);
+      border-radius: 11px;
+      background: rgba(255,255,255,.045);
+      color: #fff;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .episode-row:active {
+      transform: scale(.989);
+      background: rgba(29,79,134,.42);
+    }
+
+    .episode-row__title {
+      display: -webkit-box;
+      overflow: hidden;
+      font-size: 14px;
+      font-weight: 780;
+      line-height: 1.28;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+
+    .episode-row__meta {
+      display: block;
+      margin-top: 5px;
+      color: rgba(255,255,255,.52);
+      font-size: 11px;
+      font-weight: 650;
+      line-height: 1.2;
+    }
+
+    .latest-episodes-retry {
+      min-height: 42px;
+      margin-top: 12px;
+      padding: 0 16px;
+      border: 1px solid rgba(77,163,255,.45);
+      border-radius: 11px;
+      background: rgba(29,79,134,.5);
+      color: #fff;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
 </style>
 </head>
 <body>
@@ -2404,10 +2487,20 @@ Psalm 46:10
         </button>
 
         <section class="latest-episodes-placeholder" aria-label="Latest episodes">
-          <h3 class="latest-episodes-placeholder__heading">Latest Episodes</h3>
-          <p class="latest-episodes-placeholder__text">
-            Select a teaching ministry to see its newest messages.
-          </p>
+          <div class="latest-episodes-placeholder__header">
+            <h3 class="latest-episodes-placeholder__heading">Latest Episodes</h3>
+            <span class="latest-episodes-placeholder__source" id="latestEpisodesSource">Insight for Living</span>
+          </div>
+
+          <div class="latest-episodes-status" id="latestEpisodesStatus" role="status">
+            Loading latest episodes…
+          </div>
+
+          <div class="latest-episodes-list" id="latestEpisodesList"></div>
+
+          <button class="latest-episodes-retry" id="latestEpisodesRetry" type="button" hidden>
+            Try Again
+          </button>
         </section>
       </section>
     </nav>
@@ -3315,15 +3408,200 @@ Psalm 46:10
 
 
   <script>
-    document.querySelectorAll(".teaching-source").forEach((button) => {
-      button.addEventListener("click", () => {
-        document.querySelectorAll(".teaching-source").forEach((item) => {
-          const selected = item === button;
-          item.classList.toggle("active", selected);
-          item.setAttribute("aria-pressed", String(selected));
+    (() => {
+      const teachingSources = {
+        insight: {
+          label: "Insight for Living",
+          searchTerm: "Insight for Living Daily Broadcast",
+          preferredArtist: "Chuck Swindoll",
+          fallbackFeed: "https://feeds.feedburner.com/InsightForLivingDailyBroadcast"
+        },
+        southeast: {
+          label: "Southeast Christian",
+          searchTerm: "Southeast Christian Church",
+          preferredArtist: "Southeast Christian Church",
+          fallbackFeed: "https://rock.secc.org/GetChannelFeed.ashx/sermonfeed.rss?ChannelId=23&Count=45&TemplateId=17326"
+        },
+        "tony-evans": {
+          label: "Tony Evans",
+          searchTerm: "The Alternative with Dr. Tony Evans",
+          preferredArtist: "Tony Evans",
+          fallbackFeed: ""
+        }
+      };
+
+      const sourceButtons = [...document.querySelectorAll(".teaching-source")];
+      const sourceLabel = document.getElementById("latestEpisodesSource");
+      const status = document.getElementById("latestEpisodesStatus");
+      const list = document.getElementById("latestEpisodesList");
+      const retryButton = document.getElementById("latestEpisodesRetry");
+
+      let activeSourceKey = "insight";
+      let requestNumber = 0;
+      const episodeCache = new Map();
+
+      function cleanText(value = "") {
+        const holder = document.createElement("div");
+        holder.innerHTML = String(value);
+        return (holder.textContent || holder.innerText || "")
+          .replace(/\s+/g, " ")
+          .trim();
+      }
+
+      function formatEpisodeDate(value) {
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "";
+        return new Intl.DateTimeFormat("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric"
+        }).format(date);
+      }
+
+      function selectSourceButton(sourceKey) {
+        sourceButtons.forEach((button) => {
+          const selected = button.dataset.teachingSource === sourceKey;
+          button.classList.toggle("active", selected);
+          button.setAttribute("aria-pressed", String(selected));
+        });
+      }
+
+      function setLoading(sourceKey) {
+        const source = teachingSources[sourceKey];
+        sourceLabel.textContent = source.label;
+        status.hidden = false;
+        status.textContent = "Loading latest episodes…";
+        list.innerHTML = "";
+        retryButton.hidden = true;
+      }
+
+      function renderError() {
+        status.hidden = false;
+        status.textContent = "The latest episodes could not be reached. Check the connection and try again.";
+        list.innerHTML = "";
+        retryButton.hidden = false;
+      }
+
+      function renderEpisodes(sourceKey, episodes) {
+        const source = teachingSources[sourceKey];
+        sourceLabel.textContent = source.label;
+        list.innerHTML = "";
+        retryButton.hidden = true;
+
+        if (!episodes.length) {
+          status.hidden = false;
+          status.textContent = "No recent episodes were found.";
+          return;
+        }
+
+        status.hidden = true;
+
+        episodes.slice(0, 5).forEach((episode) => {
+          const row = document.createElement("button");
+          row.className = "episode-row";
+          row.type = "button";
+
+          const title = document.createElement("span");
+          title.className = "episode-row__title";
+          title.textContent = cleanText(episode.title) || "Untitled episode";
+
+          const meta = document.createElement("span");
+          meta.className = "episode-row__meta";
+          meta.textContent = formatEpisodeDate(episode.pubDate || episode.isoDate);
+
+          row.append(title, meta);
+
+          row.addEventListener("click", () => {
+            const destination = episode.link || episode.guid;
+            if (destination) window.open(destination, "_blank", "noopener");
+          });
+
+          list.appendChild(row);
+        });
+      }
+
+      async function discoverFeed(source) {
+        if (source.fallbackFeed) return source.fallbackFeed;
+
+        const endpoint =
+          "https://itunes.apple.com/search?media=podcast&entity=podcast&limit=8&term=" +
+          encodeURIComponent(source.searchTerm);
+
+        const response = await fetch(endpoint);
+        if (!response.ok) throw new Error(`Podcast search returned ${response.status}`);
+
+        const data = await response.json();
+        const results = Array.isArray(data.results) ? data.results : [];
+
+        const preferred = results.find((item) => {
+          const combined = `${item.collectionName || ""} ${item.artistName || ""}`.toLowerCase();
+          return combined.includes(source.preferredArtist.toLowerCase());
+        });
+
+        const match = preferred || results[0];
+        if (!match?.feedUrl) throw new Error("No podcast feed was found.");
+
+        return match.feedUrl;
+      }
+
+      async function fetchFeedThroughRss2Json(feedUrl) {
+        const endpoint =
+          "https://api.rss2json.com/v1/api.json?count=10&rss_url=" +
+          encodeURIComponent(feedUrl);
+
+        const response = await fetch(endpoint);
+        if (!response.ok) throw new Error(`Episode service returned ${response.status}`);
+
+        const data = await response.json();
+        if (data.status !== "ok" || !Array.isArray(data.items)) {
+          throw new Error(data.message || "Episode service could not read the feed.");
+        }
+
+        return data.items;
+      }
+
+      async function loadEpisodes(sourceKey, forceRefresh = false) {
+        const source = teachingSources[sourceKey];
+        if (!source) return;
+
+        activeSourceKey = sourceKey;
+        selectSourceButton(sourceKey);
+        setLoading(sourceKey);
+
+        if (!forceRefresh && episodeCache.has(sourceKey)) {
+          renderEpisodes(sourceKey, episodeCache.get(sourceKey));
+          return;
+        }
+
+        const currentRequest = ++requestNumber;
+
+        try {
+          const feedUrl = await discoverFeed(source);
+          const episodes = await fetchFeedThroughRss2Json(feedUrl);
+
+          if (currentRequest !== requestNumber) return;
+
+          episodeCache.set(sourceKey, episodes);
+          renderEpisodes(sourceKey, episodes);
+        } catch (error) {
+          if (currentRequest !== requestNumber) return;
+          console.warn("Teaching episodes unavailable:", error);
+          renderError();
+        }
+      }
+
+      sourceButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          loadEpisodes(button.dataset.teachingSource);
         });
       });
-    });
+
+      retryButton.addEventListener("click", () => {
+        loadEpisodes(activeSourceKey, true);
+      });
+
+      loadEpisodes(activeSourceKey);
+    })();
   </script>
 
 </body>
