@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bible v14.3 Red Letter</title>
+  <title>Bible v14.4 Red Letter + Font Control</title>
   <link rel="stylesheet" href="bible.css?v=001">
 
   <style>
@@ -2191,6 +2191,66 @@
     }
 
 
+
+    /* v14.4 — Scripture font-size controls.
+       Level 0 is exactly the pre-existing reader size. */
+    .reader-text-size {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 10px clamp(18px, 2.2vw, 28px);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.08);
+    }
+
+    .reader-text-size__label {
+      margin-right: 2px;
+      color: rgba(255,255,255,.66);
+      font-size: 14px;
+      font-weight: 750;
+      letter-spacing: .02em;
+    }
+
+    .reader-text-size__button {
+      display: grid;
+      place-items: center;
+      min-width: 58px;
+      height: 46px;
+      padding: 0 14px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 12px;
+      background: #101216;
+      color: #fff;
+      font: inherit;
+      font-size: 19px;
+      font-weight: 800;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .reader-text-size__button:active {
+      transform: scale(.97);
+    }
+
+    .reader-text-size__button:disabled {
+      opacity: .38;
+      cursor: default;
+      transform: none;
+    }
+
+    .scripture-reader__text[data-font-level="0"] {
+      font-size: clamp(18px, 1.55vw, 23px);
+    }
+
+    .scripture-reader__text[data-font-level="1"] {
+      font-size: clamp(21px, 1.8vw, 27px);
+    }
+
+    .scripture-reader__text[data-font-level="2"] {
+      font-size: clamp(24px, 2.05vw, 31px);
+    }
+
     /* v14.3 — Red-letter edition
        The complete verse is red when that verse contains words spoken by Jesus.
        Verse numbers remain warm yellow for readability. */
@@ -2378,6 +2438,12 @@ Psalm 46:10
           </div>
         </div>
 
+        <div class="reader-text-size" aria-label="Scripture text size">
+          <span class="reader-text-size__label">Text size</span>
+          <button class="reader-text-size__button" id="decreaseTextSize" type="button" aria-label="Decrease Scripture text size">A−</button>
+          <button class="reader-text-size__button" id="increaseTextSize" type="button" aria-label="Increase Scripture text size">A+</button>
+        </div>
+
         <div class="chapter-navigation chapter-navigation--top" id="topChapterNavigation" aria-label="Chapter navigation">
           <button class="chapter-navigation__button" data-chapter-direction="previous" type="button">◀ Previous Chapter</button>
           <button class="chapter-navigation__button" data-chapter-direction="next" type="button">Next Chapter ▶</button>
@@ -2412,7 +2478,7 @@ Psalm 46:10
           <article class="scripture-reader">
             <p class="scripture-reader__eyebrow">World English Bible</p>
             <h2 class="scripture-reader__title" id="scriptureTitle">Psalms 46</h2>
-            <p class="scripture-reader__text" id="scriptureText">
+            <p class="scripture-reader__text" id="scriptureText" data-font-level="0">
               <span><sup>1</sup> God is our refuge and strength, a very present help in trouble.</span>
               <span><sup>2</sup> Therefore we won’t be afraid, though the earth changes, though the mountains are shaken into the heart of the seas;</span>
               <span><sup>3</sup> though its waters roar and are troubled, though the mountains tremble with their swelling.</span>
@@ -2752,6 +2818,45 @@ Psalm 46:10
           chapterMenu.appendChild(item);
         }
       }
+
+      const decreaseTextSizeButton = document.getElementById("decreaseTextSize");
+      const increaseTextSizeButton = document.getElementById("increaseTextSize");
+      const scriptureTextElement = document.getElementById("scriptureText");
+      const textSizeStorageKey = "bibleReaderFontLevel";
+      const minimumFontLevel = 0;
+      const maximumFontLevel = 2;
+
+      let scriptureFontLevel = Number.parseInt(
+        localStorage.getItem(textSizeStorageKey) || "0",
+        10
+      );
+
+      if (!Number.isInteger(scriptureFontLevel) ||
+          scriptureFontLevel < minimumFontLevel ||
+          scriptureFontLevel > maximumFontLevel) {
+        scriptureFontLevel = minimumFontLevel;
+      }
+
+      function applyScriptureFontLevel() {
+        scriptureTextElement.dataset.fontLevel = String(scriptureFontLevel);
+        decreaseTextSizeButton.disabled = scriptureFontLevel <= minimumFontLevel;
+        increaseTextSizeButton.disabled = scriptureFontLevel >= maximumFontLevel;
+        localStorage.setItem(textSizeStorageKey, String(scriptureFontLevel));
+      }
+
+      decreaseTextSizeButton.addEventListener("click", () => {
+        if (scriptureFontLevel <= minimumFontLevel) return;
+        scriptureFontLevel -= 1;
+        applyScriptureFontLevel();
+      });
+
+      increaseTextSizeButton.addEventListener("click", () => {
+        if (scriptureFontLevel >= maximumFontLevel) return;
+        scriptureFontLevel += 1;
+        applyScriptureFontLevel();
+      });
+
+      applyScriptureFontLevel();
 
       const redLetterBookCache = new Map();
       const redLetterBooks = new Set([
