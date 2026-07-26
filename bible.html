@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bible v14.9 Matching Player Controls</title>
+  <title>Bible v15.0 Ministry Artwork</title>
   <link rel="stylesheet" href="bible.css?v=001">
 
   <style>
@@ -2422,13 +2422,34 @@
     }
 
 
-    /* v14.9 — Teaching controls match the Bible audio player. */
+    /* v15.0 — Ministry artwork integrated into the teaching player. */
     .teaching-player {
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr);
+      align-items: center;
+      gap: 16px;
       margin-top: 15px;
       padding: 14px;
       border: 1px solid rgba(77,163,255,.28);
       border-radius: 14px;
       background: rgba(7,15,26,.78);
+    }
+
+    .teaching-player__artwork {
+      width: 96px;
+      height: 96px;
+      border-radius: 14px;
+      object-fit: cover;
+      opacity: 1;
+      transition: opacity .25s ease;
+    }
+
+    .teaching-player__artwork.is-switching {
+      opacity: .2;
+    }
+
+    .teaching-player__main {
+      min-width: 0;
     }
 
     .teaching-player__details {
@@ -2513,6 +2534,29 @@
       font-size: 10px;
       font-variant-numeric: tabular-nums;
       font-weight: 650;
+    }
+
+    @media (max-width: 760px) {
+      .teaching-player {
+        grid-template-columns: 76px minmax(0, 1fr);
+        gap: 12px;
+      }
+
+      .teaching-player__artwork {
+        width: 76px;
+        height: 76px;
+        border-radius: 12px;
+      }
+
+      .teaching-player__button {
+        width: 50px;
+        height: 50px;
+      }
+
+      .teaching-player__button--skip svg {
+        width: 30px;
+        height: 30px;
+      }
     }
 
     .episode-row.is-loaded {
@@ -2602,12 +2646,20 @@ Psalm 46:10
           </button>
 
           <section class="teaching-player" id="teachingPlayer" aria-label="Teaching audio player">
-            <div class="teaching-player__details">
-              <div class="teaching-player__title" id="teachingPlayerTitle">Select an episode</div>
-              <div class="teaching-player__source" id="teachingPlayerSource">Teaching</div>
-            </div>
+            <img
+              class="teaching-player__artwork"
+              id="teachingPlayerArtwork"
+              src="images/Insight_for_Living.png"
+              alt="Insight for Living artwork"
+            />
 
-            <div class="teaching-player__controls">
+            <div class="teaching-player__main">
+              <div class="teaching-player__details">
+                <div class="teaching-player__title" id="teachingPlayerTitle">Select an episode</div>
+                <div class="teaching-player__source" id="teachingPlayerSource">Insight for Living</div>
+              </div>
+
+              <div class="teaching-player__controls">
               <button class="teaching-player__button teaching-player__button--skip" id="teachingBack15" type="button" aria-label="Go back 15 seconds" disabled>
                 <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
                   <path d="M15.2 7.1v17.8L3 16 15.2 7.1Zm13.8 0v17.8L16.8 16 29 7.1Z"/>
@@ -2623,11 +2675,12 @@ Psalm 46:10
                   <path d="M16.8 7.1v17.8L29 16 16.8 7.1Zm-13.8 0v17.8L15.2 16 3 7.1Z"/>
                 </svg>
               </button>
-            </div>
+              </div>
 
-            <div class="teaching-player__time" aria-live="off">
-              <span id="teachingCurrentTime">0:00</span>
-              <span id="teachingDuration">0:00</span>
+              <div class="teaching-player__time" aria-live="off">
+                <span id="teachingCurrentTime">0:00</span>
+                <span id="teachingDuration">0:00</span>
+              </div>
             </div>
 
             <audio id="teachingAudio" preload="metadata"></audio>
@@ -3545,19 +3598,22 @@ Psalm 46:10
           label: "Insight for Living",
           searchTerm: "Insight for Living Daily Broadcast",
           preferredArtist: "Chuck Swindoll",
-          fallbackFeed: "https://feeds.feedburner.com/InsightForLivingDailyBroadcast"
+          fallbackFeed: "https://feeds.feedburner.com/InsightForLivingDailyBroadcast",
+          artwork: "images/Insight_for_Living.png"
         },
         southeast: {
           label: "Southeast Christian",
           searchTerm: "Southeast Christian Church",
           preferredArtist: "Southeast Christian Church",
-          fallbackFeed: "https://rock.secc.org/GetChannelFeed.ashx/sermonfeed.rss?ChannelId=23&Count=45&TemplateId=17326"
+          fallbackFeed: "https://rock.secc.org/GetChannelFeed.ashx/sermonfeed.rss?ChannelId=23&Count=45&TemplateId=17326",
+          artwork: "images/Southeast_Christian.png"
         },
         "tony-evans": {
           label: "Tony Evans",
           searchTerm: "The Alternative with Dr. Tony Evans",
           preferredArtist: "Tony Evans",
-          fallbackFeed: ""
+          fallbackFeed: "",
+          artwork: "images/Tony_Evans.png"
         }
       };
 
@@ -3569,6 +3625,7 @@ Psalm 46:10
       const teachingAudio = document.getElementById("teachingAudio");
       const teachingPlayerTitle = document.getElementById("teachingPlayerTitle");
       const teachingPlayerSource = document.getElementById("teachingPlayerSource");
+      const teachingPlayerArtwork = document.getElementById("teachingPlayerArtwork");
       const teachingPlayPause = document.getElementById("teachingPlayPause");
       const teachingPlayPauseIcon = document.getElementById("teachingPlayPauseIcon");
       const teachingBack15 = document.getElementById("teachingBack15");
@@ -3659,6 +3716,13 @@ Psalm 46:10
       function setLoading(sourceKey) {
         const source = teachingSources[sourceKey];
         sourceLabel.textContent = source.label;
+        teachingPlayerSource.textContent = source.label;
+        teachingPlayerArtwork.classList.add("is-switching");
+        teachingPlayerArtwork.src = source.artwork;
+        teachingPlayerArtwork.alt = `${source.label} artwork`;
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => teachingPlayerArtwork.classList.remove("is-switching"));
+        });
         status.hidden = false;
         status.textContent = "Loading latest episodes…";
         list.innerHTML = "";
@@ -3722,6 +3786,8 @@ Psalm 46:10
 
         teachingPlayerTitle.textContent = cleanText(episode.title) || "Untitled episode";
         teachingPlayerSource.textContent = source.label;
+        teachingPlayerArtwork.src = source.artwork;
+        teachingPlayerArtwork.alt = `${source.label} artwork`;
         teachingCurrentTime.textContent = "0:00";
         teachingDuration.textContent = "0:00";
 
