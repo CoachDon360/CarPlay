@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bible v14.4 Red Letter + Font Control</title>
+  <title>Bible v14.5 Teaching Phase 1</title>
   <link rel="stylesheet" href="bible.css?v=001">
 
   <style>
@@ -2258,6 +2258,86 @@
       color: #ff6b6b;
     }
 
+
+    /* v14.5 — Phase 1 teaching panel.
+       Compact, text-only controls; intentionally no oversized icons. */
+    .teaching-panel {
+      display: grid;
+      gap: 10px;
+      padding-bottom: 20px;
+    }
+
+    .teaching-panel__heading,
+    .latest-episodes-placeholder__heading {
+      margin: 0;
+      color: #4da3ff;
+      font-size: 15px;
+      font-weight: 850;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .teaching-panel__heading {
+      padding: 0 4px 3px;
+    }
+
+    .teaching-source {
+      width: 100%;
+      min-height: 64px;
+      padding: 11px 14px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-left: 3px solid transparent;
+      border-radius: 13px;
+      background: rgba(255,255,255,.055);
+      color: #fff;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .teaching-source.active,
+    .teaching-source[aria-pressed="true"] {
+      border-left-color: #4da3ff;
+      background: rgba(29,79,134,.58);
+    }
+
+    .teaching-source:active {
+      transform: scale(.988);
+    }
+
+    .teaching-source__title,
+    .teaching-source__subtitle {
+      display: block;
+    }
+
+    .teaching-source__title {
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.15;
+    }
+
+    .teaching-source__subtitle {
+      margin-top: 4px;
+      color: rgba(255,255,255,.62);
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .latest-episodes-placeholder {
+      margin-top: 8px;
+      padding: 16px 4px 4px;
+      border-top: 1px solid rgba(255,255,255,.13);
+    }
+
+    .latest-episodes-placeholder__text {
+      margin: 9px 0 0;
+      color: rgba(255,255,255,.58);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
 </style>
 </head>
 <body>
@@ -2305,35 +2385,31 @@ Psalm 46:10
         </div>
       </section>
 
-      <button class="menu-item active" type="button" data-section="law">
-        <span class="menu-title">The Law</span>
-        <span class="menu-subtitle">Genesis–Deuteronomy</span>
-      </button>
+      <section class="teaching-panel" aria-label="Teaching ministries">
+        <h2 class="teaching-panel__heading">Teaching</h2>
 
-      <button class="menu-item" type="button" data-section="history">
-        <span class="menu-title">History</span>
-        <span class="menu-subtitle">Joshua–Esther</span>
-      </button>
+        <button class="teaching-source active" type="button" data-teaching-source="insight" aria-pressed="true">
+          <span class="teaching-source__title">Insight for Living</span>
+          <span class="teaching-source__subtitle">Chuck Swindoll</span>
+        </button>
 
-      <button class="menu-item" type="button" data-section="wisdom">
-        <span class="menu-title">Poetry &amp; Wisdom</span>
-        <span class="menu-subtitle">Job–Song of Songs</span>
-      </button>
+        <button class="teaching-source" type="button" data-teaching-source="southeast" aria-pressed="false">
+          <span class="teaching-source__title">Southeast Christian</span>
+          <span class="teaching-source__subtitle">Latest messages</span>
+        </button>
 
-      <button class="menu-item" type="button" data-section="prophets">
-        <span class="menu-title">Prophets</span>
-        <span class="menu-subtitle">Isaiah–Malachi</span>
-      </button>
+        <button class="teaching-source" type="button" data-teaching-source="tony-evans" aria-pressed="false">
+          <span class="teaching-source__title">Tony Evans</span>
+          <span class="teaching-source__subtitle">The Urban Alternative</span>
+        </button>
 
-      <button class="menu-item" type="button" data-section="new-testament">
-        <span class="menu-title">New Testament</span>
-        <span class="menu-subtitle">Matthew–Revelation</span>
-      </button>
-
-      <button class="menu-item" type="button" data-section="insight">
-        <span class="menu-title">Insight for Living</span>
-        <span class="menu-subtitle">Sermons</span>
-      </button>
+        <section class="latest-episodes-placeholder" aria-label="Latest episodes">
+          <h3 class="latest-episodes-placeholder__heading">Latest Episodes</h3>
+          <p class="latest-episodes-placeholder__text">
+            Select a teaching ministry to see its newest messages.
+          </p>
+        </section>
+      </section>
     </nav>
 
     <div class="panel-divider" aria-hidden="true"></div>
@@ -3235,6 +3311,19 @@ Psalm 46:10
         loadChapterAudio();
       }
     })();
+  </script>
+
+
+  <script>
+    document.querySelectorAll(".teaching-source").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".teaching-source").forEach((item) => {
+          const selected = item === button;
+          item.classList.toggle("active", selected);
+          item.setAttribute("aria-pressed", String(selected));
+        });
+      });
+    });
   </script>
 
 </body>
