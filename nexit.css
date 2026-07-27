@@ -789,3 +789,22 @@ img[src*="nexit-food"]{
   width:100%;
   text-align:right;
 }
+
+
+/* Phase 12.5: 25% larger supporting information lines */
+.trip-status span,
+.exit-status span {
+  font-size: clamp(0.975rem, 1.25vw, 1.1875rem);
+}
+
+.trip-status small,
+.exit-status small {
+  font-size: clamp(1.2rem, 1.5625vw, 1.5rem);
+}
+
+@media (max-width: 680px), (max-height: 560px) {
+  .trip-status small,
+  .exit-status small {
+    font-size: clamp(1rem, 2.875vw, 1.25rem);
+  }
+}

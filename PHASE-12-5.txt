@@ -1,0 +1,10 @@
+NEXT EXIT — PHASE 12.5
+
+Corrected typography change:
+• INTERSTATE heading: 25% larger
+• Westbound/Eastbound/Northbound/Southbound line: 25% larger
+• NEXT EXIT heading: 25% larger
+• Distance-ahead / Exit now / Exit taken line: 25% larger
+
+The large I-64 and Exit 53B values retain their existing sizes.
+Includes all Phase 12.4 exit-completion and quiet off-interstate changes.
