@@ -581,3 +581,108 @@ img[src*="nexit-food"]{
     font-size: clamp(0.9rem, 2.2vw, 1.1rem);
   }
 }
+
+
+/* Phase 12: dedicated interstate and next-exit cards */
+.app-header {
+  grid-template-columns: 80px minmax(150px, 1fr) auto;
+}
+
+.drive-status-group {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.trip-status,
+.exit-status {
+  min-width: 220px;
+  padding: 16px 22px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(4, 15, 52, 0.76);
+  text-align: left;
+  backdrop-filter: blur(18px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.24);
+}
+
+.trip-status {
+  cursor: pointer;
+}
+
+.trip-status span,
+.exit-status span {
+  display: block;
+  margin: 0 0 6px;
+  color: var(--muted-white);
+  font-size: clamp(0.78rem, 1vw, 0.95rem);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.trip-status strong,
+.exit-status strong,
+.trip-status[data-state="ready"] strong {
+  display: block;
+  margin-top: 2px;
+  font-size: clamp(1.9rem, 2.8vw, 2.75rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.trip-status small,
+.exit-status small {
+  display: block;
+  min-height: 1.25em;
+  margin-top: 8px;
+  color: var(--soft-white);
+  font-size: clamp(0.96rem, 1.25vw, 1.2rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.exit-status[data-state="ready"] {
+  border-color: rgba(255, 255, 255, 0.34);
+  background:
+    linear-gradient(145deg, rgba(13, 57, 137, 0.88), rgba(3, 20, 64, 0.88));
+}
+
+.exit-status[data-state="error"] small,
+.trip-status[data-state="error"] small {
+  color: #ffd2d7;
+}
+
+@media (max-width: 1050px) {
+  .app-header {
+    grid-template-columns: 68px minmax(120px, 1fr);
+  }
+
+  .drive-status-group {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+}
+
+@media (max-width: 680px), (max-height: 560px) {
+  .drive-status-group {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .trip-status,
+  .exit-status {
+    min-width: 0;
+    padding: 12px 14px;
+  }
+
+  .trip-status strong,
+  .exit-status strong,
+  .trip-status[data-state="ready"] strong {
+    font-size: clamp(1.4rem, 4.5vw, 2rem);
+  }
+
+  .trip-status small,
+  .exit-status small {
+    font-size: clamp(0.8rem, 2.3vw, 1rem);
+  }
+}

@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#071d55">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>Nexit</title>
-  <link rel="stylesheet" href="nexit.css?v=014">
+  <title>Next Exit</title>
+  <link rel="stylesheet" href="nexit.css?v=015">
 </head>
 <body>
   <main class="app-shell">
@@ -19,10 +19,19 @@
         <img src="next-exit-sign.png" alt="Next Exit">
       </div>
 
-      <div class="trip-status" id="trip-status" aria-label="Trip status" aria-live="polite">
-        <span>INTERSTATE</span>
-        <strong id="interstate-status">Locating…</strong>
-        <small id="location-detail">Requesting location</small>
+      <div class="drive-status-group">
+        <div class="trip-status" id="trip-status" aria-label="Interstate status" aria-live="polite"
+          role="button" tabindex="0">
+          <span>INTERSTATE</span>
+          <strong id="interstate-status">Locating…</strong>
+          <small id="location-detail">Requesting location</small>
+        </div>
+
+        <div class="exit-status" id="exit-status" aria-label="Next exit" aria-live="polite">
+          <span>NEXT EXIT</span>
+          <strong id="exit-number">Searching…</strong>
+          <small id="exit-detail">Waiting for interstate</small>
+        </div>
       </div>
     </header>
 
@@ -70,6 +79,6 @@
     </section>
   </main>
 
-  <script src="nexit.js?v=014"></script>
+  <script src="nexit.js?v=015"></script>
 </body>
 </html>
