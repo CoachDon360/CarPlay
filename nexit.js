@@ -22,6 +22,12 @@ const copy = document.getElementById("selection-copy");
 
 cards.forEach((card) => {
   card.addEventListener("click", () => {
+    const page = card.dataset.page;
+    if (page) {
+      window.location.href = page;
+      return;
+    }
+
     cards.forEach((item) => item.classList.remove("active"));
     card.classList.add("active");
 

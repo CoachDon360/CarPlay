@@ -808,3 +808,17 @@ img[src*="nexit-food"]{
     font-size: clamp(1rem, 2.875vw, 1.25rem);
   }
 }
+
+
+/* Phase 13.0 — simplified dashboard */
+.drive-status-group {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.exit-status {
+  display: none !important;
+}
+
+.trip-status {
+  width: 100%;
+}

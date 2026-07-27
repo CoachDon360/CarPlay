@@ -1,0 +1,114 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --white: #ffffff;
+  --muted: rgba(255,255,255,.72);
+  --line: rgba(255,255,255,.18);
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--white);
+  background:
+    linear-gradient(rgba(3, 12, 42, .42), rgba(3, 12, 42, .72)),
+    url("nexit-background.png") center / cover fixed;
+}
+
+.restroom-shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 22px 0 40px;
+}
+
+.restroom-header {
+  min-height: 84px;
+  display: grid;
+  grid-template-columns: 64px 1fr 64px;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.restroom-header h1 {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+}
+
+.back-button {
+  width: 58px;
+  height: 58px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  color: var(--white);
+  background: rgba(255,255,255,.10);
+  text-decoration: none;
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.restroom-panel {
+  min-height: 430px;
+  padding: clamp(28px, 5vw, 58px);
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: rgba(3, 13, 46, .78);
+  backdrop-filter: blur(20px);
+}
+
+.restroom-panel img {
+  width: min(210px, 42vw);
+  aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 28px;
+  background: #fff;
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-weight: 800;
+  letter-spacing: .16em;
+}
+
+.restroom-panel h2 {
+  margin: 0 0 14px;
+  font-size: clamp(1.7rem, 3.5vw, 2.8rem);
+}
+
+.restroom-panel p:last-child {
+  max-width: 680px;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .restroom-shell {
+    width: min(100% - 20px, 1180px);
+    padding-top: 12px;
+  }
+
+  .restroom-header {
+    grid-template-columns: 54px 1fr 54px;
+  }
+
+  .back-button {
+    width: 50px;
+    height: 50px;
+  }
+}

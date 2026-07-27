@@ -1,0 +1,7 @@
+NEXT EXIT — PHASE 13.0
+
+• Restroom button now opens restroom.html.
+• Added a clean Restrooms landing page with a back arrow.
+• No restroom search is performed yet.
+• Removed the visible NEXT EXIT status box from the main dashboard.
+• Existing interstate and exit-detection code remains in place for later phases.
