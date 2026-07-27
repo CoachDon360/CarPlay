@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
   <meta name="theme-color" content="#075a9d">
   <title>Home</title>
-  <link rel="stylesheet" href="home.css?v=007">
+  <link rel="stylesheet" href="home.css?v=008">
 </head>
 <body>
   <main class="home-screen">
@@ -101,14 +101,18 @@
       <button class="home-app" type="button" aria-label="Tesla">
         <span class="home-icon icon-tesla"><span>T</span></span><span>Tesla</span>
       </button>
-      <button class="home-app" type="button" aria-label="Favorites">
-        <span class="home-icon icon-favorites"><span>★</span></span><span>Favorites</span>
+      <button class="home-app" type="button" aria-label="Next Exit"
+        onclick="window.location.href='nexit.html'">
+        <span class="home-icon" style="padding:0;overflow:hidden;background:transparent;">
+          <img src="next-exit-sign.png?v=001" alt=""
+            style="display:block;width:100%;height:100%;object-fit:contain;">
+        </span><span>Next Exit</span>
       </button>
       <button class="home-app" type="button" aria-label="Settings">
         <span class="home-icon icon-settings"><span>⚙</span></span><span>Settings</span>
       </button>
     </section>
   </main>
-  <script src="home.js?v=007"></script>
+  <script src="home.js?v=008"></script>
 </body>
 </html>

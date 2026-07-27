@@ -4,24 +4,25 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#071d55">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Nexit</title>
-  <link rel="stylesheet" href="nexit.css?v=002">
+  <link rel="stylesheet" href="nexit.css?v=013">
 </head>
 <body>
-  <div class="interstate-red-line" aria-hidden="true"></div>
-
   <main class="app-shell">
+    
     <header class="app-header">
       <a class="back-button" href="index.html" aria-label="Back to CarPlay home">‹</a>
 
-      <div class="brand">
-        <h1>Nexit</h1>
-        <p>Interstate Travel Companion</p>
+      <div class="brand sign-brand">
+        <img src="next-exit-sign.png" alt="Next Exit">
       </div>
 
-      <div class="trip-status" aria-label="Trip status">
+      <div class="trip-status" id="trip-status" aria-label="Trip status" aria-live="polite">
         <span>INTERSTATE</span>
-        <strong>Not detected</strong>
+        <strong id="interstate-status">Locating…</strong>
+        <small id="location-detail">Requesting location</small>
       </div>
     </header>
 
@@ -69,6 +70,6 @@
     </section>
   </main>
 
-  <script src="nexit.js?v=002"></script>
+  <script src="nexit.js?v=013"></script>
 </body>
 </html>
