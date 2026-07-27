@@ -538,3 +538,46 @@ img[src*="nexit-food"]{
 }
 
 /* Phase 11.1: direction is limited to N/S or E/W based on interstate numbering. */
+
+
+/* Phase 11.2: larger route display and flicker-free refreshes */
+.trip-status {
+  min-width: 250px;
+  padding: 16px 22px;
+}
+
+.trip-status > span {
+  font-size: clamp(0.82rem, 1.15vw, 1rem);
+  letter-spacing: 0.12em;
+}
+
+.trip-status strong,
+.trip-status[data-state="ready"] strong {
+  display: block;
+  margin-top: 4px;
+  font-size: clamp(1.9rem, 3vw, 2.8rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+.trip-status small {
+  margin-top: 8px;
+  font-size: clamp(1rem, 1.55vw, 1.35rem);
+  line-height: 1.15;
+}
+
+@media (max-width: 760px), (max-height: 560px) {
+  .trip-status {
+    min-width: 210px;
+    padding: 12px 16px;
+  }
+
+  .trip-status strong,
+  .trip-status[data-state="ready"] strong {
+    font-size: clamp(1.55rem, 4vw, 2.15rem);
+  }
+
+  .trip-status small {
+    font-size: clamp(0.9rem, 2.2vw, 1.1rem);
+  }
+}

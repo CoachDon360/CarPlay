@@ -178,8 +178,8 @@ async function identifyRoad(position) {
 
   if (
     lastRoadLookup &&
-    distanceMeters(lastRoadLookup, position.coords) < 75 &&
-    Date.now() - lastRoadLookup.timestamp < 15000
+    distanceMeters(lastRoadLookup, position.coords) < 150 &&
+    Date.now() - lastRoadLookup.timestamp < 30000
   ) {
     return;
   }
@@ -191,12 +191,10 @@ async function identifyRoad(position) {
     timestamp: Date.now()
   };
 
-  setLocationStatus(
-    "locating",
-    currentInterstate || "Identifying road…",
-    currentDirection
-  );
-
+  /*
+   * Keep the current route and direction visible while the lookup refreshes
+   * in the background. This prevents the status card from flickering.
+   */
   const params = new URLSearchParams({
     format: "jsonv2",
     lat: position.coords.latitude,
@@ -261,7 +259,7 @@ function handlePosition(position) {
 
   if (currentInterstate) {
     setLocationStatus("ready", currentInterstate, currentDirection);
-  } else {
+  } else if (!lookupInProgress) {
     setLocationStatus("locating", "Identifying road…", currentDirection);
   }
 
