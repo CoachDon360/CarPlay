@@ -1,0 +1,13 @@
+NEXT EXIT — PHASE 12.4
+
+Changes:
+• Off the interstate, both cards display only an em dash.
+• No “Detecting road,” local-road name, waiting message, or subtitle.
+• After “Exit now,” leaving the interstate is treated as taking the exit.
+• The exit card displays “Exit taken” instead of returning to a mileage value.
+• Two consecutive non-interstate readings are required before clearing ordinary
+  highway information, reducing GPS flicker.
+• Interstate and next-exit detection resume automatically after rejoining an
+  interstate.
+
+This specifically addresses the I-64 West / Exit 53B road-test behavior.

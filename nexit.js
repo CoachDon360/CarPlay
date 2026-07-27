@@ -51,6 +51,9 @@ let currentExitKey = null;
 let currentExit = null;
 let currentExitLastDistance = null;
 let currentExitPassedReadings = 0;
+let interstateMissReadings = 0;
+let exitNowSeen = false;
+let exitTaken = false;
 
 function setLocationStatus(state, headline, detail) {
   tripStatus.dataset.state = state;
@@ -62,6 +65,11 @@ function setExitStatus(state, headline, detail) {
   exitStatus.dataset.state = state;
   exitNumber.textContent = headline;
   exitDetail.textContent = detail;
+}
+
+function showQuietOffInterstateState() {
+  setLocationStatus("waiting", "—", "");
+  setExitStatus("waiting", "—", "");
 }
 
 function toRadians(value) {
@@ -287,16 +295,27 @@ function updateCurrentExitFromPosition(position) {
     ? angularDifference(heading, bearing)
     : 0;
 
+  if (meters <= 300) {
+    exitNowSeen = true;
+  }
+
   /*
-   * A passed exit will move behind the vehicle and its measured distance
-   * will begin increasing. Require two consecutive readings so one noisy GPS
-   * point does not discard a valid exit.
+   * Once “Exit now” has been reached, leaving the interstate is treated as
+   * ramp commitment. This prevents the same mapped ramp node from changing
+   * back to “0.2 mi ahead” after the vehicle has already taken the exit.
    */
+  if (exitNowSeen && interstateMissReadings >= 1) {
+    exitTaken = true;
+    currentExitLastDistance = meters;
+    setExitStatus("ready", exitLabel(currentExit.node.tags), "Exit taken");
+    return;
+  }
+
   const movingAway =
     currentExitLastDistance !== null &&
     meters > currentExitLastDistance + 35;
 
-  if (angle > 100 && meters < 1600 && movingAway) {
+  if (angle > 100 && meters < 1800 && movingAway) {
     currentExitPassedReadings += 1;
   } else {
     currentExitPassedReadings = 0;
@@ -309,17 +328,26 @@ function updateCurrentExitFromPosition(position) {
     currentExitKey = null;
     currentExitLastDistance = null;
     currentExitPassedReadings = 0;
+    exitNowSeen = false;
+    exitTaken = false;
     lastExitLookup = null;
-    setExitStatus("locating", "Searching…", `Ahead on ${currentInterstate}`);
-    identifyNextExit(position);
+
+    if (currentInterstate) {
+      setExitStatus("locating", "Searching…", `Ahead on ${currentInterstate}`);
+      identifyNextExit(position);
+    } else {
+      showQuietOffInterstateState();
+    }
     return;
   }
 
-  setExitStatus(
-    "ready",
-    exitLabel(currentExit.node.tags),
-    exitDescription(currentExit.node.tags, meters)
-  );
+  if (!exitTaken) {
+    setExitStatus(
+      "ready",
+      exitLabel(currentExit.node.tags),
+      exitDescription(currentExit.node.tags, meters)
+    );
+  }
 }
 
 async function identifyNextExit(position) {
@@ -500,11 +528,23 @@ async function identifyRoad(position) {
         data.name ||
         "No interstate nearby";
 
-      currentInterstate = null;
-      currentExit = null;
-      currentExitKey = null;
-      setLocationStatus("waiting", "Not on interstate", nearbyRoad);
-      setExitStatus("waiting", "Searching…", "Waiting for interstate");
+      interstateMissReadings += 1;
+
+      if (exitNowSeen && currentExit) {
+        exitTaken = true;
+        currentInterstate = null;
+        setLocationStatus("waiting", "—", "");
+        setExitStatus("ready", exitLabel(currentExit.node.tags), "Exit taken");
+      } else if (interstateMissReadings >= 2) {
+        currentInterstate = null;
+        currentExit = null;
+        currentExitKey = null;
+        currentExitLastDistance = null;
+        currentExitPassedReadings = 0;
+        exitNowSeen = false;
+        exitTaken = false;
+        showQuietOffInterstateState();
+      }
     }
   } catch (error) {
     console.warn("Road identification failed:", error);
@@ -547,7 +587,7 @@ function handleLocationError(error) {
 }
 
 function locateVehicle() {
-  setLocationStatus("locating", "Locating…", "Requesting location");
+  showQuietOffInterstateState();
 
   if (!window.isSecureContext) {
     setLocationStatus("error", "HTTPS required", "Open the published secure page");
@@ -572,6 +612,9 @@ function locateVehicle() {
   currentExit = null;
   currentExitLastDistance = null;
   currentExitPassedReadings = 0;
+  interstateMissReadings = 0;
+  exitNowSeen = false;
+  exitTaken = false;
   currentHeading = null;
   setExitStatus("waiting", "Searching…", "Waiting for interstate");
 
