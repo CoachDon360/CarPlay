@@ -548,11 +548,11 @@ async function identifyRoad(position) {
     }
   } catch (error) {
     console.warn("Road identification failed:", error);
-    setLocationStatus(
-      "error",
-      currentInterstate || "Road lookup failed",
-      "Tap to retry"
-    );
+    if (currentInterstate) {
+      setLocationStatus("ready", currentInterstate, currentDirection);
+    } else {
+      showQuietOffInterstateState();
+    }
   } finally {
     lookupInProgress = false;
   }
@@ -563,8 +563,8 @@ function handlePosition(position) {
 
   if (currentInterstate) {
     setLocationStatus("ready", currentInterstate, currentDirection);
-  } else if (!lookupInProgress) {
-    setLocationStatus("locating", "Identifying road…", currentDirection);
+  } else {
+    showQuietOffInterstateState();
   }
 
   updateCurrentExitFromPosition(position);

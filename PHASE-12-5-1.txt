@@ -1,0 +1,8 @@
+NEXT EXIT — PHASE 12.5.1
+
+Bug correction:
+• Removed the remaining “Identifying road…” display from the live GPS handler.
+• When no interstate is identified, both cards now remain as a simple em dash.
+• A failed road lookup also leaves the quiet dash state instead of showing
+  “Road lookup failed.”
+• Includes the corrected 25% typography increase and all Phase 12.4 logic.
