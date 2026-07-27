@@ -1,35 +1,74 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Nexit</title>
-<link rel="stylesheet" href="nexit.css?v=001">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071d55">
+  <title>Nexit</title>
+  <link rel="stylesheet" href="nexit.css?v=002">
 </head>
 <body>
-<main class="app">
-<header>
-<a class="back" href="index.html" aria-label="Back">‹</a>
-<div class="brand"><h1>Nexit</h1><p>Interstate Travel Companion</p></div>
-<div class="status"><small>INTERSTATE</small><strong>Not detected</strong></div>
-</header>
+  <div class="interstate-red-line" aria-hidden="true"></div>
 
-<section class="panel">
-<p class="kicker">CHOOSE A PURPOSE</p>
-<h2>What do you need ahead?</h2>
-<div class="buttons">
-<button data-purpose="bathroom"><span>🚻</span>Bathroom</button>
-<button data-purpose="food"><span>🍔</span>Food</button>
-<button data-purpose="superchargers"><span>⚡</span>Superchargers</button>
-</div>
-</section>
+  <main class="app-shell">
+    <header class="app-header">
+      <a class="back-button" href="index.html" aria-label="Back to CarPlay home">‹</a>
 
-<section class="message">
-<div><p class="kicker">PHASE ONE</p><h2 id="title">Select a purpose</h2>
-<p id="copy">Live location, interstate detection, and upcoming exit results will be connected one feature at a time.</p></div>
-<button disabled>Recommendations coming next</button>
-</section>
-</main>
-<script src="nexit.js?v=001"></script>
+      <div class="brand">
+        <h1>Nexit</h1>
+        <p>Interstate Travel Companion</p>
+      </div>
+
+      <div class="trip-status" aria-label="Trip status">
+        <span>INTERSTATE</span>
+        <strong>Not detected</strong>
+      </div>
+    </header>
+
+    <section class="purpose-panel" aria-labelledby="purpose-title">
+      <p class="eyebrow">CHOOSE A PURPOSE</p>
+      <h2 id="purpose-title">What do you need ahead?</h2>
+
+      <div class="purpose-grid">
+        <button class="purpose-card" type="button" data-purpose="restroom">
+          <span class="icon-frame">
+            <img src="nexit-restroom.png" alt="" aria-hidden="true">
+          </span>
+          <span class="purpose-label">Restroom</span>
+        </button>
+
+        <button class="purpose-card" type="button" data-purpose="food">
+          <span class="icon-frame">
+            <img src="nexit-food.png" alt="" aria-hidden="true">
+          </span>
+          <span class="purpose-label">Food</span>
+        </button>
+
+        <button class="purpose-card" type="button" data-purpose="superchargers">
+          <span class="icon-frame">
+            <img src="nexit-supercharger.png" alt="" aria-hidden="true">
+          </span>
+          <span class="purpose-label">Superchargers</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="phase-panel" aria-live="polite">
+      <div>
+        <p class="eyebrow">PHASE ONE</p>
+        <h2 id="selection-title">Select a purpose</h2>
+        <p id="selection-copy">
+          Live location, interstate detection, and upcoming exit recommendations
+          will be connected one building block at a time.
+        </p>
+      </div>
+
+      <button class="future-button" type="button" disabled>
+        Recommendations coming next
+      </button>
+    </section>
+  </main>
+
+  <script src="nexit.js?v=002"></script>
 </body>
 </html>
