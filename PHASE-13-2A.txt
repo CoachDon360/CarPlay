@@ -1,0 +1,22 @@
+NEXT EXIT — PHASE 13.2A
+FIRST REAL RESTROOM SEARCH USING TEST EXIT DATA
+
+TEST STEPS
+1. Open nexit.html.
+2. Tap LOAD TEST EXIT.
+3. Tap RESTROOM.
+4. The Restrooms page will search live OpenStreetMap/Overpass data around
+   the test Exit 53B coordinates.
+5. Up to six likely restroom stops will be listed.
+6. Tap a result to open it in Google Maps.
+
+SEARCHED CATEGORIES
+- Public toilets
+- Fuel and travel stops
+- Fast-food restaurants
+- Restaurants
+- Supermarkets
+- Convenience stores
+
+This micro-build proves the live search engine. Ranking and exit-access
+intelligence will be refined in later phases.
