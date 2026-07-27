@@ -768,3 +768,12 @@ img[src*="nexit-food"]{
     flex-basis: 104px;
   }
 }
+
+
+/* Phase 12.2.1: right-align the Next Exit data to mirror the Interstate card */
+.exit-status strong,
+.exit-status small {
+  width: 100%;
+  text-align: right;
+  justify-self: end;
+}
