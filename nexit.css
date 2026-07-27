@@ -777,3 +777,15 @@ img[src*="nexit-food"]{
   text-align: right;
   justify-self: end;
 }
+
+
+/* Phase 12.2.2: right-align the NEXT EXIT heading to mirror INTERSTATE */
+.exit-status{
+  text-align:right;
+}
+.exit-status span,
+.exit-status strong,
+.exit-status small{
+  width:100%;
+  text-align:right;
+}
