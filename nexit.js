@@ -48,6 +48,9 @@ let currentHeading = null;
 let lastExitLookup = null;
 let exitLookupInProgress = false;
 let currentExitKey = null;
+let currentExit = null;
+let currentExitLastDistance = null;
+let currentExitPassedReadings = 0;
 
 function setLocationStatus(state, headline, detail) {
   tripStatus.dataset.state = state;
@@ -198,7 +201,7 @@ function milesFromMeters(meters) {
 
 function formatExitDistance(meters) {
   const miles = milesFromMeters(meters);
-  if (miles < 0.1) return "Approaching now";
+  if (meters <= 250) return "Exit now";
   if (miles < 1) return `${miles.toFixed(1)} mi ahead`;
   return `${miles.toFixed(1)} mi ahead`;
 }
@@ -223,6 +226,100 @@ function exitDescription(tags = {}, meters) {
 
   const distance = formatExitDistance(meters);
   return destination ? `${distance} • ${destination}` : distance;
+}
+
+
+function overpassRouteRegex(interstate) {
+  const match = interstate.match(/^I-(\d{1,3})$/i);
+  if (!match) return "";
+  const number = match[1];
+  return `^(I[- ]?${number}|Interstate[ -]?${number})$`;
+}
+
+function candidateIdentity(node) {
+  const tags = node.tags || {};
+  return [
+    tags.ref || tags["junction:ref"] || "",
+    tags.destination || tags["destination:street"] || "",
+    tags.name || ""
+  ]
+    .join("|")
+    .toLowerCase();
+}
+
+function deduplicateExitCandidates(candidates) {
+  const kept = [];
+
+  for (const candidate of candidates) {
+    const identity = candidateIdentity(candidate.node);
+    const duplicate = kept.find((existing) => {
+      const sameIdentity =
+        identity && identity !== "||" &&
+        identity === candidateIdentity(existing.node);
+      const clustered =
+        distanceMeters(
+          { latitude: candidate.node.lat, longitude: candidate.node.lon },
+          { latitude: existing.node.lat, longitude: existing.node.lon }
+        ) < 250;
+
+      return sameIdentity || clustered;
+    });
+
+    if (!duplicate) {
+      kept.push(candidate);
+    }
+  }
+
+  return kept;
+}
+
+function updateCurrentExitFromPosition(position) {
+  if (!currentExit) return;
+
+  const coords = {
+    latitude: currentExit.node.lat,
+    longitude: currentExit.node.lon
+  };
+  const meters = distanceMeters(position.coords, coords);
+  const heading = Number.isFinite(currentHeading) ? currentHeading : null;
+  const bearing = bearingBetween(position.coords, coords);
+  const angle = Number.isFinite(heading)
+    ? angularDifference(heading, bearing)
+    : 0;
+
+  /*
+   * A passed exit will move behind the vehicle and its measured distance
+   * will begin increasing. Require two consecutive readings so one noisy GPS
+   * point does not discard a valid exit.
+   */
+  const movingAway =
+    currentExitLastDistance !== null &&
+    meters > currentExitLastDistance + 35;
+
+  if (angle > 100 && meters < 1600 && movingAway) {
+    currentExitPassedReadings += 1;
+  } else {
+    currentExitPassedReadings = 0;
+  }
+
+  currentExitLastDistance = meters;
+
+  if (currentExitPassedReadings >= 2) {
+    currentExit = null;
+    currentExitKey = null;
+    currentExitLastDistance = null;
+    currentExitPassedReadings = 0;
+    lastExitLookup = null;
+    setExitStatus("locating", "Searching…", `Ahead on ${currentInterstate}`);
+    identifyNextExit(position);
+    return;
+  }
+
+  setExitStatus(
+    "ready",
+    exitLabel(currentExit.node.tags),
+    exitDescription(currentExit.node.tags, meters)
+  );
 }
 
 async function identifyNextExit(position) {
@@ -255,9 +352,13 @@ async function identifyNextExit(position) {
    * OpenStreetMap. A 30 km search radius is broad enough for rural highways
    * without requesting a state-sized dataset.
    */
+  const routeRegex = overpassRouteRegex(currentInterstate);
   const query = `
     [out:json][timeout:20];
-    node(around:30000,${latitude},${longitude})["highway"="motorway_junction"];
+    way(around:30000,${latitude},${longitude})
+      ["highway"="motorway"]
+      ["ref"~"${routeRegex}",i];
+    node(w)["highway"="motorway_junction"];
     out body;
   `;
 
@@ -281,7 +382,7 @@ async function identifyNextExit(position) {
         ? previousPosition.coords.heading
         : null;
 
-    const candidates = (data.elements || [])
+    const rawCandidates = (data.elements || [])
       .filter((node) => Number.isFinite(node.lat) && Number.isFinite(node.lon))
       .map((node) => {
         const coords = { latitude: node.lat, longitude: node.lon };
@@ -299,16 +400,12 @@ async function identifyNextExit(position) {
         return candidate.angle <= 55;
       })
       .sort((a, b) => {
-        /*
-         * Strongly favor nodes in front of the vehicle, then choose the
-         * nearest. This avoids selecting an exit behind the car or across
-         * the median whenever heading data is available.
-         */
         const scoreA = a.meters + a.angle * 140;
         const scoreB = b.meters + b.angle * 140;
         return scoreA - scoreB;
       });
 
+    const candidates = deduplicateExitCandidates(rawCandidates);
     const next = candidates[0];
 
     if (!next) {
@@ -318,6 +415,9 @@ async function identifyNextExit(position) {
     }
 
     currentExitKey = String(next.node.id);
+    currentExit = next;
+    currentExitLastDistance = next.meters;
+    currentExitPassedReadings = 0;
     setExitStatus(
       "ready",
       exitLabel(next.node.tags),
@@ -401,7 +501,10 @@ async function identifyRoad(position) {
         "No interstate nearby";
 
       currentInterstate = null;
+      currentExit = null;
+      currentExitKey = null;
       setLocationStatus("waiting", "Not on interstate", nearbyRoad);
+      setExitStatus("waiting", "Searching…", "Waiting for interstate");
     }
   } catch (error) {
     console.warn("Road identification failed:", error);
@@ -424,6 +527,7 @@ function handlePosition(position) {
     setLocationStatus("locating", "Identifying road…", currentDirection);
   }
 
+  updateCurrentExitFromPosition(position);
   identifyRoad(position);
   identifyNextExit(position);
 }
@@ -465,6 +569,9 @@ function locateVehicle() {
   lastRoadLookup = null;
   lastExitLookup = null;
   currentExitKey = null;
+  currentExit = null;
+  currentExitLastDistance = null;
+  currentExitPassedReadings = 0;
   currentHeading = null;
   setExitStatus("waiting", "Searching…", "Waiting for interstate");
 

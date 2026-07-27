@@ -1,0 +1,12 @@
+NEXT EXIT — PHASE 12.3
+
+This micro-build improves next-exit reliability:
+
+• Searches only junctions attached to the currently detected interstate.
+• Deduplicates nearby ramp/junction nodes.
+• Keeps the chosen exit stable between server lookups.
+• Updates distance from each live GPS reading.
+• Displays “Exit now” inside 250 meters.
+• Detects when an exit has moved behind the vehicle and advances automatically.
+
+Road testing is still required because OpenStreetMap tagging varies by location.
