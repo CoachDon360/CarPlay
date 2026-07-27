@@ -822,3 +822,15 @@ img[src*="nexit-food"]{
 .trip-status {
   width: 100%;
 }
+
+
+/* Phase 13.1.1 — temporary test-exit control */
+.test-exit-button {
+  cursor: pointer;
+  opacity: 1;
+}
+
+.test-exit-button.active {
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, .18);
+}

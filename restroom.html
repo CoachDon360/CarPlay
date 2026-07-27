@@ -17,15 +17,18 @@
       <span class="header-spacer" aria-hidden="true"></span>
     </header>
 
-    <section class="restroom-panel" aria-live="polite">
+    <section class="restroom-panel">
       <img src="nexit-restroom.png" alt="" aria-hidden="true">
-      <p class="eyebrow">SELECTED EXIT</p>
-      <h2 id="route-line">—</h2>
-      <p class="exit-line" id="exit-line">—</p>
-      <p class="destination-line" id="destination-line"></p>
-      <p class="status-copy" id="status-copy">No exit is currently selected.</p>
+      <p class="eyebrow">LOCKED SEARCH TARGET</p>
+      <h2 id="restroom-route">—</h2>
+      <p class="exit-target" id="restroom-exit">—</p>
+      <p class="destination" id="restroom-destination"></p>
+      <p class="status-copy" id="restroom-status">
+        No upcoming exit has been selected.
+      </p>
     </section>
   </main>
+
   <script src="restroom.js?v=001"></script>
 </body>
 </html>

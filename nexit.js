@@ -669,6 +669,62 @@ function locateVehicle() {
   );
 }
 
+
+const loadTestExitButton = document.getElementById("load-test-exit");
+
+function loadTestExit() {
+  /*
+   * Phase 13.1.1 test fixture. It deliberately uses the same currentExit,
+   * buildExitTarget(), and sessionStorage handoff as a live Overpass result.
+   */
+  currentInterstate = "I-64";
+  currentDirection = "Westbound";
+  currentHeading = 270;
+
+  currentExit = {
+    node: {
+      id: "test-exit-53B",
+      lat: 38.2055,
+      lon: -84.8635,
+      tags: {
+        highway: "motorway_junction",
+        ref: "53B",
+        destination: "US 127 • Lawrenceburg"
+      }
+    },
+    meters: 1287,
+    bearing: 270,
+    angle: 0
+  };
+
+  currentExitKey = String(currentExit.node.id);
+  currentExitLastDistance = currentExit.meters;
+  currentExitPassedReadings = 0;
+  exitNowSeen = false;
+  exitTaken = false;
+
+  setLocationStatus("ready", currentInterstate, currentDirection);
+  setExitStatus(
+    "ready",
+    exitLabel(currentExit.node.tags),
+    exitDescription(currentExit.node.tags, currentExit.meters)
+  );
+
+  saveSelectedExitTarget();
+
+  title.textContent = "Test exit loaded";
+  copy.textContent =
+    "I-64 Westbound, Exit 53B is now using the same handoff path as a live exit. Tap Restroom to verify it.";
+
+  loadTestExitButton.textContent = "Test Exit Loaded";
+  loadTestExitButton.classList.add("active");
+}
+
+if (loadTestExitButton) {
+  loadTestExitButton.addEventListener("click", loadTestExit);
+}
+
+
 tripStatus.addEventListener("click", locateVehicle);
 tripStatus.addEventListener("keydown", (event) => {
   if (event.key === "Enter" || event.key === " ") {

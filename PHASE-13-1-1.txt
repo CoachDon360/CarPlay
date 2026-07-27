@@ -1,0 +1,15 @@
+NEXT EXIT — PHASE 13.1.1
+
+Temporary Test Exit Mode
+
+1. Tap LOAD TEST EXIT on nexit.html.
+2. The app loads I-64 Westbound, Exit 53B, 0.8 miles ahead.
+3. The test uses the same currentExit, buildExitTarget(), and sessionStorage
+   handoff used by a live exit.
+4. Tap RESTROOM.
+5. restroom.html should show:
+      I-64 Westbound
+      Exit 53B
+      US 127 • Lawrenceburg
+
+No restroom lookup is performed yet.
