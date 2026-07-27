@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
   <meta name="theme-color" content="#075a9d">
   <title>Home</title>
-  <link rel="stylesheet" href="home.css?v=006">
+  <link rel="stylesheet" href="home.css?v=007">
 </head>
 <body>
   <main class="home-screen">
@@ -81,8 +81,12 @@
             style="display:block;width:100%;height:100%;object-fit:cover;">
         </span><span>Zillow</span>
       </button>
-      <button class="home-app" type="button" aria-label="Weather">
-        <span class="home-icon icon-weather"><span>☀</span></span><span>Weather</span>
+      <button class="home-app" type="button" aria-label="Google Earth"
+        onclick="window.location.href='https://earth.google.com'">
+        <span class="home-icon" style="padding:0;overflow:hidden;background:transparent;">
+          <img src="CarPlay-google-earth.png?v=001" alt=""
+            style="display:block;width:100%;height:100%;object-fit:cover;">
+        </span><span>Google Earth</span>
       </button>
       <button class="home-app" type="button" aria-label="Restaurants">
         <span class="home-icon icon-food"><span>⌁</span></span><span>Restaurants</span>
@@ -105,6 +109,6 @@
       </button>
     </section>
   </main>
-  <script src="home.js?v=006"></script>
+  <script src="home.js?v=007"></script>
 </body>
 </html>
