@@ -1,20 +1,15 @@
-CARPLAY — SORCERER RADIO DEPLOYMENT 1
+CARPLAY SORCERER RADIO — SURGICAL BUILD
 
-UPLOAD THESE TWO FILES TO THE ROOT OF YOUR GITHUB PAGES REPOSITORY:
+Upload these four files to the repository root and replace existing files:
 - index.html
+- home.css
+- home.js
 - CarPlay-sorcerer-radio.png
 
-FIRST ROW:
-Bible | Radio | Disney | Sorcerer Radio
+This build uses the exact index.html just uploaded by the user.
+Only the fourth tile on the first row was changed:
+Podcasts -> Sorcerer Radio
 
-WHAT CHANGED:
-- Added the uploaded Sorcerer Radio icon as the fourth app on the first row.
-- Named the image CarPlay-sorcerer-radio.png.
-- Linked the icon to Sorcerer Radio's official online listening page.
-- The link opens in the same browser tab, so the browser Back button returns to CarPlay.
-- Bible links to bible.html.
-- Radio and Disney remain local app links.
-- No CSS, radio, Bible, restaurant, entertainment, or real-estate files are included or changed.
-
-IMPORTANT:
-This index.html was built from the latest CarPlay index available in the uploaded File Library.
+Everything else in index.html remains unchanged.
+The Sorcerer link opens in the same browser tab.
+Existing files such as home-wallpaper.png, bible-icon.png, and weather SVG files must remain in the repository.
