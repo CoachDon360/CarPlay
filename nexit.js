@@ -24,6 +24,7 @@ cards.forEach((card) => {
   card.addEventListener("click", () => {
     const page = card.dataset.page;
     if (page) {
+      saveSelectedExitTarget();
       window.location.href = page;
       return;
     }
@@ -60,6 +61,39 @@ let currentExitPassedReadings = 0;
 let interstateMissReadings = 0;
 let exitNowSeen = false;
 let exitTaken = false;
+
+const EXIT_TARGET_STORAGE_KEY = "nexitSelectedExit";
+
+function buildExitTarget() {
+  if (!currentExit || !currentInterstate) return null;
+
+  const tags = currentExit.node.tags || {};
+  return {
+    interstate: currentInterstate,
+    direction: currentDirection,
+    exitLabel: exitLabel(tags),
+    exitRef: tags.ref || tags["junction:ref"] || "",
+    destination:
+      tags.destination ||
+      tags["destination:street"] ||
+      tags.name ||
+      "",
+    latitude: currentExit.node.lat,
+    longitude: currentExit.node.lon,
+    selectedAt: Date.now()
+  };
+}
+
+function saveSelectedExitTarget() {
+  const target = buildExitTarget();
+  if (!target) {
+    sessionStorage.removeItem(EXIT_TARGET_STORAGE_KEY);
+    return false;
+  }
+
+  sessionStorage.setItem(EXIT_TARGET_STORAGE_KEY, JSON.stringify(target));
+  return true;
+}
 
 function setLocationStatus(state, headline, detail) {
   tripStatus.dataset.state = state;

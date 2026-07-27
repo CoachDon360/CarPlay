@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Restrooms Ahead</title>
-  <link rel="stylesheet" href="restroom.css?v=001">
+  <link rel="stylesheet" href="restroom.css?v=002">
 </head>
 <body>
   <main class="restroom-shell">
@@ -17,15 +17,15 @@
       <span class="header-spacer" aria-hidden="true"></span>
     </header>
 
-    <section class="restroom-panel">
+    <section class="restroom-panel" aria-live="polite">
       <img src="nexit-restroom.png" alt="" aria-hidden="true">
-      <p class="eyebrow">PHASE 13.0</p>
-      <h2>Restroom page connected</h2>
-      <p>
-        The Restroom button now opens this page. Exit-based restroom searching
-        will be added in the next micro-build.
-      </p>
+      <p class="eyebrow">SELECTED EXIT</p>
+      <h2 id="route-line">—</h2>
+      <p class="exit-line" id="exit-line">—</p>
+      <p class="destination-line" id="destination-line"></p>
+      <p class="status-copy" id="status-copy">No exit is currently selected.</p>
     </section>
   </main>
+  <script src="restroom.js?v=001"></script>
 </body>
 </html>

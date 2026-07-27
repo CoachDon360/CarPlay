@@ -1,0 +1,7 @@
+NEXT EXIT — PHASE 13.1
+
+• Restroom selection now saves the currently detected interstate, direction, exit, destination, and ramp coordinates.
+• restroom.html reads that saved exit package from sessionStorage.
+• The selected exit remains locked while the Restrooms page is open.
+• If no valid upcoming exit exists, the page shows dashes and asks the driver to return after an exit is identified.
+• No restroom business search is performed yet; Phase 13.2 will use the locked coordinates.
