@@ -1,0 +1,14 @@
+NEXT EXIT — PHASE 13.2A.1
+BUILD VERIFICATION ONLY
+
+• Visible BUILD 13.2A.1 badge on restroom.html
+• Unique console message
+• Cache-busting query version v=101
+• No search, ranking, or filtering changes
+
+TEST
+1. Deploy all files.
+2. Open nexit.html.
+3. Tap LOAD TEST EXIT.
+4. Tap RESTROOM.
+5. Confirm BUILD 13.2A.1 appears at top-right.

@@ -1,3 +1,5 @@
+console.info("NEXT EXIT BUILD 13.2A.1 LOADED");
+
 const EXIT_TARGET_STORAGE_KEY = "nexitSelectedExit";
 const OVERPASS_ENDPOINTS = [
   "https://overpass-api.de/api/interpreter",
