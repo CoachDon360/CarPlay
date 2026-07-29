@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Next Exit</title>
-  <link rel="stylesheet" href="nexit.css?v=062a">
+  <link rel="stylesheet" href="nexit.css?v=063a">
   <style>
     :root{--route-sign-width:190px;}
     .app-header{
@@ -634,6 +634,151 @@ body{margin:0;color:#fff;overflow-x:hidden}
   }
 }
 
+
+/* Phase 15.6.3 — Tesla-readable stacked service signs */
+.exit-card-grid{
+  grid-template-columns:1fr !important;
+  gap:18px !important;
+  max-width:1180px !important;
+  margin:0 auto !important;
+}
+.upcoming-exit-card{
+  aspect-ratio:auto !important;
+  min-height:250px !important;
+  padding:14px 24px 18px !important;
+}
+.exit-summary{
+  padding-bottom:12px !important;
+}
+.exit-card-label,
+.exit-card-number{
+  font-size:clamp(32px,4vw,52px) !important;
+}
+.service-sign{
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  grid-template-rows:repeat(3,minmax(0,1fr)) !important;
+  gap:10px 22px !important;
+  padding:2px 20px 6px !important;
+}
+.business-tile{
+  min-height:54px !important;
+  flex-direction:row !important;
+  justify-content:center !important;
+  gap:10px !important;
+  padding:2px 6px !important;
+}
+.business-logo{
+  flex:0 0 auto !important;
+  width:clamp(48px,5.2vw,70px) !important;
+  height:clamp(48px,5.2vw,70px) !important;
+  border-radius:10px !important;
+  padding:4px !important;
+}
+.business-name{
+  width:auto !important;
+  max-width:150px !important;
+  font-size:clamp(13px,1.55vw,20px) !important;
+  line-height:1.08 !important;
+  white-space:normal !important;
+  text-align:left !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+}
+@media(max-width:760px){
+  .exit-card-grid{
+    gap:12px !important;
+  }
+  .upcoming-exit-card{
+    min-height:220px !important;
+    padding:10px 10px 13px !important;
+  }
+  .exit-summary{
+    padding-bottom:8px !important;
+  }
+  .exit-card-label,
+  .exit-card-number{
+    font-size:clamp(24px,5.8vw,36px) !important;
+  }
+  .service-sign{
+    gap:7px 8px !important;
+    padding:1px 2px 4px !important;
+  }
+  .business-tile{
+    min-height:48px !important;
+    gap:5px !important;
+    padding:1px !important;
+  }
+  .business-logo{
+    width:clamp(38px,8vw,52px) !important;
+    height:clamp(38px,8vw,52px) !important;
+    border-radius:8px !important;
+    padding:3px !important;
+  }
+  .business-name{
+    max-width:95px !important;
+    font-size:clamp(9px,2.2vw,13px) !important;
+  }
+}
+
+
+/* Phase 15.6.3a — taller signs and locked row alignment */
+.upcoming-exit-card{
+  min-height:330px !important;
+  padding:16px 26px 22px !important;
+}
+.service-sign{
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  grid-template-rows:repeat(3,minmax(78px,1fr)) !important;
+  grid-auto-rows:minmax(78px,1fr) !important;
+  align-items:stretch !important;
+  justify-items:stretch !important;
+  gap:14px 22px !important;
+  padding:8px 20px 10px !important;
+}
+.business-tile{
+  display:grid !important;
+  grid-template-columns:72px minmax(0,1fr) !important;
+  align-items:center !important;
+  justify-content:stretch !important;
+  width:100% !important;
+  min-height:78px !important;
+  gap:12px !important;
+  padding:4px 8px !important;
+}
+.business-logo{
+  width:64px !important;
+  height:64px !important;
+  justify-self:center !important;
+}
+.business-name{
+  width:100% !important;
+  max-width:none !important;
+  text-align:left !important;
+  align-self:center !important;
+}
+@media(max-width:760px){
+  .upcoming-exit-card{
+    min-height:280px !important;
+    padding:12px 12px 16px !important;
+  }
+  .service-sign{
+    grid-template-rows:repeat(3,minmax(66px,1fr)) !important;
+    grid-auto-rows:minmax(66px,1fr) !important;
+    gap:10px 8px !important;
+    padding:5px 2px 7px !important;
+  }
+  .business-tile{
+    grid-template-columns:50px minmax(0,1fr) !important;
+    min-height:66px !important;
+    gap:6px !important;
+    padding:2px !important;
+  }
+  .business-logo{
+    width:46px !important;
+    height:46px !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -648,7 +793,7 @@ body{margin:0;color:#fff;overflow-x:hidden}
 
         <div class="route-stack" aria-label="Current interstate and direction">
         <div class="interstate-shield" id="interstate-shield" aria-label="Interstate 64">
-          <img class="interstate-shield-image" src="nexit-interstate-shield.png?v=062a" alt="">
+          <img class="interstate-shield-image" src="nexit-interstate-shield.png?v=063a" alt="">
           <span class="shield-route-number" id="shield-route-number">64</span>
         </div>
         <div class="direction-plaque" id="direction-plaque">EAST</div>
@@ -697,13 +842,13 @@ body{margin:0;color:#fff;overflow-x:hidden}
 
     <div class="compatibility-copy" aria-hidden="true">
       <h2 id="selection-title">Upcoming Favorites</h2>
-      <p id="selection-copy">The frozen dashboard includes standard back navigation and business matching.</p>
+      <p id="selection-copy">The Tesla dashboard now uses taller stacked signs with locked icon alignment.</p>
     </div>
   </main>
-  <script src="nexit.js?v=062a"></script>
-  <script src="nexit-favorites.js?v=062a"></script>
-  <script src="nexit-exit-bridge.js?v=062a"></script>
-  <script src="nexit-business-matcher.js?v=062a"></script>
+  <script src="nexit.js?v=063a"></script>
+  <script src="nexit-favorites.js?v=063a"></script>
+  <script src="nexit-exit-bridge.js?v=063a"></script>
+  <script src="nexit-business-matcher.js?v=063a"></script>
 
   <script>
     (() => {
