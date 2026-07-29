@@ -7,47 +7,734 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Next Exit</title>
-  <link rel="stylesheet" href="nexit.css?v=026">
+  <link rel="stylesheet" href="nexit.css?v=051">
   <style>
-    .upcoming-panel{margin:clamp(14px,2.4vh,24px) clamp(16px,3vw,34px) clamp(18px,3vh,30px);padding:clamp(18px,2.5vw,30px);border:1px solid rgba(255,255,255,.18);border-radius:24px;background:rgba(4,28,67,.58);box-shadow:0 18px 42px rgba(0,18,55,.26);backdrop-filter:blur(14px)}
-    .upcoming-heading{margin:0 0 clamp(14px,2vh,22px);color:#fff;font-size:clamp(26px,3.1vw,42px);line-height:1;letter-spacing:-.025em}
-    .exit-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,2vw,22px)}
-    .upcoming-exit-card{min-height:clamp(150px,25vh,230px);padding:clamp(18px,2.2vw,28px);border:1px solid rgba(255,255,255,.22);border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.07));color:#fff;display:flex;flex-direction:column;justify-content:space-between;box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
-    .exit-card-label{color:rgba(255,255,255,.68);font-size:clamp(13px,1.3vw,17px);font-weight:800;letter-spacing:.11em;text-transform:uppercase}
-    .exit-card-number{display:block;margin-top:8px;font-size:clamp(34px,4.2vw,58px);line-height:1;letter-spacing:-.035em}
-    .exit-card-note{margin:20px 0 0;color:rgba(255,255,255,.68);font-size:clamp(15px,1.45vw,20px);line-height:1.35}
-    .compatibility-copy{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-    @media(max-width:760px),(max-height:560px){.upcoming-panel{margin:10px 16px 16px;padding:16px;border-radius:20px}.exit-card-grid{gap:10px}.upcoming-exit-card{min-height:130px;padding:15px;border-radius:17px}.exit-card-note{margin-top:12px}}
-  </style>
+    :root{--route-sign-width:190px;}
+    .app-header{
+      display:grid;
+      grid-template-columns:auto minmax(0,1fr) auto;
+      align-items:start;
+      gap:18px;
+      padding:18px 22px 6px;
+    }
+    .back-button{
+      align-self:center;
+      justify-self:start;
+    }
+    .route-stack{
+      justify-self:start;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:2px;
+      min-width:var(--route-sign-width);
+    }
+    .app-title{
+      margin:0;
+      color:#fff;
+      font-size:clamp(28px,3vw,42px);
+      line-height:1;
+      font-weight:800;
+      letter-spacing:-.03em;
+      text-align:center;
+      align-self:center;
+      justify-self:center;
+    }
+    .interstate-shield{
+      position:relative;
+      width:var(--route-sign-width);
+      aspect-ratio:1 / 1;
+      display:grid;
+      place-items:center;
+      transform:translateY(-1px);
+      filter:drop-shadow(0 5px 7px rgba(0,0,0,.24));
+    }
+    .interstate-shield-image{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:contain;
+      pointer-events:none;
+      user-select:none;
+    }
+    .shield-route-number{
+      position:relative;
+      z-index:1;
+      display:block;
+      margin-top:17%;
+      color:#fff;
+      font-size:clamp(72px,7vw,98px);
+      font-weight:900;
+      line-height:.88;
+      letter-spacing:-.055em;
+      text-align:center;
+      transform:translateY(2px);
+      text-shadow:0 1px 2px rgba(0,0,0,.25);
+    }
+    .direction-plaque{
+      box-sizing:border-box;
+      width:var(--route-sign-width);
+      min-height:66px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px 18px;
+      overflow:hidden;
+      border:7px solid #fff;
+      border-radius:15px;
+      background:#174f98;
+      color:#fff;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:clamp(25px,2.45vw,35px);
+      font-weight:700;
+      line-height:1;
+      letter-spacing:0;
+      white-space:nowrap;
+      text-align:center;
+      text-transform:uppercase;
+      box-shadow:0 8px 18px rgba(0,0,0,.22);
+    }
+    .legacy-status{
+      position:absolute;
+      width:1px;
+      height:1px;
+      overflow:hidden;
+      clip:rect(0 0 0 0);
+      white-space:nowrap;
+    }
+
+    .upcoming-panel{
+      margin:clamp(22px,3.4vh,34px) clamp(16px,3vw,34px) clamp(18px,3vh,30px);
+      padding:clamp(18px,2.5vw,30px);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:24px;
+      background:rgba(4,28,67,.58);
+      box-shadow:0 18px 42px rgba(0,18,55,.26);
+      backdrop-filter:blur(14px);
+    }
+    .upcoming-heading{
+      margin:0 0 clamp(14px,2vh,22px);
+      color:#fff;
+      font-size:clamp(26px,3.1vw,42px);
+      line-height:1;
+      letter-spacing:-.025em;
+    }
+    .exit-card-grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:clamp(16px,2.2vw,24px);
+      max-width:760px;
+      margin:0 auto;
+    }
+    .upcoming-exit-card{
+      position:relative;
+      width:100%;
+      aspect-ratio:4 / 3;
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      padding:18px 20px 20px;
+      border:4px solid #fff;
+      border-radius:18px;
+      background:#124f95;
+      color:#fff;
+      box-shadow:inset 0 0 0 2px rgba(0,0,0,.08);
+      overflow:hidden;
+    }
+    .exit-summary{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:.3em;
+      padding:2px 0 14px;
+      text-align:center;
+    }
+    .exit-card-label,
+    .exit-card-number{
+      display:inline;
+      color:#fff;
+      font-size:clamp(28px,5vw,54px);
+      font-weight:900;
+      line-height:1;
+      letter-spacing:.02em;
+      text-transform:uppercase;
+    }
+    .exit-card-number{
+      letter-spacing:-.02em;
+    }
+    .exit-card-distance{
+      display:none;
+    }
+    .service-sign{
+      flex:1;
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      grid-template-rows:repeat(3,minmax(0,1fr));
+      gap:clamp(8px,1.4vw,14px);
+      min-width:0;
+      padding:4px 4px 8px;
+      background:transparent;
+    }
+    .business-tile{
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:5px;
+      padding:2px;
+      background:transparent;
+      text-align:center;
+      overflow:hidden;
+    }
+    .business-logo{
+      width:clamp(42px,7vw,70px);
+      height:clamp(42px,7vw,70px);
+      display:block;
+      object-fit:contain;
+      border-radius:10px;
+      background:#fff;
+      padding:4px;
+      box-sizing:border-box;
+    }
+    .business-name{
+      max-width:100%;
+      color:#fff;
+      font-size:clamp(9px,1.35vw,14px);
+      font-weight:900;
+      line-height:1.05;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .exit-chevron{
+      position:absolute;
+      right:12px;
+      bottom:6px;
+      color:rgba(255,255,255,.92);
+      font-size:32px;
+      font-weight:300;
+      line-height:1;
+    }
+    .compatibility-copy{
+      position:absolute;
+      width:1px;
+      height:1px;
+      overflow:hidden;
+      clip:rect(0 0 0 0);
+      white-space:nowrap;
+    }
+    @media(max-width:760px),(max-height:560px){
+      .app-header{padding:12px 16px 4px;gap:12px}
+      .route-stack{min-width:var(--route-sign-width);gap:2px}
+      .interstate-shield{width:var(--route-sign-width);transform:translateY(-1px)}
+      .shield-route-number{font-size:64px;margin-top:17%;transform:translateY(1px)}
+      .direction-plaque{width:var(--route-sign-width);padding:6px 12px;border-width:5px}
+      .upcoming-panel{margin:10px 16px 16px;padding:16px;border-radius:20px}
+      .exit-card-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+      .upcoming-exit-card{min-height:286px;gap:9px;padding:10px;border-radius:17px}
+      .exit-summary{grid-template-columns:auto 1fr;padding:8px 9px;border-width:2px}
+      .exit-card-distance{grid-column:1 / -1;margin-top:-2px}
+      .service-sign{gap:7px;padding:7px;border-width:3px}
+      .business-tile{min-height:80px;gap:5px;padding:7px 4px;border-radius:9px}
+      .business-logo{width:42px;height:42px;border-radius:9px}
+      .business-name{font-size:10px}
+      .exit-chevron{right:13px;bottom:10px;width:28px;height:28px;font-size:30px}
+    }
+    @media(max-width:500px){
+      .exit-card-grid{grid-template-columns:1fr}
+      .upcoming-exit-card{min-height:320px}
+    }
+
+    /* Phase 15.4.4 — visual design lock */
+    html,
+    body{
+      min-height:100%;
+      background:#000;
+    }
+    body{
+      margin:0;
+      color:#fff;
+    }
+    .app-shell{
+      min-height:100vh;
+      background:#000;
+    }
+    .app-header{
+      grid-template-columns:1fr;
+      justify-items:center;
+      padding:10px 16px 0;
+      gap:0;
+    }
+    .route-stack{
+      justify-self:center;
+    }
+    .app-title{
+      display:none;
+    }
+    .upcoming-panel{
+      margin:0 12px 18px;
+      padding:4px 0 0;
+      border:0;
+      border-radius:0;
+      background:transparent;
+      box-shadow:none;
+      backdrop-filter:none;
+    }
+    .upcoming-panel .eyebrow,
+    .upcoming-heading{
+      display:none;
+    }
+    .exit-card-grid{
+      width:min(100%,760px);
+      max-width:760px;
+      margin:0 auto;
+      gap:14px;
+    }
+    .upcoming-exit-card{
+      aspect-ratio:4 / 3;
+      padding:14px 18px 17px;
+      border:3px solid rgba(255,255,255,.96);
+      border-radius:15px;
+      background:
+        linear-gradient(180deg,#105ab1 0%,#08478f 42%,#063675 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.16),
+        0 4px 12px rgba(0,0,0,.45);
+    }
+    .exit-summary{
+      padding:1px 0 10px;
+    }
+    .service-sign{
+      gap:clamp(7px,1.2vw,12px);
+      padding:2px 4px 5px;
+    }
+    .business-tile{
+      gap:4px;
+      padding:1px;
+    }
+    .business-logo{
+      width:clamp(42px,7vw,68px);
+      height:clamp(42px,7vw,68px);
+      object-fit:contain;
+      background:#fff;
+      padding:4px;
+    }
+    .business-name{
+      color:#fff;
+      text-shadow:0 1px 1px rgba(0,0,0,.35);
+    }
+    .exit-chevron{
+      display:none !important;
+    }
+    @media(max-width:760px),(max-height:560px){
+      .app-header{
+        padding:6px 12px 0;
+      }
+      .upcoming-panel{
+        margin:0 10px 14px;
+        padding-top:0;
+      }
+      .exit-card-grid{
+        grid-template-columns:1fr;
+        gap:11px;
+      }
+      .upcoming-exit-card{
+        width:100%;
+        min-height:0;
+        aspect-ratio:4 / 3;
+        padding:10px 10px 12px;
+        border-width:2px;
+        border-radius:13px;
+      }
+      .exit-summary{
+        display:flex;
+        justify-content:center;
+        padding:0 0 7px;
+      }
+      .exit-card-label,
+      .exit-card-number{
+        font-size:clamp(24px,6vw,40px);
+      }
+      .service-sign{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        grid-template-rows:repeat(3,minmax(0,1fr));
+        gap:6px;
+        padding:1px 0 3px;
+      }
+      .business-tile{
+        min-height:0;
+        padding:1px;
+      }
+      .business-logo{
+        width:clamp(38px,9vw,56px);
+        height:clamp(38px,9vw,56px);
+      }
+      .business-name{
+        display:block;
+        font-size:clamp(8px,2vw,11px);
+      }
+    }
+    @media(max-width:500px){
+      .business-name{
+        display:block;
+      }
+    }
+
+  
+/* Phase 15.4.5 — final visual layout */
+html,body,.app-shell{min-height:100%;background:#000}
+body{margin:0;color:#fff;overflow-x:hidden}
+.app-header{
+  position:relative;display:flex;align-items:flex-start;justify-content:space-between;
+  min-height:150px;padding:18px 24px 0;background:#000
+}
+.app-title,.menu-button,.weather,.weather-button,.direction-plaque,
+.route-direction-plaque,.header-weather,.header-menu{display:none!important}
+.route-stack{
+  display:flex;flex-direction:row;align-items:center;justify-content:flex-start;
+  gap:24px;margin:0
+}
+.interstate-shield,.route-shield{width:132px;max-width:132px;height:auto;display:block}
+.route-direction,.direction-text,#routeDirection{
+  display:block!important;position:static!important;margin:0!important;padding:0!important;
+  border:0!important;background:transparent!important;color:#fff!important;
+  font-size:clamp(42px,5vw,68px)!important;font-weight:900!important;
+  line-height:1!important;letter-spacing:.01em!important;text-transform:uppercase!important;
+  box-shadow:none!important
+}
+.clock,.header-time,#clock{
+  position:absolute!important;top:20px!important;right:26px!important;display:block!important;
+  margin:0!important;color:#fff!important;font-size:clamp(28px,3vw,42px)!important;
+  font-weight:800!important;line-height:1!important;white-space:nowrap!important
+}
+.upcoming-panel{
+  margin:-2px 20px 18px;padding:0;border:0;border-radius:0;
+  background:transparent;box-shadow:none;backdrop-filter:none
+}
+.upcoming-panel .eyebrow,.upcoming-heading{display:none!important}
+.exit-card-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;
+  width:100%;max-width:none;margin:0
+}
+.upcoming-exit-card{
+  width:100%;aspect-ratio:1.45/1;min-width:0;padding:16px 18px 18px;
+  border:3px solid rgba(255,255,255,.96);border-radius:15px;
+  background:linear-gradient(180deg,#105ab1 0%,#08478f 44%,#063675 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 4px 12px rgba(0,0,0,.45);
+  overflow:hidden
+}
+.exit-summary{
+  display:flex;align-items:center;justify-content:center;gap:.28em;padding:0 0 10px
+}
+.exit-card-label,.exit-card-number{
+  color:#fff;font-size:clamp(28px,3.5vw,50px);font-weight:900;
+  line-height:1;letter-spacing:.01em;text-transform:uppercase
+}
+.exit-card-distance,.exit-chevron{display:none!important}
+.service-sign{
+  flex:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-rows:repeat(3,minmax(0,1fr));gap:8px 10px;
+  min-width:0;padding:2px 2px 4px;background:transparent
+}
+.business-tile{
+  min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;padding:1px;background:transparent;text-align:center;overflow:hidden
+}
+.business-logo{
+  width:clamp(42px,5vw,66px);height:clamp(42px,5vw,66px);display:block;
+  object-fit:contain;border-radius:9px;background:#fff;padding:4px;box-sizing:border-box
+}
+.business-name{
+  max-width:100%;color:#fff;font-size:clamp(9px,1.15vw,14px);font-weight:900;
+  line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  text-shadow:0 1px 1px rgba(0,0,0,.35)
+}
+@media(max-width:760px){
+  .app-header{min-height:116px;padding:12px 14px 0}
+  .route-stack{gap:14px}
+  .interstate-shield,.route-shield{width:94px;max-width:94px}
+  .route-direction,.direction-text,#routeDirection{font-size:clamp(32px,7vw,48px)!important}
+  .clock,.header-time,#clock{top:14px!important;right:16px!important;font-size:clamp(22px,5vw,32px)!important}
+  .upcoming-panel{margin:-2px 10px 12px}
+  .exit-card-grid{gap:10px}
+  .upcoming-exit-card{aspect-ratio:1.35/1;padding:10px 8px;border-width:2px;border-radius:12px}
+  .exit-summary{padding-bottom:6px}
+  .exit-card-label,.exit-card-number{font-size:clamp(20px,4.8vw,34px)}
+  .service-sign{gap:5px 4px}
+  .business-logo{width:clamp(32px,8vw,48px);height:clamp(32px,8vw,48px);border-radius:7px;padding:3px}
+  .business-name{font-size:clamp(7px,1.9vw,10px)}
+}
+
+
+/* Phase 15.5.0 — layout lock */
+.app-header{
+  box-sizing:border-box !important;
+  min-height:168px !important;
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:space-between !important;
+  padding:16px 24px 0 !important;
+}
+.route-stack{
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  gap:24px !important;
+  min-width:0 !important;
+}
+.direction-plaque{
+  display:block !important;
+  width:auto !important;
+  min-height:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  color:#fff !important;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif !important;
+  font-size:clamp(40px,4.8vw,66px) !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  letter-spacing:.01em !important;
+  box-shadow:none !important;
+  text-transform:uppercase !important;
+}
+.interstate-shield{
+  width:136px !important;
+  min-width:136px !important;
+  height:136px !important;
+  aspect-ratio:1/1 !important;
+}
+.shield-route-number{
+  position:absolute !important;
+  left:50% !important;
+  top:58% !important;
+  margin:0 !important;
+  transform:translate(-50%,-50%) !important;
+  width:100% !important;
+  font-size:84px !important;
+  line-height:.88 !important;
+  letter-spacing:-.065em !important;
+  text-align:center !important;
+}
+.header-time,#clock{
+  position:absolute !important;
+  top:24px !important;
+  right:26px !important;
+  display:block !important;
+  color:#fff !important;
+  font-size:clamp(19px,2vw,28px) !important;
+  font-weight:800 !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
+}
+.upcoming-panel{
+  box-sizing:border-box !important;
+  margin:-2px 24px 18px !important;
+  padding:0 !important;
+}
+.exit-card-grid{
+  box-sizing:border-box !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  gap:24px !important;
+  width:100% !important;
+  max-width:none !important;
+  margin:0 !important;
+}
+.upcoming-exit-card{
+  box-sizing:border-box !important;
+  width:100% !important;
+  min-width:0 !important;
+  aspect-ratio:1.45/1 !important;
+}
+@media(max-width:760px){
+  .app-header{
+    min-height:122px !important;
+    padding:10px 12px 0 !important;
+  }
+  .route-stack{gap:12px !important}
+  .interstate-shield{
+    width:98px !important;
+    min-width:98px !important;
+    height:98px !important;
+  }
+  .shield-route-number{
+    top:58% !important;
+    font-size:61px !important;
+  }
+  .direction-plaque{
+    font-size:clamp(28px,6vw,44px) !important;
+  }
+  .header-time,#clock{
+    top:15px !important;
+    right:14px !important;
+    font-size:clamp(15px,2.7vw,20px) !important;
+  }
+  .upcoming-panel{
+    margin:-1px 12px 12px !important;
+  }
+  .exit-card-grid{
+    gap:12px !important;
+  }
+}
+
+</style>
 </head>
 <body>
   <main class="app-shell">
     <header class="app-header">
-      <a class="back-button" href="index.html" aria-label="Back to CarPlay home">‹</a>
-      <div class="brand sign-brand"><img src="next-exit-sign.png" alt="Next Exit"></div>
-      <div class="drive-status-group">
-        <div class="trip-status" id="trip-status" aria-label="Interstate status" aria-live="polite" role="button" tabindex="0">
-          <span>INTERSTATE</span><strong id="interstate-status">Locating…</strong><small id="location-detail">Requesting location</small>
+      
+
+      <div class="route-stack" aria-label="Current interstate and direction">
+        <div class="interstate-shield" id="interstate-shield" aria-label="Interstate 64">
+          <img class="interstate-shield-image" src="nexit-interstate-shield.png?v=051" alt="">
+          <span class="shield-route-number" id="shield-route-number">64</span>
         </div>
-        <div class="exit-status" id="exit-status" aria-label="Next exit" aria-live="polite">
-          <span>NEXT EXIT</span><strong id="exit-number">Searching…</strong><small id="exit-detail">Waiting for interstate</small>
+        <div class="direction-plaque" id="direction-plaque">EAST</div>
+      </div>
+
+      <div class="header-time" id="clock" aria-label="Current time">--:--</div>
+
+      <h1 class="app-title">Next Exit</h1>
+
+      <div class="legacy-status" aria-hidden="true">
+        <div class="trip-status" id="trip-status">
+          <span>INTERSTATE</span>
+          <strong id="interstate-status">Locating…</strong>
+          <small id="location-detail">Requesting location</small>
+        </div>
+        <div class="exit-status" id="exit-status">
+          <span>NEXT EXIT</span>
+          <strong id="exit-number">Searching…</strong>
+          <small id="exit-detail">Waiting for interstate</small>
         </div>
       </div>
     </header>
+
     <section class="upcoming-panel" aria-labelledby="upcoming-title">
       <p class="eyebrow">YOUR STOPS AHEAD</p>
-      <h1 class="upcoming-heading" id="upcoming-title">Upcoming Favorites</h1>
+      <h2 class="upcoming-heading" id="upcoming-title">Upcoming Favorites</h2>
       <div class="exit-card-grid" aria-label="Upcoming exit placeholders">
-        <article class="upcoming-exit-card"><div><span class="exit-card-label">Upcoming Exit</span><strong class="exit-card-number">Exit 1</strong></div><p class="exit-card-note">Favorite stops will appear here.</p></article>
-        <article class="upcoming-exit-card"><div><span class="exit-card-label">Upcoming Exit</span><strong class="exit-card-number">Exit 2</strong></div><p class="exit-card-note">Favorite stops will appear here.</p></article>
-        <article class="upcoming-exit-card"><div><span class="exit-card-label">Upcoming Exit</span><strong class="exit-card-number">Exit 3</strong></div><p class="exit-card-note">Favorite stops will appear here.</p></article>
+        <article class="upcoming-exit-card">
+          <div class="exit-summary">
+            <span class="exit-card-label">Exit</span>
+            <strong class="exit-card-number">53</strong>
+          </div>
+          <div class="service-sign" aria-label="Sample favorite businesses at Exit 53">
+            <div class="business-tile">
+              <img class="business-logo" src="https://www.google.com/s2/favicons?domain=buc-ees.com&amp;sz=128" alt="">
+              <span class="business-name">Buc-ee's</span>
+            </div>
+            <div class="business-tile">
+              <img class="business-logo" src="https://www.google.com/s2/favicons?domain=loves.com&amp;sz=128" alt="">
+              <span class="business-name">Love's</span>
+            </div>
+            <div class="business-tile">
+              <img class="business-logo" src="https://www.google.com/s2/favicons?domain=pilotflyingj.com&amp;sz=128" alt="">
+              <span class="business-name">Pilot</span>
+            </div>
+            <div class="business-tile">
+              <img class="business-logo" src="https://www.google.com/s2/favicons?domain=chick-fil-a.com&amp;sz=128" alt="">
+              <span class="business-name">Chick-fil-A</span>
+            </div>
+            <div class="business-tile">
+              <img class="business-logo" src="https://www.google.com/s2/favicons?domain=wawa.com&amp;sz=128" alt="">
+              <span class="business-name">Wawa</span>
+            </div>
+            <div class="business-tile">
+              <img class="business-logo" src="https://www.google.com/s2/favicons?domain=quiktrip.com&amp;sz=128" alt="">
+              <span class="business-name">QuikTrip</span>
+            </div>
+            <div class="business-tile">
+              <img class="business-logo" src="https://www.google.com/s2/favicons?domain=starbucks.com&amp;sz=128" alt="">
+              <span class="business-name">Starbucks</span>
+            </div>
+            <div class="business-tile">
+              <img class="business-logo" src="https://www.google.com/s2/favicons?domain=caseys.com&amp;sz=128" alt="">
+              <span class="business-name">Casey's</span>
+            </div>
+            <div class="business-tile">
+              <img class="business-logo" src="https://www.google.com/s2/favicons?domain=shell.com&amp;sz=128" alt="">
+              <span class="business-name">Shell</span>
+            </div>
+          </div>
+        </article>
+
+<article class="upcoming-exit-card">
+          <div class="exit-summary">
+            <span class="exit-card-label">Exit</span>
+            <strong class="exit-card-number">60</strong>
+          </div>
+          <div class="service-sign" aria-label="Sample favorite businesses at Exit 60">
+            <div class="business-tile">
+              <img class="business-logo" src="https://www.google.com/s2/favicons?domain=culvers.com&amp;sz=128" alt="">
+              <span class="business-name">Culver's</span>
+            </div>
+            <div class="business-tile">
+              <img class="business-logo" src="https://www.google.com/s2/favicons?domain=racetrac.com&amp;sz=128" alt="">
+              <span class="business-name">RaceTrac</span>
+            </div>
+            <div class="business-tile">
+              <img class="business-logo" src="https://www.google.com/s2/favicons?domain=mcdonalds.com&amp;sz=128" alt="">
+              <span class="business-name">McDonald's</span>
+            </div>
+            <div class="business-tile">
+              <img class="business-logo" src="https://www.google.com/s2/favicons?domain=ta-petro.com&amp;sz=128" alt="">
+              <span class="business-name">TA</span>
+            </div>
+            <div class="business-tile">
+              <img class="business-logo" src="https://www.google.com/s2/favicons?domain=ta-petro.com&amp;sz=128" alt="">
+              <span class="business-name">Petro</span>
+            </div>
+            <div class="business-tile">
+              <img class="business-logo" src="https://www.google.com/s2/favicons?domain=circlek.com&amp;sz=128" alt="">
+              <span class="business-name">Circle K</span>
+            </div>
+            <div class="business-tile">
+              <img class="business-logo" src="https://www.google.com/s2/favicons?domain=weigels.com&amp;sz=128" alt="">
+              <span class="business-name">Weigel's</span>
+            </div>
+            <div class="business-tile">
+              <img class="business-logo" src="https://www.google.com/s2/favicons?domain=maverik.com&amp;sz=128" alt="">
+              <span class="business-name">Maverik</span>
+            </div>
+            <div class="business-tile">
+              <img class="business-logo" src="https://www.google.com/s2/favicons?domain=kroger.com&amp;sz=128" alt="">
+              <span class="business-name">Kroger</span>
+            </div>
+          </div>
+        </article>
       </div>
     </section>
+
     <div class="compatibility-copy" aria-hidden="true">
       <h2 id="selection-title">Upcoming Favorites</h2>
-      <p id="selection-copy">Three upcoming exit placeholders are ready.</p>
+      <p id="selection-copy">The final two-sign dashboard UI is frozen with a smaller live clock.</p>
     </div>
   </main>
-  <script src="nexit.js?v=026"></script>
+  <script src="nexit.js?v=051"></script>
+
+  <script>
+    (() => {
+      const clock = document.getElementById("clock");
+      if (!clock) return;
+
+      const updateClock = () => {
+        clock.textContent = new Intl.DateTimeFormat([], {
+          hour: "numeric",
+          minute: "2-digit"
+        }).format(new Date());
+      };
+
+      updateClock();
+      window.setInterval(updateClock, 15000);
+    })();
+  </script>
+
 </body>
 </html>
