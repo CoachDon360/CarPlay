@@ -8,6 +8,8 @@
    *   nexit.html?testExit=104&nextExit=108
    *   nexit.html?testExit=127&nextExit=131&interstate=75&direction=NORTH
    *
+   * Optional business-list testing is handled by nexit-business-matcher.js.
+   *
    * Remove the query parameters to return to normal live operation.
    */
 
