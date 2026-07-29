@@ -139,19 +139,6 @@
     }
   });
 
-  const SAMPLE_EXIT_BUSINESSES = Object.freeze({
-    "53": [
-      "bucees", "loves", "pilot",
-      "chickfila", "wawa", "quiktrip",
-      "starbucks", "caseys", "shell"
-    ],
-    "60": [
-      "culvers", "racetrac", "mcdonalds",
-      "ta", "petro", "circlek",
-      "weigels", "maverik", "kroger"
-    ]
-  });
-
   function normalizeBusinessName(value) {
     return String(value || "")
       .toLowerCase()
@@ -204,38 +191,63 @@
       .forEach((brand) => container.append(createBusinessTile(brand)));
   }
 
-  function renderSampleExits() {
-    const firstExitNumber =
-      document.querySelector(".upcoming-exit-card:nth-child(1) .exit-card-number")
-        ?.textContent.trim() || "53";
 
-    const secondExitNumber =
-      document.querySelector(".upcoming-exit-card:nth-child(2) .exit-card-number")
-        ?.textContent.trim() || "60";
+  const SAMPLE_BRAND_SETS = Object.freeze([
+    [
+      "bucees", "loves", "pilot",
+      "chickfila", "wawa", "quiktrip",
+      "starbucks", "caseys", "shell"
+    ],
+    [
+      "culvers", "racetrac", "mcdonalds",
+      "ta", "petro", "circlek",
+      "weigels", "maverik", "kroger"
+    ]
+  ]);
+
+  function sampleBrandsForExit(exitValue, signIndex) {
+    const text = String(exitValue || "");
+    const numericPart = Number.parseInt(text.replace(/\D+/g, ""), 10);
+    const seed = Number.isFinite(numericPart) ? numericPart : signIndex;
+    return SAMPLE_BRAND_SETS[Math.abs(seed + signIndex) % SAMPLE_BRAND_SETS.length];
+  }
+
+  function getDisplayedExitNumbers() {
+    const numbers = Array.from(document.querySelectorAll(".exit-card-number"));
+    return [
+      numbers[0]?.textContent.trim() || "53",
+      numbers[1]?.textContent.trim() || "60"
+    ];
+  }
+
+  function renderDisplayedExits() {
+    const [firstExitNumber, secondExitNumber] = getDisplayedExitNumbers();
 
     renderFavoriteBrands(
       document.getElementById("exit-sign-1"),
-      SAMPLE_EXIT_BUSINESSES[firstExitNumber] || SAMPLE_EXIT_BUSINESSES["53"]
+      sampleBrandsForExit(firstExitNumber, 0)
     );
 
     renderFavoriteBrands(
       document.getElementById("exit-sign-2"),
-      SAMPLE_EXIT_BUSINESSES[secondExitNumber] || SAMPLE_EXIT_BUSINESSES["60"]
+      sampleBrandsForExit(secondExitNumber, 1)
     );
   }
 
-  // Public bridge for the later live-data microbuilds.
   window.NextExitFavorites = Object.freeze({
     brands: FAVORITE_BRANDS,
     maxPerExit: MAX_FAVORITES_PER_EXIT,
     normalizeBusinessName,
     findFavoriteBrand,
-    renderFavoriteBrands
+    renderFavoriteBrands,
+    renderDisplayedExits
   });
 
+  window.addEventListener("nexit:exitschanged", renderDisplayedExits);
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", renderSampleExits, { once: true });
+    document.addEventListener("DOMContentLoaded", renderDisplayedExits, { once: true });
   } else {
-    renderSampleExits();
+    renderDisplayedExits();
   }
 })();

@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Next Exit</title>
-  <link rel="stylesheet" href="nexit.css?v=060">
+  <link rel="stylesheet" href="nexit.css?v=061">
   <style>
     :root{--route-sign-width:190px;}
     .app-header{
@@ -592,7 +592,7 @@ body{margin:0;color:#fff;overflow-x:hidden}
 
       <div class="route-stack" aria-label="Current interstate and direction">
         <div class="interstate-shield" id="interstate-shield" aria-label="Interstate 64">
-          <img class="interstate-shield-image" src="nexit-interstate-shield.png?v=060" alt="">
+          <img class="interstate-shield-image" src="nexit-interstate-shield.png?v=061" alt="">
           <span class="shield-route-number" id="shield-route-number">64</span>
         </div>
         <div class="direction-plaque" id="direction-plaque">EAST</div>
@@ -640,11 +640,12 @@ body{margin:0;color:#fff;overflow-x:hidden}
 
     <div class="compatibility-copy" aria-hidden="true">
       <h2 id="selection-title">Upcoming Favorites</h2>
-      <p id="selection-copy">The frozen dashboard now renders its business tiles from the favorites engine.</p>
+      <p id="selection-copy">The frozen dashboard now accepts live committed-exit data and URL-based test exits.</p>
     </div>
   </main>
-  <script src="nexit.js?v=060"></script>
-  <script src="nexit-favorites.js?v=060"></script>
+  <script src="nexit.js?v=061"></script>
+  <script src="nexit-favorites.js?v=061"></script>
+  <script src="nexit-exit-bridge.js?v=061"></script>
 
   <script>
     (() => {
