@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#00589f" />
+  <title>Ramsey Podcasts</title>
+  <link rel="stylesheet" href="ramsey.css?v=1.0" />
+</head>
+<body>
+  <main class="ramsey-app">
+    <header class="ramsey-header">
+      <h1 id="pageTitle">The Ramsey Show</h1>
+      <nav class="show-tabs" aria-label="Podcast shows">
+        <button class="show-tab active" data-show="ramsey">The Ramsey Show</button>
+        <button class="show-tab" data-show="entre">EntreLeadership</button>
+        <button class="show-tab" data-show="smart">Smart Money Happy Hour</button>
+      </nav>
+      <div id="clock" class="clock">--:--</div>
+    </header>
+
+    <section class="podcast-layout">
+      <section class="player-panel">
+        <p class="gold-label">NOW PLAYING</p>
+
+        <div class="art-frame">
+          <img id="showArtwork" src="ramsey-show-art.png" alt="The Ramsey Show artwork" />
+        </div>
+
+        <div class="episode-details">
+          <h2 id="episodeTitle">Choose an episode</h2>
+          <p id="episodeShow">The Ramsey Show</p>
+          <p id="episodeMeta">Latest episodes will appear on the right.</p>
+        </div>
+
+        <audio id="audioPlayer" preload="metadata"></audio>
+
+        <div class="progress-area">
+          <input id="progressBar" type="range" min="0" max="100" value="0" aria-label="Episode progress" />
+          <div class="time-row">
+            <span id="elapsedTime">0:00</span>
+            <span id="remainingTime">0:00</span>
+          </div>
+        </div>
+
+        <div class="main-controls">
+          <button id="rewindButton" class="skip-button" aria-label="Rewind 15 seconds">
+            <span class="triangles reverse">▶▶</span>
+          </button>
+          <button id="playPauseButton" class="play-button" aria-label="Play">▶</button>
+          <button id="forwardButton" class="skip-button" aria-label="Forward 15 seconds">
+            <span class="triangles">▶▶</span>
+          </button>
+        </div>
+
+        <button id="markListenedButton" class="listened-button" disabled>
+          ✓ Mark as listened
+        </button>
+      </section>
+
+      <section class="episodes-panel">
+        <div class="episodes-heading">
+          <div>
+            <p class="gold-label">LATEST EPISODES</p>
+            <h2 id="episodesShowName">The Ramsey Show</h2>
+          </div>
+          <div class="episode-actions">
+            <button id="unplayedFilter" class="filter-button">Unplayed</button>
+            <button id="allFilter" class="filter-button active">All</button>
+          </div>
+        </div>
+
+        <div id="feedMessage" class="feed-message">Loading episodes…</div>
+        <div id="episodeList" class="episode-list" aria-live="polite"></div>
+      </section>
+    </section>
+  </main>
+
+  <script src="ramsey.js?v=1.0"></script>
+</body>
+</html>
