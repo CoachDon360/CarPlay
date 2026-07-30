@@ -69,7 +69,6 @@ const markListenedButton = document.querySelector("#markListenedButton");
 let activeShowKey = "ramsey";
 let episodes = [];
 let currentEpisode = null;
-let currentFilter = "all";
 let progressData = readProgress();
 
 function readProgress() {
@@ -183,23 +182,15 @@ async function loadShow(showKey) {
 
 function renderEpisodes() {
   episodeList.innerHTML = "";
-  const visible = episodes.filter(episode => {
-    if (currentFilter === "all") return true;
-    const state = progressData[episodeId(activeShowKey, episode)];
-    return !state?.listened;
-  });
-
-  if (!visible.length) {
+  if (!episodes.length) {
     feedMessage.hidden = false;
-    feedMessage.textContent = currentFilter === "unplayed"
-      ? "You've listened to every episode currently shown."
-      : "No episodes are available.";
+    feedMessage.textContent = "No episodes are available.";
     return;
   }
 
   feedMessage.hidden = true;
 
-  visible.forEach(episode => {
+  episodes.forEach(episode => {
     const id = episodeId(activeShowKey, episode);
     const state = progressData[id] || {};
     const row = document.createElement("button");
@@ -337,20 +328,6 @@ markListenedButton.addEventListener("click", () => {
 
 document.querySelectorAll(".show-tab").forEach(button => {
   button.addEventListener("click", () => loadShow(button.dataset.show));
-});
-
-document.querySelector("#allFilter").addEventListener("click", () => {
-  currentFilter = "all";
-  document.querySelector("#allFilter").classList.add("active");
-  document.querySelector("#unplayedFilter").classList.remove("active");
-  renderEpisodes();
-});
-
-document.querySelector("#unplayedFilter").addEventListener("click", () => {
-  currentFilter = "unplayed";
-  document.querySelector("#unplayedFilter").classList.add("active");
-  document.querySelector("#allFilter").classList.remove("active");
-  renderEpisodes();
 });
 
 loadShow("ramsey");
