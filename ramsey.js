@@ -231,7 +231,7 @@ function selectEpisode(episode, shouldPlay = true) {
 
   episodeTitle.textContent = episode.title;
   episodeShow.textContent = shows[activeShowKey].title;
-  episodeMeta.textContent = `${episode.date}${episode.duration ? ` • ${episode.duration}` : ""}`;
+  episodeMeta.textContent = episode.date;
   showArtwork.src = episode.artwork;
 
   audio.src = episode.audio;
