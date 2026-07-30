@@ -1,10 +1,11 @@
-RAMSEY MICROBUILD 2.1
+COACHDON CARPLAY — ABRP HOME GRID UPDATE
 
-Upload:
-- ramsey.js
+Upload these two files to the repository root:
+1. index.html
+2. CarPlay-abrp.png
 
 Changes:
-- Removes episode duration from the episode list.
-- Removes the right chevron from every episode row.
-- Displays "Published <date>" beneath each title.
-- Duration still appears in the Now Playing panel after selecting an episode.
+- ABRP replaces Zillow.
+- Zillow replaces Restaurants.
+- Restaurants is removed.
+- Existing home.css and home.js remain unchanged.
