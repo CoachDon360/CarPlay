@@ -221,12 +221,10 @@ function renderEpisodes() {
           ${state.listened ? '<span class="listened-check">✓</span>' : ''}
           <strong>${episode.title}</strong>
         </span>
-        <span class="row-meta">${episode.date}</span>
+        <span class="row-meta">Published ${episode.date}</span>
       </span>
       <span class="row-side">
         ${percent > 0 && !state.listened ? `<span class="row-progress">${percent}%</span>` : ""}
-        <span>${episode.duration || ""}</span>
-        <span class="chevron">›</span>
       </span>
     `;
 
