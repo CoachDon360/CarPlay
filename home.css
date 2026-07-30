@@ -240,7 +240,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
   inset:clamp(92px,14vh,140px) clamp(42px,6.2vw,106px) clamp(30px,5vh,58px);
   display:grid;
   grid-template-columns:repeat(4,minmax(0,1fr));
-  grid-template-rows:repeat(3,minmax(0,1fr));
+  grid-template-rows:repeat(2,minmax(0,1fr));
   align-items:center;
   justify-items:center;
   column-gap:clamp(28px,5vw,86px);
@@ -289,7 +289,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
 .home-app:active .home-icon{transform:scale(.94);filter:brightness(.92)}
 .home-app:focus-visible .home-icon{outline:4px solid #fff;outline-offset:5px}
 
-.icon-radio{background:linear-gradient(145deg,#ff6a24,#e9342c)}
+.icon-ramsey{background:linear-gradient(145deg,#2f7de1,#0b3f91)}
 .icon-disney{background:linear-gradient(145deg,#7457ff,#2738aa)}
 .icon-bible{background:linear-gradient(145deg,#bea06e,#664526)}
 .icon-podcasts{background:linear-gradient(145deg,#9d57ff,#6020c7)}
