@@ -7,7 +7,7 @@ const shows = {
   entre: {
     title: "EntreLeadership",
     artwork: "ramsey-entreleadership-art.png",
-    feed: "https://feeds.megaphone.fm/entreleadership"
+    feed: "https://feeds.megaphone.fm/RM6855404952"
   },
   smart: {
     title: "Smart Money Happy Hour",
@@ -16,7 +16,39 @@ const shows = {
   }
 };
 
-const proxy = "https://api.allorigins.win/raw?url=";
+const feedFetchers = [
+  feedUrl => feedUrl,
+  feedUrl => `https://api.allorigins.win/raw?url=${encodeURIComponent(feedUrl)}`,
+  feedUrl => `https://corsproxy.io/?url=${encodeURIComponent(feedUrl)}`
+];
+
+async function fetchFeedXml(feedUrl) {
+  let lastError;
+
+  for (const makeUrl of feedFetchers) {
+    try {
+      const response = await fetch(makeUrl(feedUrl), {
+        cache: "no-store",
+        headers: { Accept: "application/rss+xml, application/xml, text/xml, */*" }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Feed request returned ${response.status}`);
+      }
+
+      const text = await response.text();
+      if (!text.includes("<rss") && !text.includes("<feed")) {
+        throw new Error("The response was not a podcast feed");
+      }
+
+      return text;
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError || new Error("The podcast feed could not be loaded");
+}
 const storageKey = "ramseyPodcastProgressV1";
 
 const audio = document.querySelector("#audioPlayer");
@@ -117,10 +149,7 @@ async function loadShow(showKey) {
   episodeList.innerHTML = "";
 
   try {
-    const response = await fetch(proxy + encodeURIComponent(show.feed), { cache: "no-store" });
-    if (!response.ok) throw new Error("Feed request failed");
-
-    const xmlText = await response.text();
+    const xmlText = await fetchFeedXml(show.feed);
     const xml = new DOMParser().parseFromString(xmlText, "application/xml");
     if (xml.querySelector("parsererror")) throw new Error("Feed could not be read");
 
@@ -130,17 +159,25 @@ async function loadShow(showKey) {
       duration: item.getElementsByTagName("itunes:duration")[0]?.textContent || "",
       audio: item.querySelector("enclosure")?.getAttribute("url") || "",
       guid: item.querySelector("guid")?.textContent || "",
-      artwork: show.artwork
+      artwork:
+        item.getElementsByTagName("itunes:image")[0]?.getAttribute("href") ||
+        item.querySelector("image url")?.textContent ||
+        show.artwork
     })).filter(item => item.audio);
 
     if (!episodes.length) throw new Error("No playable episodes were found");
 
     feedMessage.hidden = true;
     renderEpisodes();
+
+    if (episodes[0]) {
+      selectEpisode(episodes[0], false);
+    }
   } catch (error) {
     feedMessage.hidden = false;
+    console.error(error);
     feedMessage.textContent =
-      "This show's live feed could not load yet. The layout and listening-history framework are ready.";
+      "The live episode feed could not load. Check your connection, then tap this show again.";
   }
 }
 
@@ -193,12 +230,12 @@ function renderEpisodes() {
       </span>
     `;
 
-    row.addEventListener("click", () => selectEpisode(episode));
+    row.addEventListener("click", () => selectEpisode(episode, true));
     episodeList.appendChild(row);
   });
 }
 
-function selectEpisode(episode) {
+function selectEpisode(episode, shouldPlay = true) {
   currentEpisode = episode;
   const id = episodeId(activeShowKey, episode);
   const state = progressData[id] || {};
@@ -219,7 +256,10 @@ function selectEpisode(episode) {
   markListenedButton.disabled = false;
   updateListenedButton();
   renderEpisodes();
-  audio.play().catch(() => {});
+
+  if (shouldPlay) {
+    audio.play().catch(() => {});
+  }
 }
 
 function updateListenedButton() {
