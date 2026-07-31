@@ -1,28 +1,213 @@
 :root{
-  --glass:rgba(4,18,48,.54);
-  --line:rgba(255,255,255,.22);
   --text:#fff;
-  --muted:rgba(255,255,255,.76);
-  --accent:#b781ff;
+  --muted:rgba(255,255,255,.88);
+  --gold:#ffd96a;
+  --panel:rgba(3,14,38,.68);
+  --line:rgba(255,255,255,.18);
 }
+
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden}
-body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;background:#071a3d;color:var(--text);-webkit-font-smoothing:antialiased}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+  background:#071a3d;
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+}
 button{font:inherit;-webkit-tap-highlight-color:transparent}
-.park-player{position:relative;width:100vw;height:100vh;min-height:480px;background:url("park-music-epcot-bg.png?v=001") center/cover no-repeat;display:grid;place-items:end start;padding:clamp(28px,5vw,72px)}
-.shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(2,10,29,.68) 0%,rgba(2,10,29,.25) 48%,rgba(2,10,29,.03) 78%),linear-gradient(0deg,rgba(2,8,25,.56),transparent 55%)}
-.player-card{position:relative;z-index:1;width:min(620px,82vw);min-height:250px;padding:clamp(26px,3.2vw,44px);border:1px solid var(--line);border-radius:30px;background:var(--glass);box-shadow:0 24px 70px rgba(0,0,0,.32);backdrop-filter:blur(18px) saturate(125%);display:grid;grid-template-columns:1fr auto;grid-template-rows:1fr auto;gap:20px 34px;align-items:center}
-.copy{min-width:0}.eyebrow{margin:0 0 12px;font-size:clamp(13px,1.3vw,18px);font-weight:760;letter-spacing:.18em;color:var(--accent)}
-h1{margin:0;font-size:clamp(29px,4vw,56px);line-height:1.02;letter-spacing:-.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.metadata{margin:13px 0 0;color:var(--muted);font-size:clamp(16px,1.8vw,25px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mouse-control{position:relative;width:clamp(108px,12vw,154px);height:clamp(108px,12vw,154px);border:0;background:transparent;padding:0;cursor:pointer;filter:drop-shadow(0 13px 28px rgba(0,0,0,.35))}
-.head,.ear{position:absolute;background:rgba(255,255,255,.94);transition:transform .16s ease,background .16s ease,box-shadow .16s ease}
-.head{width:68%;height:68%;left:16%;top:25%;border-radius:50%;display:grid;place-items:center}
-.ear{width:37%;height:37%;top:2%;border-radius:50%}.ear-left{left:3%}.ear-right{right:3%}
-.play-symbol{margin-left:.08em;font-size:clamp(37px,4.4vw,58px);color:#16275d;line-height:1}
-.mouse-control.playing .head,.mouse-control.playing .ear{background:#fff;box-shadow:0 0 28px rgba(183,129,255,.55)}
-.mouse-control:active{transform:scale(.95)}.mouse-control:focus-visible{outline:4px solid #fff;outline-offset:8px;border-radius:50%}
-.status{grid-column:1/-1;margin:0;color:rgba(255,255,255,.58);font-size:14px;letter-spacing:.02em}
-@media(max-width:700px){.park-player{place-items:end center;padding:22px}.player-card{width:100%;grid-template-columns:1fr auto;padding:24px;border-radius:24px}h1{font-size:32px}.metadata{font-size:17px}.mouse-control{width:100px;height:100px}}
-@media(max-height:560px){.park-player{padding:20px}.player-card{min-height:0;padding:20px 26px}.mouse-control{width:92px;height:92px}.status{display:none}}
-@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.park-player{
+  position:relative;
+  width:100vw;
+  height:100vh;
+  min-height:480px;
+  background:url("park-music-epcot-bg.png?v=001") center/cover no-repeat;
+}
+
+.shade{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(0deg,rgba(2,8,25,.48) 0%,rgba(2,8,25,.08) 38%,transparent 64%),
+    linear-gradient(90deg,rgba(2,10,29,.20),transparent 54%);
+  pointer-events:none;
+}
+
+.audio-panel{
+  position:absolute;
+  z-index:1;
+  left:0;
+  right:0;
+  bottom:0;
+  min-height:clamp(174px,23vh,220px);
+  padding:24px clamp(28px,5vw,72px) max(22px,env(safe-area-inset-bottom));
+  border-top:1px solid var(--line);
+  background:var(--panel);
+  box-shadow:0 -18px 50px rgba(0,0,0,.22);
+  backdrop-filter:blur(20px) saturate(130%);
+  -webkit-backdrop-filter:blur(20px) saturate(130%);
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center;
+}
+
+.now-playing{
+  grid-column:1;
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+.music-mark{
+  position:relative;
+  flex:0 0 auto;
+  width:74px;
+  height:68px;
+  display:grid;
+  place-items:center;
+  filter:drop-shadow(0 0 11px rgba(255,255,255,.35));
+}
+
+.music-note{
+  color:#fff;
+  font-size:58px;
+  font-weight:800;
+  line-height:1;
+  text-shadow:0 0 16px rgba(255,255,255,.72),0 0 32px rgba(183,129,255,.38);
+}
+
+.spark{
+  position:absolute;
+  color:var(--gold);
+  line-height:1;
+  text-shadow:0 0 8px rgba(255,217,106,.95),0 0 18px rgba(255,217,106,.62);
+}
+.spark-left{left:0;top:5px;font-size:22px}
+.spark-right{right:0;bottom:7px;font-size:17px}
+
+.metadata{
+  margin:0;
+  min-width:0;
+  color:var(--muted);
+  font-size:clamp(19px,2vw,29px);
+  font-weight:650;
+  letter-spacing:-.015em;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  text-shadow:0 2px 12px rgba(0,0,0,.45);
+}
+
+.mouse-control{
+  grid-column:2;
+  position:relative;
+  width:clamp(124px,12vw,168px);
+  height:clamp(124px,12vw,168px);
+  border:0;
+  background:transparent;
+  padding:0;
+  cursor:pointer;
+  filter:drop-shadow(0 13px 28px rgba(0,0,0,.38));
+  transition:transform .16s ease;
+}
+
+.head,.ear{
+  position:absolute;
+  background:rgba(255,255,255,.97);
+  transition:background .2s ease,box-shadow .2s ease;
+}
+.head{
+  width:68%;
+  height:68%;
+  left:16%;
+  top:25%;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+}
+.ear{width:37%;height:37%;top:2%;border-radius:50%}
+.ear-left{left:3%}
+.ear-right{right:3%}
+
+.play-symbol{
+  margin-left:.08em;
+  font-size:clamp(42px,4.4vw,62px);
+  font-weight:750;
+  color:#16275d;
+  line-height:1;
+}
+
+.mouse-control.playing .head,
+.mouse-control.playing .ear{
+  background:#fff;
+  animation:soft-glow 2.8s ease-in-out infinite;
+}
+.mouse-control.playing .play-symbol{margin-left:0;font-size:clamp(38px,4vw,55px)}
+.mouse-control:active{transform:scale(.95)}
+.mouse-control:focus-visible{outline:4px solid #fff;outline-offset:8px;border-radius:50%}
+
+.status{
+  position:absolute;
+  right:clamp(28px,5vw,72px);
+  bottom:max(16px,env(safe-area-inset-bottom));
+  margin:0;
+  color:rgba(255,255,255,.58);
+  font-size:13px;
+  letter-spacing:.02em;
+  opacity:0;
+  transition:opacity .2s ease;
+}
+.status.is-visible{opacity:1}
+
+@keyframes soft-glow{
+  0%,100%{box-shadow:0 0 18px rgba(183,129,255,.26)}
+  50%{box-shadow:0 0 38px rgba(183,129,255,.68)}
+}
+
+@media(max-width:760px){
+  .audio-panel{
+    min-height:190px;
+    padding:18px 20px max(18px,env(safe-area-inset-bottom));
+    grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  }
+  .now-playing{gap:10px}
+  .music-mark{width:56px;height:54px}
+  .music-note{font-size:45px}
+  .spark-left{font-size:18px}
+  .spark-right{font-size:14px}
+  .metadata{font-size:17px}
+  .mouse-control{width:112px;height:112px}
+  .status{right:20px}
+}
+
+@media(max-width:540px){
+  .audio-panel{
+    min-height:210px;
+    grid-template-columns:1fr auto 1fr;
+    align-items:center;
+  }
+  .now-playing{
+    position:absolute;
+    left:20px;
+    right:20px;
+    top:14px;
+    justify-content:center;
+  }
+  .mouse-control{margin-top:34px}
+  .metadata{max-width:calc(100vw - 110px)}
+}
+
+@media(max-height:560px){
+  .audio-panel{min-height:150px;padding-top:12px;padding-bottom:12px}
+  .mouse-control{width:96px;height:96px}
+  .music-mark{width:54px;height:50px}
+  .music-note{font-size:43px}
+  .metadata{font-size:17px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *{transition:none!important}
+  .mouse-control.playing .head,
+  .mouse-control.playing .ear{animation:none;box-shadow:0 0 28px rgba(183,129,255,.55)}
+}

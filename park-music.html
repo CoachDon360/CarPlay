@@ -5,17 +5,20 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
   <meta name="theme-color" content="#071a3d">
   <title>Park Music</title>
-  <link rel="stylesheet" href="park-music.css?v=001">
+  <link rel="stylesheet" href="park-music.css?v=002">
 </head>
 <body>
   <main class="park-player">
     <div class="shade" aria-hidden="true"></div>
 
-    <section class="player-card" aria-label="Park Music player">
-      <div class="copy">
-        <p class="eyebrow">PARK MUSIC</p>
-        <h1 id="track-title">Park World Radio</h1>
-        <p id="track-meta" class="metadata">Tap play to begin</p>
+    <section class="audio-panel" aria-label="Park Music player">
+      <div class="now-playing" aria-live="polite">
+        <div class="music-mark" aria-hidden="true">
+          <span class="spark spark-left">✦</span>
+          <span class="music-note">♪</span>
+          <span class="spark spark-right">✦</span>
+        </div>
+        <p id="track-meta" class="metadata">Streaming Live</p>
       </div>
 
       <button id="play-button" class="mouse-control" type="button" aria-label="Play Park Music" aria-pressed="false">
@@ -31,6 +34,6 @@
 
     <audio id="park-audio" preload="none" playsinline></audio>
   </main>
-  <script src="park-music.js?v=001"></script>
+  <script src="park-music.js?v=002"></script>
 </body>
 </html>
