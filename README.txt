@@ -1,11 +1,18 @@
-COACHDON CARPLAY — ABRP HOME GRID UPDATE
+PARK MUSIC — MICRO BUILD 1.0
 
-Upload these two files to the repository root:
-1. index.html
-2. CarPlay-abrp.png
+Upload these four files to the root of the GitHub Pages repository:
+- park-music.html
+- park-music.css
+- park-music.js
+- park-music-epcot-bg.png
 
-Changes:
-- ABRP replaces Zillow.
-- Zillow replaces Restaurants.
-- Restaurants is removed.
-- Existing home.css and home.js remain unchanged.
+Open: park-music.html
+
+This build includes:
+- One EPCOT-focused background
+- One Park World Radio stream
+- One mouse-head play/pause control
+- Simple fallback status text
+
+The stream URL is isolated near the top of park-music.js so it can be changed easily.
+Live track metadata is intentionally reserved for the next micro-build after playback is confirmed.
