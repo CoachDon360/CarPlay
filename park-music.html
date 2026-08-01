@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
   <meta name="theme-color" content="#071a3d">
   <title>Park Music</title>
-  <link rel="stylesheet" href="park-music.css?v=002">
+  <link rel="stylesheet" href="park-music.css?v=006">
 </head>
 <body>
   <main class="park-player">
+    <div id="background-day" class="background-layer background-day" aria-hidden="true"></div>
+    <div id="background-night" class="background-layer background-night" aria-hidden="true"></div>
     <div class="shade" aria-hidden="true"></div>
 
     <section class="audio-panel" aria-label="Park Music player">
@@ -34,6 +36,6 @@
 
     <audio id="park-audio" preload="none" playsinline></audio>
   </main>
-  <script src="park-music.js?v=002"></script>
+  <script src="park-music.js?v=006"></script>
 </body>
 </html>

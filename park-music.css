@@ -21,8 +21,24 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
   width:100vw;
   height:100vh;
   min-height:480px;
-  background:url("park-music-epcot-bg.png?v=001") center/cover no-repeat;
+  background:#071a3d;
 }
+
+.background-layer{
+  position:absolute;
+  inset:0;
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+  opacity:0;
+  transition:opacity 2s ease;
+  will-change:opacity;
+}
+.background-day{background-image:url("park-music-day.png?v=006")}
+.background-night{background-image:url("park-music-night.png?v=006")}
+.park-player.is-day .background-day{opacity:1}
+.park-player.is-night .background-night{opacity:1}
+
 
 .shade{
   position:absolute;
@@ -208,6 +224,8 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
 
 @media(prefers-reduced-motion:reduce){
   *{transition:none!important}
+  .background-layer{transition:none!important}
+
   .mouse-control.playing .head,
   .mouse-control.playing .ear{animation:none;box-shadow:0 0 28px rgba(183,129,255,.55)}
 }
