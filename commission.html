@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Commission" />
+  <title>Commission Calculator</title>
+  <link rel="stylesheet" href="commission.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section class="calculator">
+      <h1>Commission Calculator</h1>
+
+      <div class="inputs">
+        <label class="field">
+          <span>SALES PRICE</span>
+          <div class="input-wrap">
+            <span class="prefix">$</span>
+            <input id="salesPrice" type="number" inputmode="decimal" min="0" step="1000" placeholder="300000" />
+          </div>
+        </label>
+
+        <label class="field">
+          <span>COMMISSION %</span>
+          <div class="input-wrap">
+            <input id="commissionRate" type="number" inputmode="decimal" min="0" step="0.01" placeholder="3.00" />
+            <span class="suffix">%</span>
+          </div>
+        </label>
+      </div>
+
+      <section class="results" aria-live="polite">
+        <div class="row"><span>COMPANY GROSS</span><strong id="companyGross">$0.00</strong></div>
+        <div class="row"><span>TRANSACTION FEE</span><strong id="transactionFee">$0.00</strong></div>
+        <div class="row"><span>AGENT GROSS</span><strong id="agentGross">$0.00</strong></div>
+        <div class="row"><span>GIVING</span><strong id="giving">$0.00</strong></div>
+        <div class="row"><span>TAXES</span><strong id="taxes">$0.00</strong></div>
+      </section>
+
+      <div class="net-bar">
+        <strong id="agentNet">$0.00</strong>
+      </div>
+
+      <button id="clearButton" type="button">Clear</button>
+    </section>
+  </main>
+
+  <script src="commission.js"></script>
+</body>
+</html>
