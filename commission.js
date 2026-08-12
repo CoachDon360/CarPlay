@@ -8,7 +8,12 @@ const taxesEl=document.getElementById("taxes");
 const agentNetEl=document.getElementById("agentNet");
 const clearButton=document.getElementById("clearButton");
 
-const money=new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",minimumFractionDigits:2,maximumFractionDigits:2});
+const money=new Intl.NumberFormat("en-US",{
+  style:"currency",
+  currency:"USD",
+  minimumFractionDigits:2,
+  maximumFractionDigits:2
+});
 
 function getTransactionFee(companyGross){
   if(companyGross<=250)return 0;
@@ -18,7 +23,10 @@ function getTransactionFee(companyGross){
   if(companyGross<=25000)return 335;
   return 435;
 }
-function roundUpToNearestFive(amount){return Math.ceil(amount/5)*5}
+
+function roundUpToNearestFive(amount){
+  return Math.ceil(amount/5)*5;
+}
 
 function calculate(){
   const price=Number(salesPrice.value)||0;

@@ -3,7 +3,7 @@
   color-scheme:dark;
   --bg:#000;
   --panel:#050505;
-  --line:#2f2f31;
+  --line:#303033;
   --text:#f5f5f7;
   --muted:#8e8e93;
   --orange:#ff9500;
@@ -13,67 +13,150 @@
 html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text)}
 body{min-height:100vh}
 .app-shell{
-  min-height:100vh;display:flex;justify-content:center;
-  padding:max(28px,env(safe-area-inset-top)) 18px max(30px,env(safe-area-inset-bottom))
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  padding:max(26px,env(safe-area-inset-top)) 18px max(28px,env(safe-area-inset-bottom))
 }
-.calculator{width:100%;max-width:520px}
+.calculator{width:100%;max-width:540px}
 h1{
-  margin:6px 0 34px;color:var(--orange);
-  font-size:clamp(38px,8vw,58px);line-height:.98;
-  letter-spacing:-.04em;font-weight:800;text-align:center
+  margin:10px 0 34px;
+  color:var(--orange);
+  font-size:clamp(38px,8.4vw,58px);
+  line-height:1;
+  letter-spacing:-.045em;
+  font-weight:800;
+  text-align:center
 }
-.inputs{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:28px}
+.inputs{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:22px;
+  margin-bottom:30px
+}
 .field>span{
-  display:block;margin:0 0 9px 4px;color:var(--orange);
-  font-size:15px;font-weight:800;letter-spacing:.01em
+  display:block;
+  margin:0 0 10px 4px;
+  color:var(--orange);
+  font-size:clamp(14px,3.5vw,19px);
+  font-weight:800;
+  letter-spacing:.01em
 }
 .input-wrap{
-  height:74px;display:flex;align-items:center;border:2px solid var(--line);
-  border-radius:18px;background:#020202;overflow:hidden
+  height:80px;
+  display:flex;
+  align-items:center;
+  border:2px solid var(--line);
+  border-radius:18px;
+  background:#020202;
+  overflow:hidden
 }
 .input-wrap:focus-within{border-color:var(--orange)}
-.prefix,.suffix{color:var(--text);font-size:25px;font-weight:500}
-.prefix{padding-left:18px}.suffix{padding-right:18px}
-input{
-  width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--text);
-  font-size:clamp(28px,7vw,40px);font-weight:500;padding:0 14px;font-family:inherit
+.prefix,.suffix{
+  flex:0 0 auto;
+  color:var(--text);
+  font-size:clamp(27px,6vw,38px);
+  font-weight:500;
+  line-height:1
 }
+.prefix{padding-left:18px}
+.suffix{padding-right:18px}
+input{
+  width:100%;
+  min-width:0;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:var(--text);
+  font-size:clamp(28px,6vw,39px);
+  font-weight:500;
+  line-height:1;
+  padding:0 10px;
+  font-family:inherit
+}
+#salesPrice{font-size:clamp(26px,5.7vw,37px)}
+#commissionRate{font-size:clamp(28px,6.2vw,40px)}
+input::placeholder{color:#5d5d62;opacity:1}
 .results{
-  border:2px solid var(--line);border-radius:20px;overflow:hidden;background:var(--panel)
+  border:2px solid var(--line);
+  border-radius:20px;
+  overflow:hidden;
+  background:var(--panel)
 }
 .row{
-  min-height:112px;display:flex;align-items:center;justify-content:space-between;gap:20px;
-  padding:24px 28px;border-bottom:1px solid var(--line)
+  min-height:108px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  padding:24px 26px;
+  border-bottom:1px solid var(--line)
 }
 .row:last-child{border-bottom:0}
 .row span{
-  color:var(--orange);font-size:clamp(16px,4.5vw,23px);
-  font-weight:800;letter-spacing:-.01em
+  color:var(--orange);
+  font-size:clamp(16px,4.4vw,23px);
+  font-weight:800;
+  letter-spacing:-.01em
 }
 .row strong{
-  color:var(--text);font-size:clamp(25px,6.5vw,40px);
-  font-weight:500;text-align:right;white-space:nowrap
+  color:var(--text);
+  font-size:clamp(25px,6vw,38px);
+  font-weight:500;
+  text-align:right;
+  white-space:nowrap
 }
 .net-bar{
-  margin-top:20px;min-height:126px;border-radius:20px;background:var(--green);
-  display:flex;align-items:center;justify-content:center;padding:20px 24px
+  margin-top:20px;
+  min-height:124px;
+  border-radius:20px;
+  background:var(--green);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px 22px
 }
 .net-bar strong{
-  color:#fff;font-size:clamp(46px,12vw,78px);line-height:1;
-  font-weight:800;letter-spacing:-.045em;text-align:center
+  color:#fff;
+  font-size:clamp(46px,11.5vw,76px);
+  line-height:1;
+  font-weight:800;
+  letter-spacing:-.045em;
+  text-align:center
 }
 button{
-  width:100%;margin-top:18px;border:1px solid var(--line);border-radius:15px;
-  background:#111;color:var(--muted);padding:14px 16px;font-size:16px;
-  font-weight:700;font-family:inherit
+  width:100%;
+  margin-top:18px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:#111;
+  color:var(--muted);
+  padding:14px 16px;
+  font-size:16px;
+  font-weight:700;
+  font-family:inherit
 }
 button:active{transform:translateY(1px)}
-@media(max-width:420px){
+@media(max-width:430px){
   .app-shell{padding-left:14px;padding-right:14px}
   h1{margin-bottom:28px}
-  .inputs{gap:12px}
-  .input-wrap{height:66px}
-  .row{min-height:94px;padding:20px 18px}
+  .inputs{gap:14px}
+  .input-wrap{height:72px}
+  .prefix{padding-left:14px}
+  .suffix{padding-right:14px}
+  input{padding:0 7px}
+  .row{min-height:96px;padding:20px 18px}
   .net-bar{min-height:112px}
 }
-@media(max-width:345px){.inputs{grid-template-columns:1fr}}
+@media(max-width:360px){
+  h1{font-size:36px}
+  .inputs{gap:10px}
+  .field>span{font-size:13px}
+  .input-wrap{height:66px}
+  .prefix,.suffix{font-size:25px}
+  #salesPrice{font-size:24px}
+  #commissionRate{font-size:27px}
+  .row{padding:18px 14px}
+  .row span{font-size:15px}
+  .row strong{font-size:24px}
+}
