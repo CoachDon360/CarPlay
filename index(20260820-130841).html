@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="theme-color" content="#075a9d">
+  <title>Home</title>
+  <link rel="stylesheet" href="home.css?v=011">
+</head>
+<body>
+  <main class="home-screen">
+    <div class="status" aria-label="Current weather and time">
+      <button
+        class="weather-trigger"
+        id="weather-trigger"
+        type="button"
+        aria-label="Open 12 hour forecast"
+        aria-expanded="false"
+        aria-controls="forecast-panel">
+        <img id="weather-icon" class="weather-icon" src="weather-sun.svg" alt="">
+        <span id="temperature" class="temperature">--°</span>
+      </button>
+      <time id="home-time">--:--</time>
+    </div>
+
+    <button class="forecast-backdrop" id="forecast-backdrop" type="button"
+      aria-label="Close 12 hour forecast" tabindex="-1"></button>
+
+    <section class="forecast-panel" id="forecast-panel" aria-hidden="true"
+      aria-labelledby="forecast-title">
+      <header class="forecast-header">
+        <h2 id="forecast-title">Weather</h2>
+      </header>
+
+      <section class="forecast-section" aria-labelledby="hourly-title">
+        <h3 id="hourly-title">Next 12 Hours</h3>
+        <div class="forecast-strip" id="forecast-strip" aria-live="polite">
+          <div class="forecast-loading">Loading forecast…</div>
+        </div>
+      </section>
+
+      <div class="forecast-divider" aria-hidden="true"></div>
+
+      <section class="forecast-section forecast-section-daily" aria-labelledby="daily-title">
+        <h3 id="daily-title">Next 10 Days</h3>
+        <div class="daily-strip" id="daily-strip" aria-live="polite">
+          <div class="forecast-loading">Loading forecast…</div>
+        </div>
+      </section>
+
+      <footer class="forecast-footer">
+        <span>Frankfort, Kentucky</span>
+        <span id="forecast-updated"></span>
+      </footer>
+    </section>
+
+    <section class="home-grid" aria-label="Apps">
+      <button class="home-app" type="button" aria-label="Bible" onclick="window.location.href='bible.html'">
+        <span class="home-icon icon-bible" style="padding:0;overflow:hidden;background:transparent;">
+          <img src="bible-icon.png?v=001" alt="" style="display:block;width:100%;height:100%;object-fit:cover;">
+        </span><span>Bible</span>
+      </button>
+      <button class="home-app" type="button" aria-label="Ramsey"
+        onclick="window.location.href='ramsey.html'">
+        <span class="home-icon" style="padding:0;overflow:hidden;background:transparent;">
+          <img src="CarPlay-ramsey.png?v=003" alt=""
+            style="display:block;width:100%;height:100%;object-fit:cover;">
+        </span><span>Ramsey</span>
+      </button>
+      <button class="home-app" type="button" aria-label="Park Music"
+        onclick="window.location.href='park-music.html'">
+        <span class="home-icon" style="padding:0;overflow:hidden;background:transparent;">
+          <img src="CarPlay-park-music.png?v=001" alt=""
+            style="display:block;width:100%;height:100%;object-fit:cover;">
+        </span><span>Park Music</span>
+      </button>
+
+      <button class="home-app" type="button" aria-label="HD Radio"
+        onclick="window.location.href='radio.html'">
+        <span class="home-icon" style="padding:0;overflow:hidden;background:transparent;">
+          <img src="HDRadio.png?v=001" alt=""
+            style="display:block;width:100%;height:100%;object-fit:cover;">
+        </span><span>HD Radio</span>
+      </button>
+      <button class="home-app" type="button" aria-label="Sorcerer Radio"
+        onclick="window.location.href='https://srsounds.com/player.php?varName=Sorcerer%20Radio'">
+        <span class="home-icon" style="padding:0;overflow:hidden;background:transparent;">
+          <img src="CarPlay-sorcerer-radio.png?v=001" alt=""
+            style="display:block;width:100%;height:100%;object-fit:cover;">
+        </span><span>Sorcerer Radio</span>
+      </button>
+
+      <button class="home-app" type="button" aria-label="A Better Routeplanner"
+        onclick="window.location.href='https://abetterrouteplanner.com/'">
+        <span class="home-icon" style="padding:0;overflow:hidden;background:transparent;">
+          <img src="CarPlay-abrp.png?v=001" alt=""
+            style="display:block;width:100%;height:100%;object-fit:cover;">
+        </span><span>ABRP</span>
+      </button>
+      <button class="home-app" type="button" aria-label="Google Earth"
+        onclick="window.location.href='https://earth.google.com'">
+        <span class="home-icon" style="padding:0;overflow:hidden;background:transparent;">
+          <img src="CarPlay-google-earth.png?v=001" alt=""
+            style="display:block;width:100%;height:100%;object-fit:cover;">
+        </span><span>Google Earth</span>
+      </button>
+      <button class="home-app" type="button" aria-label="Zillow"
+        onclick="window.location.href='https://www.zillow.com/'">
+        <span class="home-icon" style="padding:0;overflow:hidden;background:transparent;">
+          <img src="CarPlay-zillow.png?v=001" alt=""
+            style="display:block;width:100%;height:100%;object-fit:cover;">
+        </span><span>Zillow</span>
+      </button>
+    </section>
+  </main>
+  <script src="home.js?v=011"></script>
+</body>
+</html>
