@@ -1,0 +1,137 @@
+:root {
+  --bg: #08111f;
+  --panel: #101a2b;
+  --panel-hover: #152239;
+  --line: #25324a;
+  --text: #f6f8fc;
+  --muted: #9aa7bc;
+  --accent: #4a86ff;
+  --accent-soft: rgba(74, 134, 255, 0.18);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+button { font: inherit; }
+
+.app-shell {
+  width: min(100%, 1100px);
+  padding: 34px 34px 48px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  min-height: 72px;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: 0.06em;
+  font-weight: 750;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 20px 0 24px;
+}
+
+.tab {
+  min-height: 58px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: #0d1727;
+  color: var(--muted);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-weight: 750;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+}
+
+.tab.active {
+  color: white;
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.station-panel {
+  width: 100%;
+}
+
+.station-list {
+  display: none;
+  gap: 12px;
+}
+
+.station-list.active {
+  display: grid;
+}
+
+.station-row {
+  width: 100%;
+  min-height: 84px;
+  padding: 18px 22px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--panel);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease, transform 140ms ease;
+}
+
+.station-row:hover,
+.station-row:focus-visible {
+  background: var(--panel-hover);
+  border-color: #3a4b68;
+  outline: none;
+}
+
+.station-row:active {
+  transform: scale(0.995);
+}
+
+.station-row.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.station-row span,
+.station-row small {
+  display: block;
+}
+
+.station-row span {
+  font-size: clamp(1.25rem, 2.3vw, 1.6rem);
+  font-weight: 720;
+}
+
+.station-row small {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: clamp(0.92rem, 1.6vw, 1.02rem);
+}
+
+@media (max-width: 720px) {
+  .app-shell { padding: 22px 16px 34px; }
+  .topbar { min-height: 60px; }
+  .tabs { gap: 8px; margin-top: 14px; }
+  .tab { min-height: 52px; border-radius: 14px; }
+  .station-row { min-height: 78px; border-radius: 16px; padding: 16px 18px; }
+}
